@@ -1,0 +1,36 @@
+{
+  "kind": "singleType",
+  "collectionName": "footers",
+  "info": {
+    "singularName": "footer",
+    "pluralName": "footers",
+    "displayName": "Footer"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "companyDescription": {
+      "type": "text"
+    },
+    "copyrightText": {
+      "type": "string",
+      "default": "© 2026 The Hive. Todos los derechos reservados."
+    },
+    "links": {
+      "type": "component",
+      "component": "footer.footer-link",
+      "repeatable": true
+    },
+    "socialMedia": {
+      "type": "component",
+      "component": "footer.social-media",
+      "repeatable": true
+    },
+    "showSocialMedia": {
+      "type": "boolean",
+      "default": true
+    }
+  }
+}

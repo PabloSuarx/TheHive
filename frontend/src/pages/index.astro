@@ -1,6 +1,14 @@
 ---
-// pages/index.astro
 import Layout from '../layouts/Layout.astro';
+import Button from '../components/Button.astro';
+import { getButtons } from '../lib/strapi';
+
+const buttons = await getButtons();
+
+const buttonsByName = buttons.reduce((acc, btn) => {
+  acc[btn.content] = btn;
+  return acc;
+}, {});
 ---
 
 <Layout 
@@ -9,9 +17,7 @@ import Layout from '../layouts/Layout.astro';
   keywords="miel artesanal, miel natural, miel premium, miel pura, apicultura sostenible, productos naturales, miel de azahar, miel multiflora"
 >
 
-<!-- Hero Section -->
 <section class="relative overflow-hidden bg-gradient-to-br from-[#FEF3C7] via-white to-[#FEF3C7] py-20 lg:py-32">
-  <!-- Hexágonos animados de fondo -->
   <div class="absolute inset-0 overflow-hidden pointer-events-none">
     <div class="hexagon hex-1"></div>
     <div class="hexagon hex-2"></div>
@@ -23,14 +29,7 @@ import Layout from '../layouts/Layout.astro';
   <div class="container mx-auto px-4 lg:px-8 relative z-10">
     <div class="grid lg:grid-cols-2 gap-12 items-center">
       
-      <!-- Contenido Izquierda -->
       <div class="space-y-8 text-center lg:text-left">
-        <div class="inline-block animate-fade-in-up">
-          <span class="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full text-sm font-medium text-[#D97706] shadow-md">
-            <span class="w-2 h-2 bg-[#F59E0B] rounded-full animate-pulse"></span>
-            100% Miel Artesanal
-          </span>
-        </div>
 
         <h1 class="text-gradient-honey animate-fade-in-up animation-delay-100">
           Miel Premium Directamente de la Colmena
@@ -42,17 +41,9 @@ import Layout from '../layouts/Layout.astro';
         </p>
 
         <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-fade-in-up animation-delay-300">
-          <a 
-            href="/productos" 
-            class="group px-8 py-4 bg-[#F59E0B] hover:bg-[#D97706] text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
-          >
-            <span class="flex items-center justify-center gap-2">
-              Ver Productos
-              <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-              </svg>
-            </span>
-          </a>
+          {buttonsByName['Ver todos los productos'] && (
+            <Button {...buttonsByName['Ver todos los productos']} className="group" />
+          )}
           <a 
             href="/sobre-nosotros" 
             class="px-8 py-4 bg-white hover:bg-gray-50 text-gray-900 font-semibold rounded-xl shadow-md hover:shadow-lg transition-all border-2 border-gray-200"
@@ -61,7 +52,6 @@ import Layout from '../layouts/Layout.astro';
           </a>
         </div>
 
-        <!-- Stats -->
         <div class="grid grid-cols-3 gap-8 pt-8 animate-fade-in-up animation-delay-400">
           <div class="text-center lg:text-left">
             <div class="text-3xl lg:text-4xl font-bold text-[#F59E0B]">15+</div>
@@ -78,7 +68,6 @@ import Layout from '../layouts/Layout.astro';
         </div>
       </div>
 
-      <!-- Imagen Derecha -->
       <div class="relative animate-fade-in-up animation-delay-500">
         <div class="relative z-10">
           <img 
@@ -88,7 +77,6 @@ import Layout from '../layouts/Layout.astro';
             loading="eager"
           >
         </div>
-        <!-- Elemento decorativo -->
         <div class="absolute -bottom-6 -right-6 w-full h-full bg-gradient-to-br from-[#FCD34D] to-[#F59E0B] rounded-2xl -z-10 opacity-20"></div>
       </div>
 
@@ -96,7 +84,6 @@ import Layout from '../layouts/Layout.astro';
   </div>
 </section>
 
-<!-- Categorías Section -->
 <section class="py-20 bg-white">
   <div class="container mx-auto px-4 lg:px-8">
     <div class="text-center max-w-3xl mx-auto mb-16">
@@ -108,7 +95,6 @@ import Layout from '../layouts/Layout.astro';
 
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
       
-      <!-- Categoría 1 -->
       <a href="/categoria/monoflora" class="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all transform hover:scale-105">
         <img 
           src="https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?w=600&h=400&fit=crop" 
@@ -126,7 +112,6 @@ import Layout from '../layouts/Layout.astro';
         </div>
       </a>
 
-      <!-- Categoría 2 -->
       <a href="/categoria/multiflora" class="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all transform hover:scale-105">
         <img 
           src="https://images.unsplash.com/photo-1587049352851-8d4e89133924?w=600&h=400&fit=crop" 
@@ -144,7 +129,6 @@ import Layout from '../layouts/Layout.astro';
         </div>
       </a>
 
-      <!-- Categoría 3 -->
       <a href="/categoria/premium" class="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all transform hover:scale-105">
         <img 
           src="https://images.unsplash.com/photo-1587049352846-4a222e784387?w=600&h=400&fit=crop" 
@@ -166,7 +150,6 @@ import Layout from '../layouts/Layout.astro';
   </div>
 </section>
 
-<!-- Productos Destacados -->
 <section class="py-20 bg-gradient-to-b from-white to-[#FEF3C7]">
   <div class="container mx-auto px-4 lg:px-8">
     <div class="text-center max-w-3xl mx-auto mb-16">
@@ -178,7 +161,6 @@ import Layout from '../layouts/Layout.astro';
 
     <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
       
-      <!-- Producto 1 -->
       <article class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow group">
         <div class="relative overflow-hidden">
           <img 
@@ -207,7 +189,6 @@ import Layout from '../layouts/Layout.astro';
         </div>
       </article>
 
-      <!-- Producto 2 -->
       <article class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow group">
         <div class="relative overflow-hidden">
           <img 
@@ -233,7 +214,6 @@ import Layout from '../layouts/Layout.astro';
         </div>
       </article>
 
-      <!-- Producto 3 -->
       <article class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow group">
         <div class="relative overflow-hidden">
           <img 
@@ -262,7 +242,6 @@ import Layout from '../layouts/Layout.astro';
         </div>
       </article>
 
-      <!-- Producto 4 -->
       <article class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow group">
         <div class="relative overflow-hidden">
           <img 
@@ -291,20 +270,13 @@ import Layout from '../layouts/Layout.astro';
     </div>
 
     <div class="text-center mt-12">
-      <a 
-        href="/productos" 
-        class="inline-flex items-center gap-2 px-8 py-4 bg-white hover:bg-gray-50 text-gray-900 font-semibold rounded-xl shadow-md hover:shadow-lg transition-all border-2 border-gray-200"
-      >
-        Ver Todos los Productos
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-        </svg>
-      </a>
+      {buttonsByName['Ver todos los productos'] && (
+        <Button {...buttonsByName['Ver todos los productos']} className="inline-flex items-center gap-2" />
+      )}
     </div>
   </div>
 </section>
 
-<!-- Por Qué Elegirnos -->
 <section class="py-20 bg-white">
   <div class="container mx-auto px-4 lg:px-8">
     <div class="text-center max-w-3xl mx-auto mb-16">
@@ -316,7 +288,6 @@ import Layout from '../layouts/Layout.astro';
 
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
       
-      <!-- Beneficio 1 -->
       <div class="text-center p-8 rounded-2xl bg-gradient-to-br from-[#FEF3C7] to-white hover:shadow-xl transition-shadow">
         <div class="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-[#F59E0B] to-[#D97706] rounded-2xl flex items-center justify-center text-3xl shadow-lg">
           🐝
@@ -327,7 +298,6 @@ import Layout from '../layouts/Layout.astro';
         </p>
       </div>
 
-      <!-- Beneficio 2 -->
       <div class="text-center p-8 rounded-2xl bg-gradient-to-br from-[#FEF3C7] to-white hover:shadow-xl transition-shadow">
         <div class="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-[#F59E0B] to-[#D97706] rounded-2xl flex items-center justify-center text-3xl shadow-lg">
           🌱
@@ -338,7 +308,6 @@ import Layout from '../layouts/Layout.astro';
         </p>
       </div>
 
-      <!-- Beneficio 3 -->
       <div class="text-center p-8 rounded-2xl bg-gradient-to-br from-[#FEF3C7] to-white hover:shadow-xl transition-shadow">
         <div class="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-[#F59E0B] to-[#D97706] rounded-2xl flex items-center justify-center text-3xl shadow-lg">
           🏔️
@@ -349,7 +318,6 @@ import Layout from '../layouts/Layout.astro';
         </p>
       </div>
 
-      <!-- Beneficio 4 -->
       <div class="text-center p-8 rounded-2xl bg-gradient-to-br from-[#FEF3C7] to-white hover:shadow-xl transition-shadow">
         <div class="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-[#F59E0B] to-[#D97706] rounded-2xl flex items-center justify-center text-3xl shadow-lg">
           🔬
@@ -360,7 +328,6 @@ import Layout from '../layouts/Layout.astro';
         </p>
       </div>
 
-      <!-- Beneficio 5 -->
       <div class="text-center p-8 rounded-2xl bg-gradient-to-br from-[#FEF3C7] to-white hover:shadow-xl transition-shadow">
         <div class="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-[#F59E0B] to-[#D97706] rounded-2xl flex items-center justify-center text-3xl shadow-lg">
           📦
@@ -371,7 +338,6 @@ import Layout from '../layouts/Layout.astro';
         </p>
       </div>
 
-      <!-- Beneficio 6 -->
       <div class="text-center p-8 rounded-2xl bg-gradient-to-br from-[#FEF3C7] to-white hover:shadow-xl transition-shadow">
         <div class="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-[#F59E0B] to-[#D97706] rounded-2xl flex items-center justify-center text-3xl shadow-lg">
           ❤️
@@ -386,7 +352,6 @@ import Layout from '../layouts/Layout.astro';
   </div>
 </section>
 
-<!-- Testimonios -->
 <section class="py-20 bg-gradient-to-b from-white to-[#FEF3C7]">
   <div class="container mx-auto px-4 lg:px-8">
     <div class="text-center max-w-3xl mx-auto mb-16">
@@ -398,24 +363,13 @@ import Layout from '../layouts/Layout.astro';
 
     <div class="grid md:grid-cols-3 gap-8">
       
-      <!-- Testimonio 1 -->
       <article class="bg-white p-8 rounded-2xl shadow-lg">
         <div class="flex items-center gap-1 mb-4">
-          <svg class="w-5 h-5 text-[#F59E0B]" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-          </svg>
-          <svg class="w-5 h-5 text-[#F59E0B]" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-          </svg>
-          <svg class="w-5 h-5 text-[#F59E0B]" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-          </svg>
-          <svg class="w-5 h-5 text-[#F59E0B]" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-          </svg>
-          <svg class="w-5 h-5 text-[#F59E0B]" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-          </svg>
+          {[...Array(5)].map(() => (
+            <svg class="w-5 h-5 text-[#F59E0B]" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+            </svg>
+          ))}
         </div>
         <p class="text-gray-700 mb-6 italic">
           "La mejor miel que he probado nunca. El sabor a azahar es increíble y se nota que es 100% natural. ¡Repito cada mes!"
@@ -431,24 +385,13 @@ import Layout from '../layouts/Layout.astro';
         </div>
       </article>
 
-      <!-- Testimonio 2 -->
       <article class="bg-white p-8 rounded-2xl shadow-lg">
         <div class="flex items-center gap-1 mb-4">
-          <svg class="w-5 h-5 text-[#F59E0B]" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-          </svg>
-          <svg class="w-5 h-5 text-[#F59E0B]" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-          </svg>
-          <svg class="w-5 h-5 text-[#F59E0B]" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-          </svg>
-          <svg class="w-5 h-5 text-[#F59E0B]" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-          </svg>
-          <svg class="w-5 h-5 text-[#F59E0B]" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-          </svg>
+          {[...Array(5)].map(() => (
+            <svg class="w-5 h-5 text-[#F59E0B]" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+            </svg>
+          ))}
         </div>
         <p class="text-gray-700 mb-6 italic">
           "Excelente calidad y envío rapidísimo. Me encanta conocer la historia de cada apicultor. Es miel con alma."
@@ -464,24 +407,13 @@ import Layout from '../layouts/Layout.astro';
         </div>
       </article>
 
-      <!-- Testimonio 3 -->
       <article class="bg-white p-8 rounded-2xl shadow-lg">
         <div class="flex items-center gap-1 mb-4">
-          <svg class="w-5 h-5 text-[#F59E0B]" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-          </svg>
-          <svg class="w-5 h-5 text-[#F59E0B]" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-          </svg>
-          <svg class="w-5 h-5 text-[#F59E0B]" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-          </svg>
-          <svg class="w-5 h-5 text-[#F59E0B]" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-          </svg>
-          <svg class="w-5 h-5 text-[#F59E0B]" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-          </svg>
+          {[...Array(5)].map(() => (
+            <svg class="w-5 h-5 text-[#F59E0B]" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+            </svg>
+          ))}
         </div>
         <p class="text-gray-700 mb-6 italic">
           "Compré la miel de eucalipto para mi hijo que tiene tos. Funciona de maravilla y además está deliciosa. ¡Totalmente recomendable!"
@@ -501,7 +433,6 @@ import Layout from '../layouts/Layout.astro';
   </div>
 </section>
 
-<!-- Blog Preview -->
 <section class="py-20 bg-white">
   <div class="container mx-auto px-4 lg:px-8">
     <div class="flex justify-between items-end mb-12">
@@ -511,17 +442,15 @@ import Layout from '../layouts/Layout.astro';
           Aprende más sobre la miel y sus beneficios
         </p>
       </div>
-      <a href="/blog" class="hidden md:inline-flex items-center gap-2 text-[#F59E0B] hover:text-[#D97706] font-semibold">
-        Ver Todos
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-        </svg>
-      </a>
+      {buttonsByName['Leer más'] && (
+        <div class="hidden md:block">
+          <Button {...buttonsByName['Leer más']} variant="ghost" />
+        </div>
+      )}
     </div>
 
     <div class="grid md:grid-cols-3 gap-8">
       
-      <!-- Artículo 1 -->
       <article class="group">
         <a href="/blog/beneficios-miel" class="block">
           <div class="relative overflow-hidden rounded-xl mb-4">
@@ -547,7 +476,6 @@ import Layout from '../layouts/Layout.astro';
         </a>
       </article>
 
-      <!-- Artículo 2 -->
       <article class="group">
         <a href="/blog/tipos-miel" class="block">
           <div class="relative overflow-hidden rounded-xl mb-4">
@@ -573,7 +501,6 @@ import Layout from '../layouts/Layout.astro';
         </a>
       </article>
 
-      <!-- Artículo 3 -->
       <article class="group">
         <a href="/blog/recetas-miel" class="block">
           <div class="relative overflow-hidden rounded-xl mb-4">
@@ -600,21 +527,10 @@ import Layout from '../layouts/Layout.astro';
       </article>
 
     </div>
-
-    <div class="text-center mt-8 md:hidden">
-      <a href="/blog" class="inline-flex items-center gap-2 text-[#F59E0B] hover:text-[#D97706] font-semibold">
-        Ver Todos los Artículos
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-        </svg>
-      </a>
-    </div>
   </div>
 </section>
 
-<!-- CTA Final -->
 <section class="py-20 bg-gradient-to-br from-[#F59E0B] to-[#D97706] text-white relative overflow-hidden">
-  <!-- Hexágonos decorativos -->
   <div class="absolute inset-0 opacity-10">
     <div class="hexagon-white hex-cta-1"></div>
     <div class="hexagon-white hex-cta-2"></div>
@@ -628,21 +544,14 @@ import Layout from '../layouts/Layout.astro';
         Únete a miles de clientes satisfechos y descubre el auténtico sabor de la miel artesanal
       </p>
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <a 
-          href="/productos" 
-          class="px-8 py-4 bg-white text-[#F59E0B] font-bold rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
-        >
-          Explorar Productos
-        </a>
-        <a 
-          href="/contacto" 
-          class="px-8 py-4 bg-transparent border-2 border-white text-white font-semibold rounded-xl hover:bg-white hover:text-[#F59E0B] transition-all"
-        >
-          Contactar
-        </a>
+        {buttonsByName['Ver todos los productos'] && (
+          <Button {...buttonsByName['Ver todos los productos']} className="bg-white text-[#F59E0B] hover:bg-gray-100" />
+        )}
+        {buttonsByName['Contáctanos'] && (
+          <Button {...buttonsByName['Contáctanos']} variant="outline" className="border-white text-white hover:bg-white hover:text-[#F59E0B]" />
+        )}
       </div>
       
-      <!-- Trust badges -->
       <div class="flex flex-wrap justify-center items-center gap-8 pt-8 text-white/80">
         <div class="flex items-center gap-2">
           <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
@@ -671,7 +580,6 @@ import Layout from '../layouts/Layout.astro';
 </Layout>
 
 <style>
-  /* Animaciones personalizadas */
   @keyframes fade-in-up {
     from {
       opacity: 0;
@@ -708,7 +616,6 @@ import Layout from '../layouts/Layout.astro';
     animation-delay: 0.5s;
   }
 
-  /* Hexágonos animados */
   .hexagon {
     position: absolute;
     width: 100px;
@@ -777,7 +684,6 @@ import Layout from '../layouts/Layout.astro';
     animation: float 24s infinite ease-in-out 3s;
   }
 
-  /* Hexágonos blancos para CTA */
   .hexagon-white {
     position: absolute;
     width: 120px;

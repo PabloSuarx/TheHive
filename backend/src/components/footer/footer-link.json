@@ -1,0 +1,32 @@
+{
+  "collectionName": "components_footer_footer_links",
+  "info": {
+    "displayName": "footerLink",
+    "icon": "arrowDown"
+  },
+  "options": {},
+  "attributes": {
+    "label": {
+      "type": "string",
+      "required": true
+    },
+    "url": {
+      "type": "string",
+      "required": true
+    },
+    "column": {
+      "type": "enumeration",
+      "enum": [
+        "General",
+        "Legal",
+        "Ayuda",
+        "Empresa"
+      ]
+    },
+    "order": {
+      "type": "integer",
+      "default": 0
+    }
+  },
+  "config": {}
+}

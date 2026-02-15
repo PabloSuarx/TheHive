@@ -1,0 +1,41 @@
+---
+interface Props {
+  content: string;
+  link: string;
+  variant?: string;
+  isExternal?: boolean;
+  className?: string;
+}
+
+const { 
+  content, 
+  link, 
+  variant = 'primary', 
+  isExternal = false, 
+  className = '' 
+} = Astro.props;
+
+const baseClasses = 'inline-flex items-center justify-center px-6 py-3 rounded-lg font-semibold transition-all duration-200';
+
+const variantClasses: Record<string, string> = {
+  primary: 'bg-primary hover:bg-primary-dark text-white shadow-md hover:shadow-lg',
+  secondary: 'bg-secondary hover:bg-secondary-light text-white shadow-md hover:shadow-lg',
+  outline: 'border-2 border-primary text-primary hover:bg-primary hover:text-white',
+  ghost: 'text-primary hover:bg-primary-pale'
+};
+
+const getVariantClass = (v: string) => {
+  return variantClasses[v] || variantClasses.primary;
+};
+
+const buttonClasses = `${baseClasses} ${getVariantClass(variant)} ${className}`;
+---
+
+<a 
+  href={link}
+  class={buttonClasses}
+  target={isExternal ? '_blank' : undefined}
+  rel={isExternal ? 'noopener noreferrer' : undefined}
+>
+  {content}
+</a>

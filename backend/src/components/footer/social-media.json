@@ -1,0 +1,29 @@
+{
+  "collectionName": "components_footer_social_medias",
+  "info": {
+    "displayName": "socialMedia",
+    "icon": "thumbUp"
+  },
+  "options": {},
+  "attributes": {
+    "platform": {
+      "type": "enumeration",
+      "enum": [
+        "Instagram",
+        "  Facebook",
+        "  Twitter",
+        "  LinkedIn",
+        "  YouTube",
+        "  TikTok"
+      ]
+    },
+    "url": {
+      "type": "string",
+      "required": true
+    },
+    "icon": {
+      "type": "text"
+    }
+  },
+  "config": {}
+}

@@ -1,0 +1,30 @@
+{
+  "collectionName": "components_menu_item_menu_items",
+  "info": {
+    "displayName": "MenuItem",
+    "icon": "bulletList"
+  },
+  "options": {},
+  "attributes": {
+    "label": {
+      "type": "string",
+      "required": true
+    },
+    "url": {
+      "type": "string",
+      "required": true
+    },
+    "order": {
+      "type": "integer"
+    },
+    "isExternal": {
+      "type": "boolean",
+      "default": false
+    },
+    "newTab": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "config": {}
+}

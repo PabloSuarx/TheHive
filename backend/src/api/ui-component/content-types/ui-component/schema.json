@@ -1,0 +1,25 @@
+{
+  "kind": "singleType",
+  "collectionName": "ui_components",
+  "info": {
+    "singularName": "ui-component",
+    "pluralName": "ui-components",
+    "displayName": "UIComponent"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "buttons": {
+      "type": "component",
+      "component": "ui.button",
+      "repeatable": true
+    },
+    "commomTexts": {
+      "type": "component",
+      "component": "ui.common-text",
+      "repeatable": true
+    }
+  }
+}

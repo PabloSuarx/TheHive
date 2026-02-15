@@ -1,14 +1,114 @@
 @import "tailwindcss";
 
-:root {
-  --honey-gold: #F59E0B;
-  --honey-dark: #D97706;
-  --honey-light: #FCD34D;
-  --honey-pale: #FEF3C7;
+@theme {
+
+  --color-primary: #E89B00;
+  --color-primary-dark: #C27A00;
+  --color-primary-light: #F6C65B;
+  --color-primary-pale: #FFF3D6;
+
+  --color-secondary: #5C2E0C;
+  --color-secondary-light: #7A3E12;
+
+  --color-accent: #F2B705;
+
+  --color-bg-primary: #FFFFFF;
+  --color-bg-secondary: #FAF7F2;
+  --color-bg-tertiary: #F3EEE6;
+  --color-bg-footer: #FFF3D6;
+
+  --color-text-primary: #1A1A1A;
+  --color-text-secondary: #5B5B5B;
+  --color-text-tertiary: #8A8A8A;
+  --color-text-inverse: #FFFFFF;
+
+  --color-border-default: #E8E2D8;
+  --color-divider: #DDD6C8;
+
+  --color-success: #15803D;
+  --color-error: #DC2626;
+  --color-warning: #D97706;
+  --color-info: #2563EB;
 }
 
+:root {
+  --primary: var(--color-primary);
+  --primary-dark: var(--color-primary-dark);
+  --primary-light: var(--color-primary-light);
+  --primary-pale: var(--color-primary-pale);
+  
+  --secondary: var(--color-secondary);
+  --secondary-light: var(--color-secondary-light);
+  
+  --accent: var(--color-accent);
+  
+  --bg-primary: var(--color-bg-primary);
+  --bg-secondary: var(--color-bg-secondary);
+  --bg-tertiary: var(--color-bg-tertiary);
+  --bg-footer: var(--color-bg-footer);
+  
+  --text-primary: var(--color-text-primary);
+  --text-secondary: var(--color-text-secondary);
+  --text-tertiary: var(--color-text-tertiary);
+  --text-inverse: var(--color-text-inverse);
+  
+  --border-color: var(--color-border-DEFAULT);
+  --divider: var(--color-divider);
+  
+  --success: var(--color-success);
+  --error: var(--color-error);
+  --warning: var(--color-warning);
+  --info: var(--color-info);
+  
+  --transition-fast: 150ms ease-in-out;
+  --transition-base: 250ms ease-in-out;
+  --transition-slow: 350ms ease-in-out;
+}
+/*
+[data-theme="dark"] {
+  --color-bg-primary: #111827;
+  --color-bg-secondary: #1F2937;
+  --color-bg-tertiary: #374151;
+  
+  --color-text-primary: #F9FAFB;
+  --color-text-secondary: #D1D5DB;
+  --color-text-tertiary: #9CA3AF;
+  --color-text-inverse: #111827;
+  
+  --color-border-DEFAULT: #374151;
+  --color-divider: #4B5563;
+  
+  --color-primary: #FBBF24;
+  --color-primary-dark: #F59E0B;
+  --color-primary-light: #FCD34D;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-bg-primary: #111827;
+    --color-bg-secondary: #1F2937;
+    --color-bg-tertiary: #374151;
+    
+    --color-text-primary: #F9FAFB;
+    --color-text-secondary: #D1D5DB;
+    --color-text-tertiary: #9CA3AF;
+    --color-text-inverse: #111827;
+    
+    --color-border-DEFAULT: #374151;
+    --color-divider: #4B5563;
+    
+    --color-primary: #FBBF24;
+    --color-primary-dark: #F59E0B;
+    
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+  }
+} */
+
 body {
-  background-color: var(--white);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
 }
 
 h1 {
@@ -48,11 +148,11 @@ p {
 }
 
 a {
-  color: var(--honey-gold);
+  color: var(--primary);
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
 a:hover {
-  color: var(--honey-dark);
+  color: var(--primary-dark);
 }

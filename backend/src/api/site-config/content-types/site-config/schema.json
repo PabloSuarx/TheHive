@@ -1,0 +1,71 @@
+{
+  "kind": "singleType",
+  "collectionName": "site_configs",
+  "info": {
+    "singularName": "site-config",
+    "pluralName": "site-configs",
+    "displayName": "SiteConfig"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "siteName": {
+      "type": "string",
+      "default": "The Hive",
+      "required": true
+    },
+    "tagline": {
+      "type": "string",
+      "default": "Pure honey, straight from the hive"
+    },
+    "logo": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "logoAlt": {
+      "type": "string",
+      "default": "The Hive - Miel Artesanal"
+    },
+    "favicon": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "primaryColor": {
+      "type": "string",
+      "default": "#F59E0B"
+    },
+    "secondaryColor": {
+      "type": "string",
+      "default": "#D97706"
+    },
+    "contactEmail": {
+      "type": "string"
+    },
+    "contactPhone": {
+      "type": "string"
+    },
+    "contactAddress": {
+      "type": "string"
+    },
+    "socialMedia": {
+      "type": "enumeration",
+      "enum": [
+        "Instagram, Facebook, Twitter, LinkedIn"
+      ]
+    },
+    "url": {
+      "type": "string"
+    },
+    "icon": {
+      "type": "string"
+    }
+  }
+}
