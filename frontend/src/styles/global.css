@@ -1,1 +1,58 @@
 @import "tailwindcss";
+
+:root {
+  --honey-gold: #F59E0B;
+  --honey-dark: #D97706;
+  --honey-light: #FCD34D;
+  --honey-pale: #FEF3C7;
+}
+
+body {
+  background-color: var(--white);
+}
+
+h1 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  margin-bottom: clamp(1rem, 3vw, 1.5rem);
+}
+
+h2 {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  margin-bottom: clamp(0.75rem, 2.5vw, 1.25rem);
+  letter-spacing: -0.01em;
+}
+
+h3 {
+  font-size: clamp(1.25rem, 3vw, 2rem);
+  margin-bottom: clamp(0.5rem, 2vw, 1rem);
+}
+
+h4 {
+  font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+  margin-bottom: clamp(0.5rem, 1.5vw, 0.875rem);
+}
+
+h5 {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  margin-bottom: clamp(0.5rem, 1.5vw, 0.75rem);
+}
+
+h6 {
+  font-size: clamp(0.875rem, 1.5vw, 1.125rem);
+  margin-bottom: clamp(0.5rem, 1vw, 0.625rem);
+}
+
+p {
+  font-size: clamp(1rem, 1.5vw, 1.125rem);
+  margin-bottom: clamp(0.75rem, 2vw, 1rem);
+}
+
+a {
+  color: var(--honey-gold);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--honey-dark);
+}

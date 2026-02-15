@@ -1,0 +1,232 @@
+---
+// src/pages/index.astro
+const title = "En Construcción | The Hive";
+const description = "Sitio web en construcción. Próximamente disponible.";
+---
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content={description}>
+  <title>{title}</title>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #f59e0b;
+      --secondary: #1f2937;
+      --accent: #fbbf24;
+      --bg: #0f172a;
+      --text: #f1f5f9;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, var(--bg) 0%, #1e293b 100%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hexagon-container {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .hexagon {
+      position: absolute;
+      width: 100px;
+      height: 57.74px;
+      background-color: rgba(245, 158, 11, 0.05);
+      margin: 28.87px 0;
+      animation: float 20s infinite ease-in-out;
+    }
+
+    .hexagon:before,
+    .hexagon:after {
+      content: "";
+      position: absolute;
+      width: 0;
+      border-left: 50px solid transparent;
+      border-right: 50px solid transparent;
+    }
+
+    .hexagon:before {
+      bottom: 100%;
+      border-bottom: 28.87px solid rgba(245, 158, 11, 0.05);
+    }
+
+    .hexagon:after {
+      top: 100%;
+      border-top: 28.87px solid rgba(245, 158, 11, 0.05);
+    }
+
+    .hexagon:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+    .hexagon:nth-child(2) { top: 60%; left: 80%; animation-delay: 2s; }
+    .hexagon:nth-child(3) { top: 30%; left: 60%; animation-delay: 4s; }
+    .hexagon:nth-child(4) { top: 80%; left: 20%; animation-delay: 6s; }
+    .hexagon:nth-child(5) { top: 20%; left: 85%; animation-delay: 8s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.3; }
+      50% { transform: translateY(-20px) rotate(180deg); opacity: 0.1; }
+    }
+
+    .container {
+      max-width: 600px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      animation: fadeIn 1s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .logo {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 2rem;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      font-weight: bold;
+      box-shadow: 0 20px 60px rgba(245, 158, 11, 0.3);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    p {
+      font-size: 1.25rem;
+      color: #94a3b8;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      border-radius: 50px;
+      font-weight: 600;
+      margin-bottom: 2rem;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      background: var(--primary);
+      border-radius: 50%;
+      animation: blink 1.5s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-top: 3rem;
+    }
+
+    .feature {
+      padding: 1.5rem 1rem;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .feature:hover {
+      transform: translateY(-5px);
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--primary);
+    }
+
+    .feature-icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .feature-title {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    @media (max-width: 640px) {
+      h1 { font-size: 2rem; }
+      p { font-size: 1rem; }
+      .logo { width: 80px; height: 80px; font-size: 2rem; }
+      .features { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="hexagon-container">
+    <div class="hexagon"></div>
+    <div class="hexagon"></div>
+    <div class="hexagon"></div>
+    <div class="hexagon"></div>
+    <div class="hexagon"></div>
+  </div>
+
+  <div class="container">
+    <div class="logo">
+      🐝
+    </div>
+    
+    <h1>The Hive</h1>
+    
+    <div class="status">
+      <span class="status-dot"></span>
+      <span>En Construcción</span>
+    </div>
+    
+    <p>
+      Estamos trabajando duro para crear algo increíble. 
+      Nuestro sitio web estará disponible muy pronto.
+    </p>
+  </div>
+</body>
+</html>

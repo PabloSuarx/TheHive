@@ -1,17 +1,825 @@
 ---
-
+// pages/index.astro
+import Layout from '../layouts/Layout.astro';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout 
+  titulo="Inicio"
+  descripcion="The Hive - Miel artesanal de calidad premium directamente de la colmena a tu mesa. Descubre nuestras mieles monoflora, multiflora y productos naturales 100% puros."
+  keywords="miel artesanal, miel natural, miel premium, miel pura, apicultura sostenible, productos naturales, miel de azahar, miel multiflora"
+>
+
+<!-- Hero Section -->
+<section class="relative overflow-hidden bg-gradient-to-br from-[#FEF3C7] via-white to-[#FEF3C7] py-20 lg:py-32">
+  <!-- Hexágonos animados de fondo -->
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    <div class="hexagon hex-1"></div>
+    <div class="hexagon hex-2"></div>
+    <div class="hexagon hex-3"></div>
+    <div class="hexagon hex-4"></div>
+    <div class="hexagon hex-5"></div>
+  </div>
+
+  <div class="container mx-auto px-4 lg:px-8 relative z-10">
+    <div class="grid lg:grid-cols-2 gap-12 items-center">
+      
+      <!-- Contenido Izquierda -->
+      <div class="space-y-8 text-center lg:text-left">
+        <div class="inline-block animate-fade-in-up">
+          <span class="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full text-sm font-medium text-[#D97706] shadow-md">
+            <span class="w-2 h-2 bg-[#F59E0B] rounded-full animate-pulse"></span>
+            100% Miel Artesanal
+          </span>
+        </div>
+
+        <h1 class="text-gradient-honey animate-fade-in-up animation-delay-100">
+          Miel Premium Directamente de la Colmena
+        </h1>
+
+        <p class="text-lead text-gray-600 animate-fade-in-up animation-delay-200 max-w-xl mx-auto lg:mx-0">
+          Descubre el auténtico sabor de la naturaleza. Trabajamos con apicultores locales comprometidos 
+          con la sostenibilidad para ofrecerte miel de máxima calidad.
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-fade-in-up animation-delay-300">
+          <a 
+            href="/productos" 
+            class="group px-8 py-4 bg-[#F59E0B] hover:bg-[#D97706] text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
+          >
+            <span class="flex items-center justify-center gap-2">
+              Ver Productos
+              <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+              </svg>
+            </span>
+          </a>
+          <a 
+            href="/sobre-nosotros" 
+            class="px-8 py-4 bg-white hover:bg-gray-50 text-gray-900 font-semibold rounded-xl shadow-md hover:shadow-lg transition-all border-2 border-gray-200"
+          >
+            Nuestra Historia
+          </a>
+        </div>
+
+        <!-- Stats -->
+        <div class="grid grid-cols-3 gap-8 pt-8 animate-fade-in-up animation-delay-400">
+          <div class="text-center lg:text-left">
+            <div class="text-3xl lg:text-4xl font-bold text-[#F59E0B]">15+</div>
+            <div class="text-sm text-gray-600">Apicultores</div>
+          </div>
+          <div class="text-center lg:text-left">
+            <div class="text-3xl lg:text-4xl font-bold text-[#F59E0B]">100%</div>
+            <div class="text-sm text-gray-600">Natural</div>
+          </div>
+          <div class="text-center lg:text-left">
+            <div class="text-3xl lg:text-4xl font-bold text-[#F59E0B]">20+</div>
+            <div class="text-sm text-gray-600">Variedades</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Imagen Derecha -->
+      <div class="relative animate-fade-in-up animation-delay-500">
+        <div class="relative z-10">
+          <img 
+            src="https://images.unsplash.com/photo-1587049352846-4a222e784387?w=800&h=1000&fit=crop" 
+            alt="Miel artesanal en frasco de vidrio con panal" 
+            class="rounded-2xl shadow-2xl w-full h-auto"
+            loading="eager"
+          >
+        </div>
+        <!-- Elemento decorativo -->
+        <div class="absolute -bottom-6 -right-6 w-full h-full bg-gradient-to-br from-[#FCD34D] to-[#F59E0B] rounded-2xl -z-10 opacity-20"></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Categorías Section -->
+<section class="py-20 bg-white">
+  <div class="container mx-auto px-4 lg:px-8">
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <h2>Nuestras Categorías</h2>
+      <p class="text-lead text-gray-600 mt-4">
+        Explora nuestra selección de mieles artesanales, cada una con su carácter único
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      
+      <!-- Categoría 1 -->
+      <a href="/categoria/monoflora" class="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all transform hover:scale-105">
+        <img 
+          src="https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?w=600&h=400&fit=crop" 
+          alt="Miel Monoflora de flores específicas"
+          class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+          loading="lazy"
+        >
+        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
+        <div class="absolute bottom-0 left-0 right-0 p-6">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-3xl">🌸</span>
+            <h3 class="text-white text-2xl font-bold">Miel Monoflora</h3>
+          </div>
+          <p class="text-gray-200 text-sm">Azahar, Romero, Eucalipto y más</p>
+        </div>
+      </a>
+
+      <!-- Categoría 2 -->
+      <a href="/categoria/multiflora" class="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all transform hover:scale-105">
+        <img 
+          src="https://images.unsplash.com/photo-1587049352851-8d4e89133924?w=600&h=400&fit=crop" 
+          alt="Miel Multiflora de múltiples flores"
+          class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+          loading="lazy"
+        >
+        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
+        <div class="absolute bottom-0 left-0 right-0 p-6">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-3xl">🌺</span>
+            <h3 class="text-white text-2xl font-bold">Miel Multiflora</h3>
+          </div>
+          <p class="text-gray-200 text-sm">Bosque, Montaña, Primavera</p>
+        </div>
+      </a>
+
+      <!-- Categoría 3 -->
+      <a href="/categoria/premium" class="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all transform hover:scale-105">
+        <img 
+          src="https://images.unsplash.com/photo-1587049352846-4a222e784387?w=600&h=400&fit=crop" 
+          alt="Miel Premium de alta calidad"
+          class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+          loading="lazy"
+        >
+        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
+        <div class="absolute bottom-0 left-0 right-0 p-6">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-3xl">⭐</span>
+            <h3 class="text-white text-2xl font-bold">Miel Premium</h3>
+          </div>
+          <p class="text-gray-200 text-sm">Manuka, Tupelo, Acacia</p>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- Productos Destacados -->
+<section class="py-20 bg-gradient-to-b from-white to-[#FEF3C7]">
+  <div class="container mx-auto px-4 lg:px-8">
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <h2>Productos Destacados</h2>
+      <p class="text-lead text-gray-600 mt-4">
+        Las mieles favoritas de nuestros clientes
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+      
+      <!-- Producto 1 -->
+      <article class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow group">
+        <div class="relative overflow-hidden">
+          <img 
+            src="https://images.unsplash.com/photo-1587049352846-4a222e784387?w=400&h=400&fit=crop" 
+            alt="Miel de Azahar en frasco de cristal"
+            class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+            loading="lazy"
+          >
+          <span class="absolute top-4 right-4 px-3 py-1 bg-[#F59E0B] text-white text-xs font-bold rounded-full">
+            Bestseller
+          </span>
+        </div>
+        <div class="p-6 space-y-3">
+          <h3 class="text-xl font-bold text-gray-900">Miel de Azahar</h3>
+          <p class="text-sm text-gray-600">Suave y aromática, perfecta para endulzar</p>
+          <div class="flex items-center justify-between">
+            <span class="text-2xl font-bold text-[#F59E0B]">12,99€</span>
+            <span class="text-sm text-gray-500">500g</span>
+          </div>
+          <a 
+            href="/producto/miel-azahar" 
+            class="block w-full text-center px-4 py-3 bg-[#F59E0B] hover:bg-[#D97706] text-white font-semibold rounded-xl transition-colors"
+          >
+            Ver Producto
+          </a>
+        </div>
+      </article>
+
+      <!-- Producto 2 -->
+      <article class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow group">
+        <div class="relative overflow-hidden">
+          <img 
+            src="https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?w=400&h=400&fit=crop" 
+            alt="Miel de Romero en frasco artesanal"
+            class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+            loading="lazy"
+          >
+        </div>
+        <div class="p-6 space-y-3">
+          <h3 class="text-xl font-bold text-gray-900">Miel de Romero</h3>
+          <p class="text-sm text-gray-600">Sabor intenso y propiedades únicas</p>
+          <div class="flex items-center justify-between">
+            <span class="text-2xl font-bold text-[#F59E0B]">14,99€</span>
+            <span class="text-sm text-gray-500">500g</span>
+          </div>
+          <a 
+            href="/producto/miel-romero" 
+            class="block w-full text-center px-4 py-3 bg-[#F59E0B] hover:bg-[#D97706] text-white font-semibold rounded-xl transition-colors"
+          >
+            Ver Producto
+          </a>
+        </div>
+      </article>
+
+      <!-- Producto 3 -->
+      <article class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow group">
+        <div class="relative overflow-hidden">
+          <img 
+            src="https://images.unsplash.com/photo-1587049352851-8d4e89133924?w=400&h=400&fit=crop" 
+            alt="Miel de Bosque natural"
+            class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+            loading="lazy"
+          >
+          <span class="absolute top-4 right-4 px-3 py-1 bg-green-600 text-white text-xs font-bold rounded-full">
+            Eco
+          </span>
+        </div>
+        <div class="p-6 space-y-3">
+          <h3 class="text-xl font-bold text-gray-900">Miel de Bosque</h3>
+          <p class="text-sm text-gray-600">Oscura y robusta, llena de matices</p>
+          <div class="flex items-center justify-between">
+            <span class="text-2xl font-bold text-[#F59E0B]">13,99€</span>
+            <span class="text-sm text-gray-500">500g</span>
+          </div>
+          <a 
+            href="/producto/miel-bosque" 
+            class="block w-full text-center px-4 py-3 bg-[#F59E0B] hover:bg-[#D97706] text-white font-semibold rounded-xl transition-colors"
+          >
+            Ver Producto
+          </a>
+        </div>
+      </article>
+
+      <!-- Producto 4 -->
+      <article class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow group">
+        <div class="relative overflow-hidden">
+          <img 
+            src="https://images.unsplash.com/photo-1471943038776-48c17bca76cc?w=400&h=400&fit=crop" 
+            alt="Miel de Eucalipto medicinal"
+            class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+            loading="lazy"
+          >
+        </div>
+        <div class="p-6 space-y-3">
+          <h3 class="text-xl font-bold text-gray-900">Miel de Eucalipto</h3>
+          <p class="text-sm text-gray-600">Propiedades balsámicas y refrescantes</p>
+          <div class="flex items-center justify-between">
+            <span class="text-2xl font-bold text-[#F59E0B]">15,99€</span>
+            <span class="text-sm text-gray-500">500g</span>
+          </div>
+          <a 
+            href="/producto/miel-eucalipto" 
+            class="block w-full text-center px-4 py-3 bg-[#F59E0B] hover:bg-[#D97706] text-white font-semibold rounded-xl transition-colors"
+          >
+            Ver Producto
+          </a>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="text-center mt-12">
+      <a 
+        href="/productos" 
+        class="inline-flex items-center gap-2 px-8 py-4 bg-white hover:bg-gray-50 text-gray-900 font-semibold rounded-xl shadow-md hover:shadow-lg transition-all border-2 border-gray-200"
+      >
+        Ver Todos los Productos
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Por Qué Elegirnos -->
+<section class="py-20 bg-white">
+  <div class="container mx-auto px-4 lg:px-8">
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <h2>¿Por Qué Elegir The Hive?</h2>
+      <p class="text-lead text-gray-600 mt-4">
+        Compromiso con la calidad, la sostenibilidad y la autenticidad
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      
+      <!-- Beneficio 1 -->
+      <div class="text-center p-8 rounded-2xl bg-gradient-to-br from-[#FEF3C7] to-white hover:shadow-xl transition-shadow">
+        <div class="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-[#F59E0B] to-[#D97706] rounded-2xl flex items-center justify-center text-3xl shadow-lg">
+          🐝
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 mb-3">100% Natural</h3>
+        <p class="text-gray-600">
+          Sin aditivos ni conservantes. Solo miel pura directamente de la colmena.
+        </p>
+      </div>
+
+      <!-- Beneficio 2 -->
+      <div class="text-center p-8 rounded-2xl bg-gradient-to-br from-[#FEF3C7] to-white hover:shadow-xl transition-shadow">
+        <div class="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-[#F59E0B] to-[#D97706] rounded-2xl flex items-center justify-center text-3xl shadow-lg">
+          🌱
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 mb-3">Sostenible</h3>
+        <p class="text-gray-600">
+          Prácticas apícolas responsables que protegen las abejas y el medio ambiente.
+        </p>
+      </div>
+
+      <!-- Beneficio 3 -->
+      <div class="text-center p-8 rounded-2xl bg-gradient-to-br from-[#FEF3C7] to-white hover:shadow-xl transition-shadow">
+        <div class="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-[#F59E0B] to-[#D97706] rounded-2xl flex items-center justify-center text-3xl shadow-lg">
+          🏔️
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 mb-3">Local</h3>
+        <p class="text-gray-600">
+          Trabajamos con apicultores locales de Andalucía y toda España.
+        </p>
+      </div>
+
+      <!-- Beneficio 4 -->
+      <div class="text-center p-8 rounded-2xl bg-gradient-to-br from-[#FEF3C7] to-white hover:shadow-xl transition-shadow">
+        <div class="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-[#F59E0B] to-[#D97706] rounded-2xl flex items-center justify-center text-3xl shadow-lg">
+          🔬
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 mb-3">Certificada</h3>
+        <p class="text-gray-600">
+          Análisis de laboratorio garantizan la pureza y calidad de cada lote.
+        </p>
+      </div>
+
+      <!-- Beneficio 5 -->
+      <div class="text-center p-8 rounded-2xl bg-gradient-to-br from-[#FEF3C7] to-white hover:shadow-xl transition-shadow">
+        <div class="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-[#F59E0B] to-[#D97706] rounded-2xl flex items-center justify-center text-3xl shadow-lg">
+          📦
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 mb-3">Envío Rápido</h3>
+        <p class="text-gray-600">
+          Entrega en 24-48h para que disfrutes de tu miel lo antes posible.
+        </p>
+      </div>
+
+      <!-- Beneficio 6 -->
+      <div class="text-center p-8 rounded-2xl bg-gradient-to-br from-[#FEF3C7] to-white hover:shadow-xl transition-shadow">
+        <div class="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-[#F59E0B] to-[#D97706] rounded-2xl flex items-center justify-center text-3xl shadow-lg">
+          ❤️
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 mb-3">Pasión</h3>
+        <p class="text-gray-600">
+          Cada frasco cuenta la historia de nuestros apicultores y su dedicación.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Testimonios -->
+<section class="py-20 bg-gradient-to-b from-white to-[#FEF3C7]">
+  <div class="container mx-auto px-4 lg:px-8">
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <h2>Lo Que Dicen Nuestros Clientes</h2>
+      <p class="text-lead text-gray-600 mt-4">
+        Miles de personas ya disfrutan de nuestra miel
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-8">
+      
+      <!-- Testimonio 1 -->
+      <article class="bg-white p-8 rounded-2xl shadow-lg">
+        <div class="flex items-center gap-1 mb-4">
+          <svg class="w-5 h-5 text-[#F59E0B]" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+          </svg>
+          <svg class="w-5 h-5 text-[#F59E0B]" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+          </svg>
+          <svg class="w-5 h-5 text-[#F59E0B]" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+          </svg>
+          <svg class="w-5 h-5 text-[#F59E0B]" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+          </svg>
+          <svg class="w-5 h-5 text-[#F59E0B]" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+          </svg>
+        </div>
+        <p class="text-gray-700 mb-6 italic">
+          "La mejor miel que he probado nunca. El sabor a azahar es increíble y se nota que es 100% natural. ¡Repito cada mes!"
+        </p>
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 bg-gradient-to-br from-[#F59E0B] to-[#D97706] rounded-full flex items-center justify-center text-white font-bold">
+            MC
+          </div>
+          <div>
+            <div class="font-semibold text-gray-900">María Carmen</div>
+            <div class="text-sm text-gray-500">Málaga</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Testimonio 2 -->
+      <article class="bg-white p-8 rounded-2xl shadow-lg">
+        <div class="flex items-center gap-1 mb-4">
+          <svg class="w-5 h-5 text-[#F59E0B]" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+          </svg>
+          <svg class="w-5 h-5 text-[#F59E0B]" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+          </svg>
+          <svg class="w-5 h-5 text-[#F59E0B]" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+          </svg>
+          <svg class="w-5 h-5 text-[#F59E0B]" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+          </svg>
+          <svg class="w-5 h-5 text-[#F59E0B]" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+          </svg>
+        </div>
+        <p class="text-gray-700 mb-6 italic">
+          "Excelente calidad y envío rapidísimo. Me encanta conocer la historia de cada apicultor. Es miel con alma."
+        </p>
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 bg-gradient-to-br from-[#F59E0B] to-[#D97706] rounded-full flex items-center justify-center text-white font-bold">
+            JL
+          </div>
+          <div>
+            <div class="font-semibold text-gray-900">Javier López</div>
+            <div class="text-sm text-gray-500">Granada</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Testimonio 3 -->
+      <article class="bg-white p-8 rounded-2xl shadow-lg">
+        <div class="flex items-center gap-1 mb-4">
+          <svg class="w-5 h-5 text-[#F59E0B]" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+          </svg>
+          <svg class="w-5 h-5 text-[#F59E0B]" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+          </svg>
+          <svg class="w-5 h-5 text-[#F59E0B]" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+          </svg>
+          <svg class="w-5 h-5 text-[#F59E0B]" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+          </svg>
+          <svg class="w-5 h-5 text-[#F59E0B]" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+          </svg>
+        </div>
+        <p class="text-gray-700 mb-6 italic">
+          "Compré la miel de eucalipto para mi hijo que tiene tos. Funciona de maravilla y además está deliciosa. ¡Totalmente recomendable!"
+        </p>
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 bg-gradient-to-br from-[#F59E0B] to-[#D97706] rounded-full flex items-center justify-center text-white font-bold">
+            AR
+          </div>
+          <div>
+            <div class="font-semibold text-gray-900">Ana Rodríguez</div>
+            <div class="text-sm text-gray-500">Sevilla</div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- Blog Preview -->
+<section class="py-20 bg-white">
+  <div class="container mx-auto px-4 lg:px-8">
+    <div class="flex justify-between items-end mb-12">
+      <div>
+        <h2>Últimas del Blog</h2>
+        <p class="text-lead text-gray-600 mt-2">
+          Aprende más sobre la miel y sus beneficios
+        </p>
+      </div>
+      <a href="/blog" class="hidden md:inline-flex items-center gap-2 text-[#F59E0B] hover:text-[#D97706] font-semibold">
+        Ver Todos
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+        </svg>
+      </a>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-8">
+      
+      <!-- Artículo 1 -->
+      <article class="group">
+        <a href="/blog/beneficios-miel" class="block">
+          <div class="relative overflow-hidden rounded-xl mb-4">
+            <img 
+              src="https://images.unsplash.com/photo-1587049352846-4a222e784387?w=600&h=400&fit=crop" 
+              alt="Beneficios de la miel para la salud"
+              class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
+              loading="lazy"
+            >
+          </div>
+          <span class="text-sm text-[#F59E0B] font-semibold">Salud y Bienestar</span>
+          <h3 class="text-xl font-bold text-gray-900 mt-2 mb-2 group-hover:text-[#F59E0B] transition-colors">
+            10 Beneficios de la Miel para Tu Salud
+          </h3>
+          <p class="text-gray-600 text-sm mb-3">
+            Descubre por qué la miel es considerada un superalimento y cómo puede mejorar tu bienestar.
+          </p>
+          <div class="flex items-center gap-2 text-sm text-gray-500">
+            <span>5 min lectura</span>
+            <span>•</span>
+            <span>12 Feb 2026</span>
+          </div>
+        </a>
+      </article>
+
+      <!-- Artículo 2 -->
+      <article class="group">
+        <a href="/blog/tipos-miel" class="block">
+          <div class="relative overflow-hidden rounded-xl mb-4">
+            <img 
+              src="https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?w=600&h=400&fit=crop" 
+              alt="Diferentes tipos de miel"
+              class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
+              loading="lazy"
+            >
+          </div>
+          <span class="text-sm text-[#F59E0B] font-semibold">Educación</span>
+          <h3 class="text-xl font-bold text-gray-900 mt-2 mb-2 group-hover:text-[#F59E0B] transition-colors">
+            Guía Completa de Tipos de Miel
+          </h3>
+          <p class="text-gray-600 text-sm mb-3">
+            Aprende a diferenciar entre miel monoflora, multiflora y premium. Características únicas de cada una.
+          </p>
+          <div class="flex items-center gap-2 text-sm text-gray-500">
+            <span>8 min lectura</span>
+            <span>•</span>
+            <span>10 Feb 2026</span>
+          </div>
+        </a>
+      </article>
+
+      <!-- Artículo 3 -->
+      <article class="group">
+        <a href="/blog/recetas-miel" class="block">
+          <div class="relative overflow-hidden rounded-xl mb-4">
+            <img 
+              src="https://images.unsplash.com/photo-1587049352851-8d4e89133924?w=600&h=400&fit=crop" 
+              alt="Recetas con miel"
+              class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
+              loading="lazy"
+            >
+          </div>
+          <span class="text-sm text-[#F59E0B] font-semibold">Recetas</span>
+          <h3 class="text-xl font-bold text-gray-900 mt-2 mb-2 group-hover:text-[#F59E0B] transition-colors">
+            5 Recetas Deliciosas con Miel
+          </h3>
+          <p class="text-gray-600 text-sm mb-3">
+            Desde desayunos hasta postres, descubre cómo incorporar miel en tu cocina diaria.
+          </p>
+          <div class="flex items-center gap-2 text-sm text-gray-500">
+            <span>6 min lectura</span>
+            <span>•</span>
+            <span>8 Feb 2026</span>
+          </div>
+        </a>
+      </article>
+
+    </div>
+
+    <div class="text-center mt-8 md:hidden">
+      <a href="/blog" class="inline-flex items-center gap-2 text-[#F59E0B] hover:text-[#D97706] font-semibold">
+        Ver Todos los Artículos
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Final -->
+<section class="py-20 bg-gradient-to-br from-[#F59E0B] to-[#D97706] text-white relative overflow-hidden">
+  <!-- Hexágonos decorativos -->
+  <div class="absolute inset-0 opacity-10">
+    <div class="hexagon-white hex-cta-1"></div>
+    <div class="hexagon-white hex-cta-2"></div>
+    <div class="hexagon-white hex-cta-3"></div>
+  </div>
+
+  <div class="container mx-auto px-4 lg:px-8 text-center relative z-10">
+    <div class="max-w-3xl mx-auto space-y-8">
+      <h2 class="text-white">¿Listo para Probar la Mejor Miel?</h2>
+      <p class="text-xl text-white/90">
+        Únete a miles de clientes satisfechos y descubre el auténtico sabor de la miel artesanal
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a 
+          href="/productos" 
+          class="px-8 py-4 bg-white text-[#F59E0B] font-bold rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
+        >
+          Explorar Productos
+        </a>
+        <a 
+          href="/contacto" 
+          class="px-8 py-4 bg-transparent border-2 border-white text-white font-semibold rounded-xl hover:bg-white hover:text-[#F59E0B] transition-all"
+        >
+          Contactar
+        </a>
+      </div>
+      
+      <!-- Trust badges -->
+      <div class="flex flex-wrap justify-center items-center gap-8 pt-8 text-white/80">
+        <div class="flex items-center gap-2">
+          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+          </svg>
+          <span class="text-sm font-medium">Pago Seguro</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"></path>
+            <path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1v-5a1 1 0 00-.293-.707l-2-2A1 1 0 0015 7h-1z"></path>
+          </svg>
+          <span class="text-sm font-medium">Envío 24-48h</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+          </svg>
+          <span class="text-sm font-medium">100% Natural</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</Layout>
+
+<style>
+  /* Animaciones personalizadas */
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in-up {
+    animation: fade-in-up 0.8s ease-out forwards;
+    opacity: 0;
+  }
+
+  .animation-delay-100 {
+    animation-delay: 0.1s;
+  }
+
+  .animation-delay-200 {
+    animation-delay: 0.2s;
+  }
+
+  .animation-delay-300 {
+    animation-delay: 0.3s;
+  }
+
+  .animation-delay-400 {
+    animation-delay: 0.4s;
+  }
+
+  .animation-delay-500 {
+    animation-delay: 0.5s;
+  }
+
+  /* Hexágonos animados */
+  .hexagon {
+    position: absolute;
+    width: 100px;
+    height: 57.74px;
+    background-color: rgba(245, 158, 11, 0.05);
+    margin: 28.87px 0;
+  }
+
+  .hexagon:before,
+  .hexagon:after {
+    content: "";
+    position: absolute;
+    width: 0;
+    border-left: 50px solid transparent;
+    border-right: 50px solid transparent;
+  }
+
+  .hexagon:before {
+    bottom: 100%;
+    border-bottom: 28.87px solid rgba(245, 158, 11, 0.05);
+  }
+
+  .hexagon:after {
+    top: 100%;
+    border-top: 28.87px solid rgba(245, 158, 11, 0.05);
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px) rotate(0deg);
+      opacity: 0.3;
+    }
+    50% {
+      transform: translateY(-30px) rotate(180deg);
+      opacity: 0.1;
+    }
+  }
+
+  .hex-1 {
+    top: 10%;
+    left: 5%;
+    animation: float 25s infinite ease-in-out;
+  }
+
+  .hex-2 {
+    top: 60%;
+    left: 80%;
+    animation: float 20s infinite ease-in-out 2s;
+  }
+
+  .hex-3 {
+    top: 30%;
+    right: 10%;
+    animation: float 22s infinite ease-in-out 4s;
+  }
+
+  .hex-4 {
+    bottom: 10%;
+    left: 15%;
+    animation: float 28s infinite ease-in-out 6s;
+  }
+
+  .hex-5 {
+    top: 50%;
+    left: 40%;
+    animation: float 24s infinite ease-in-out 3s;
+  }
+
+  /* Hexágonos blancos para CTA */
+  .hexagon-white {
+    position: absolute;
+    width: 120px;
+    height: 69.28px;
+    background-color: rgba(255, 255, 255, 0.1);
+    margin: 34.64px 0;
+  }
+
+  .hexagon-white:before,
+  .hexagon-white:after {
+    content: "";
+    position: absolute;
+    width: 0;
+    border-left: 60px solid transparent;
+    border-right: 60px solid transparent;
+  }
+
+  .hexagon-white:before {
+    bottom: 100%;
+    border-bottom: 34.64px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .hexagon-white:after {
+    top: 100%;
+    border-top: 34.64px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .hex-cta-1 {
+    top: 20%;
+    left: 10%;
+    animation: float 20s infinite ease-in-out;
+  }
+
+  .hex-cta-2 {
+    top: 60%;
+    right: 15%;
+    animation: float 25s infinite ease-in-out 3s;
+  }
+
+  .hex-cta-3 {
+    bottom: 20%;
+    left: 70%;
+    animation: float 22s infinite ease-in-out 5s;
+  }
+</style>

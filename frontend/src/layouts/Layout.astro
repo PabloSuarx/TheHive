@@ -1,0 +1,61 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const { 
+  titulo, 
+  descripcion = 'The Hive - Miel artesanal de calidad premium directamente de la colmena a tu mesa. Descubre nuestras mieles monoflora y multiflora.',
+  imagen = '/images/og-default.jpg',
+  tipo = 'website',
+  keywords = 'miel artesanal, miel natural, apicultura, miel premium, productos naturales'
+} = Astro.props;
+
+const siteName = 'The Hive';
+const urlActual = Astro.url.href;
+const tituloCompleto = `${titulo} | ${siteName}`;
+---
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content={descripcion}>
+  <meta name="keywords" content={keywords}>
+  <meta name="author" content="The Hive">
+  
+  <title>{tituloCompleto}</title>
+
+  <meta property="og:type" content={tipo}>
+  <meta property="og:url" content={urlActual}>
+  <meta property="og:title" content={tituloCompleto}>
+  <meta property="og:description" content={descripcion}>
+  <meta property="og:image" content={imagen}>
+  <meta property="og:site_name" content={siteName}>
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content={urlActual}>
+  <meta name="twitter:title" content={tituloCompleto}>
+  <meta name="twitter:description" content={descripcion}>
+  <meta name="twitter:image" content={imagen}>
+  
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  
+  <link rel="canonical" href={urlActual}>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+
+  <meta name="theme-color" content="#F59E0B">
+  <meta name="robots" content="index, follow">
+</head>
+
+<body class="flex flex-col min-h-screen bg-white">
+  <Header />
+  <main id="main-content" class="grow">
+    <slot />
+  </main>
+  <Footer />
+</body>
+</html>
