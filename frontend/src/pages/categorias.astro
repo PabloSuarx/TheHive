@@ -1,0 +1,64 @@
+---
+import Layout from '../layouts/Layout.astro';
+import CategoryCard from '../components/CategoryCard.astro';
+import { getCategories } from '../lib/strapi';
+
+const PUBLIC_STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL;
+const categories = await getCategories();
+---
+
+<Layout 
+  titulo="Categorías"
+  descripcion="Explora nuestras categorías de miel artesanal: monoflora, multiflora, premium y más."
+  keywords="categorías miel, tipos de miel, miel monoflora, miel multiflora, miel premium"
+>
+
+<section class="relative overflow-hidden bg-gradient-to-br from-[#FEF3C7] via-white to-[#FEF3C7] py-20 lg:py-32">
+  <div class="absolute inset-0 overflow-hidden pointer-events-none opacity-30">
+    <div class="hexagon hex-1"></div>
+    <div class="hexagon hex-2"></div>
+    <div class="hexagon hex-3"></div>
+  </div>
+
+  <div class="container mx-auto px-4 lg:px-8 relative z-10">
+    <div class="max-w-3xl mx-auto text-center space-y-6 animate-fade-in-up">
+
+      <h1 class="text-gradient-honey">Categorías de Miel</h1>
+      <p class="text-lead text-gray-600">
+        Descubre todos los tipos de miel artesanal que tenemos para ti
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="py-20 bg-white">
+  <div class="container mx-auto px-4 lg:px-8">
+    {categories.length > 0 ? (
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {categories.map((cat) => {
+          const imageUrl = cat.image?.url 
+            ? `${PUBLIC_STRAPI_URL}${cat.image.url}` 
+            : undefined;
+
+          return (
+            <CategoryCard
+              name={cat.name}
+              slug={cat.slug}
+              description={cat.description}
+              icon={cat.icon}
+              imageUrl={imageUrl}
+              productCount={cat.products?.length || 0}
+            />
+          );
+        })}
+      </div>
+    ) : (
+      <div class="text-center py-16">
+        <span class="text-6xl mb-4 block">🐝</span>
+        <p class="text-gray-500 text-lg">No hay categorías disponibles todavía.</p>
+      </div>
+    )}
+  </div>
+</section>
+
+</Layout>

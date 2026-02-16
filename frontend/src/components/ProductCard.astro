@@ -1,0 +1,125 @@
+---
+interface Props {
+  name: string;
+  slug: string;
+  price: number;
+  shortDescription?: string;
+  imageUrl?: string;
+  weightValue?: number;
+  weightUnit?: string;
+  featured?: boolean;
+  organic?: boolean;
+  stock?: number;
+  rating?: number;
+  categoryName?: string;
+  className?: string;
+}
+
+const { 
+  name, 
+  slug, 
+  price, 
+  shortDescription,
+  imageUrl, 
+  weightValue,
+  weightUnit,
+  featured = false,
+  organic = false,
+  stock = 0,
+  rating,
+  categoryName,
+  className = '' 
+} = Astro.props;
+
+const placeholder = 'https://images.unsplash.com/photo-1587049352846-4a222e784387?w=400&h=400&fit=crop';
+const imgSrc = imageUrl || placeholder;
+const outOfStock = stock <= 0;
+
+const formatPrice = (p: number) => {
+  return p.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+};
+---
+
+<article class={`bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow group ${className}`}>
+  <div class="relative overflow-hidden">
+    <a href={`/producto/${slug}`}>
+      <img 
+        src={imgSrc}
+        alt={name}
+        class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+        loading="lazy"
+      />
+    </a>
+
+    {featured && (
+      <span class="absolute top-4 right-4 px-3 py-1 bg-[#F59E0B] text-white text-xs font-bold rounded-full">
+        Destacado
+      </span>
+    )}
+
+    {organic && (
+      <span class="absolute top-4 left-4 px-3 py-1 bg-green-500 text-white text-xs font-bold rounded-full">
+        Ecológico
+      </span>
+    )}
+
+    {outOfStock && (
+      <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
+        <span class="bg-red-600 text-white px-4 py-2 rounded-full font-bold text-sm">
+          Agotado
+        </span>
+      </div>
+    )}
+  </div>
+
+  <div class="p-6 space-y-3">
+    {categoryName && (
+      <span class="text-xs text-[#F59E0B] font-semibold uppercase tracking-wide">
+        {categoryName}
+      </span>
+    )}
+
+    <h3 class="text-xl font-bold text-gray-900">
+      <a href={`/producto/${slug}`} class="hover:text-[#F59E0B] transition-colors">
+        {name}
+      </a>
+    </h3>
+
+    {shortDescription && (
+      <p class="text-sm text-gray-600 line-clamp-2">{shortDescription}</p>
+    )}
+
+    {rating && rating > 0 && (
+      <div class="flex items-center gap-1">
+        {[...Array(5)].map((_, i) => (
+          <svg 
+            class={`w-4 h-4 ${i < Math.round(rating) ? 'text-[#F59E0B]' : 'text-gray-300'}`} 
+            fill="currentColor" 
+            viewBox="0 0 20 20"
+          >
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+          </svg>
+        ))}
+        <span class="text-xs text-gray-500 ml-1">({rating})</span>
+      </div>
+    )}
+
+    <div class="flex items-center justify-between">
+      <span class="text-2xl font-bold text-[#F59E0B]">{formatPrice(price)}€</span>
+      {weightValue && weightUnit && (
+        <span class="text-sm text-gray-500">{weightValue}{weightUnit}</span>
+      )}
+    </div>
+
+    <a 
+      href={`/producto/${slug}`}
+      class={`block w-full text-center px-4 py-3 font-semibold rounded-xl transition-colors ${
+        outOfStock 
+          ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
+          : 'bg-[#F59E0B] hover:bg-[#D97706] text-white'
+      }`}
+    >
+      {outOfStock ? 'Sin Stock' : 'Ver Producto'}
+    </a>
+  </div>
+</article>

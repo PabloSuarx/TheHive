@@ -1,0 +1,118 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCategories, getCategoryBySlug } from '../../lib/strapi';
+
+const PUBLIC_STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL;
+const { slug } = Astro.params;
+
+const category = await getCategoryBySlug(slug);
+
+if (!category) {
+  return Astro.redirect('/404');
+}
+
+const products = category.products || [];
+
+const seoTitle = category.seo?.metaTitle || category.name;
+const seoDescription = category.seo?.metaDescription || category.description || `Descubre nuestra selección de ${category.name}`;
+
+export async function getStaticPaths() {
+  const categories = await getCategories();
+  return categories.map((cat) => ({
+    params: { slug: cat.slug },
+  }));
+}
+---
+
+<Layout 
+  titulo={seoTitle}
+  descripcion={seoDescription}
+  keywords={`miel ${category.name}, ${category.name} artesanal`}
+>
+
+<!-- Hero -->
+<section class="relative overflow-hidden bg-gradient-to-br from-[#FEF3C7] via-white to-[#FEF3C7] py-20 lg:py-32">
+  <div class="absolute inset-0 overflow-hidden pointer-events-none opacity-30">
+    <div class="hexagon hex-1"></div>
+    <div class="hexagon hex-2"></div>
+  </div>
+
+  <div class="container mx-auto px-4 lg:px-8 relative z-10">
+    <div class="max-w-3xl mx-auto text-center space-y-6 animate-fade-in-up">
+      {category.icon && <span class="text-6xl">{category.icon}</span>}
+      <h1 class="text-gradient-honey">{category.name}</h1>
+      {category.description && (
+        <p class="text-lead text-gray-600">{category.description}</p>
+      )}
+      <p class="text-sm text-gray-500">
+        {products.length} {products.length === 1 ? 'producto' : 'productos'} disponibles
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Productos -->
+<section class="py-20 bg-white">
+  <div class="container mx-auto px-4 lg:px-8">
+    {products.length > 0 ? (
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        {products.map((product) => {
+          const imgUrl = product.mainImage?.url 
+            ? `${PUBLIC_STRAPI_URL}${product.mainImage.url}` 
+            : 'https://images.unsplash.com/photo-1587049352846-4a222e784387?w=400&h=400&fit=crop';
+
+          return (
+            <article class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow group">
+              <div class="relative overflow-hidden">
+                <img 
+                  src={imgUrl}
+                  alt={product.name}
+                  class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+                  loading="lazy"
+                />
+                {product.featured && (
+                  <span class="absolute top-4 right-4 px-3 py-1 bg-[#F59E0B] text-white text-xs font-bold rounded-full">
+                    Destacado
+                  </span>
+                )}
+                {product.organic && (
+                  <span class="absolute top-4 left-4 px-3 py-1 bg-green-500 text-white text-xs font-bold rounded-full">
+                    Ecológico
+                  </span>
+                )}
+              </div>
+              <div class="p-6 space-y-3">
+                <h3 class="text-xl font-bold text-gray-900">{product.name}</h3>
+                {product.shortDescription && (
+                  <p class="text-sm text-gray-600 line-clamp-2">{product.shortDescription}</p>
+                )}
+                <div class="flex items-center justify-between">
+                  <span class="text-2xl font-bold text-[#F59E0B]">{product.price}€</span>
+                  {product.weightValue && (
+                    <span class="text-sm text-gray-500">{product.weightValue}{product.weightUnit}</span>
+                  )}
+                </div>
+                <a 
+                  href={`/producto/${product.slug}`}
+                  class="block w-full text-center px-4 py-3 bg-[#F59E0B] hover:bg-[#D97706] text-white font-semibold rounded-xl transition-colors"
+                >
+                  Ver Producto
+                </a>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    ) : (
+      <div class="text-center py-16">
+        <span class="text-6xl mb-4 block">🐝</span>
+        <p class="text-gray-500 text-lg mb-4">Aún no hay productos en esta categoría.</p>
+        <a href="/categorias" class="text-[#F59E0B] font-semibold hover:underline">
+          ← Volver a categorías
+        </a>
+      </div>
+    )}
+  </div>
+</section>
+
+</Layout>

@@ -16,7 +16,7 @@ const { siteConfig, logoUrl, logoAlt } = Astro.props;
 const siteName = siteConfig.siteName;
 
 const navigationData = await getNavigation();
-const navLinks: NavLink[] = navigationData?.menuItems || [];
+const navLinks: NavLink[] = navigationData?.menuItems;
 
 const sortedLinks = navLinks.sort((a, b) => a.order - b.order);
 ---

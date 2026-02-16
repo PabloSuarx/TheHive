@@ -1,5 +1,5 @@
 ---
-import { getFooter } from "../lib/strapi";
+import { fetchAPI, getFooter } from "../lib/strapi";
 import Logo from './Logo.astro';
 
 const { siteConfig, logoUrl, logoAlt } = Astro.props;
@@ -37,11 +37,19 @@ const linksByColumn = links.reduce<LinksByColumn>((acc, link) => {
   return acc;
 }, {});
 
+
+
+// const columnOrder = fetchAPI("ui-component");
+
+// console.log(columnOrder);
+
 const columnOrder = ["General","Empresa", "Ayuda", "Legal"];
+
+
 ---
 
 <footer class="bg-bg-footer text-tertiary mt-auto">
-  <div class="container mx-auto px-4 lg:px-8 py-12">
+  <div class="container mx-auto px-4 lg:px-8 py-8">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
       <div class="space-y-4">
         <div class="flex items-center gap-3">
@@ -102,10 +110,14 @@ const columnOrder = ["General","Empresa", "Ayuda", "Legal"];
           : null;
         })
       }
+
+      
     </div>
+    
   </div>
 
-  <div class="border-t border-divider">
+
+  <div class="border-t border-divider ">
     <div class="container mx-auto px-4 lg:px-8 py-6">
       <div class="flex flex-col md:flex-row justify-between items-center gap-4">
         <p class="text-sm text-secondary text-center md:text-left">

@@ -1,9 +1,17 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Button from '../components/Button.astro';
-import { getButtons } from '../lib/strapi';
+import CategoryCard from '../components/CategoryCard.astro';
+
+import BlogCard from '../components/BlogCard.astro';
+import { getButtons, getCategories, getFeaturedProducts, getBlogs } from '../lib/strapi';
+const blogs = await getBlogs();
+const latestBlogs = blogs.slice(0, 3);
+
+const PUBLIC_STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL;
 
 const buttons = await getButtons();
+const categories = await getCategories();
 
 const buttonsByName = buttons.reduce((acc, btn) => {
   acc[btn.content] = btn;
@@ -17,6 +25,7 @@ const buttonsByName = buttons.reduce((acc, btn) => {
   keywords="miel artesanal, miel natural, miel premium, miel pura, apicultura sostenible, productos naturales, miel de azahar, miel multiflora"
 >
 
+<!-- Hero -->
 <section class="relative overflow-hidden bg-gradient-to-br from-[#FEF3C7] via-white to-[#FEF3C7] py-20 lg:py-32">
   <div class="absolute inset-0 overflow-hidden pointer-events-none">
     <div class="hexagon hex-1"></div>
@@ -84,6 +93,7 @@ const buttonsByName = buttons.reduce((acc, btn) => {
   </div>
 </section>
 
+<!-- Categorías (DINÁMICO desde Strapi) -->
 <section class="py-20 bg-white">
   <div class="container mx-auto px-4 lg:px-8">
     <div class="text-center max-w-3xl mx-auto mb-16">
@@ -93,63 +103,35 @@ const buttonsByName = buttons.reduce((acc, btn) => {
       </p>
     </div>
 
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-      
-      <a href="/categoria/monoflora" class="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all transform hover:scale-105">
-        <img 
-          src="https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?w=600&h=400&fit=crop" 
-          alt="Miel Monoflora de flores específicas"
-          class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
-          loading="lazy"
-        >
-        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
-        <div class="absolute bottom-0 left-0 right-0 p-6">
-          <div class="flex items-center gap-2 mb-2">
-            <span class="text-3xl">🌸</span>
-            <h3 class="text-white text-2xl font-bold">Miel Monoflora</h3>
-          </div>
-          <p class="text-gray-200 text-sm">Azahar, Romero, Eucalipto y más</p>
-        </div>
-      </a>
+    {categories.length > 0 ? (
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {categories.map((cat) => {
+          const imageUrl = cat.image?.url 
+            ? `${PUBLIC_STRAPI_URL}${cat.image.url}` 
+            : undefined;
 
-      <a href="/categoria/multiflora" class="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all transform hover:scale-105">
-        <img 
-          src="https://images.unsplash.com/photo-1587049352851-8d4e89133924?w=600&h=400&fit=crop" 
-          alt="Miel Multiflora de múltiples flores"
-          class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
-          loading="lazy"
-        >
-        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
-        <div class="absolute bottom-0 left-0 right-0 p-6">
-          <div class="flex items-center gap-2 mb-2">
-            <span class="text-3xl">🌺</span>
-            <h3 class="text-white text-2xl font-bold">Miel Multiflora</h3>
-          </div>
-          <p class="text-gray-200 text-sm">Bosque, Montaña, Primavera</p>
-        </div>
-      </a>
-
-      <a href="/categoria/premium" class="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all transform hover:scale-105">
-        <img 
-          src="https://images.unsplash.com/photo-1587049352846-4a222e784387?w=600&h=400&fit=crop" 
-          alt="Miel Premium de alta calidad"
-          class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
-          loading="lazy"
-        >
-        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
-        <div class="absolute bottom-0 left-0 right-0 p-6">
-          <div class="flex items-center gap-2 mb-2">
-            <span class="text-3xl">⭐</span>
-            <h3 class="text-white text-2xl font-bold">Miel Premium</h3>
-          </div>
-          <p class="text-gray-200 text-sm">Manuka, Tupelo, Acacia</p>
-        </div>
-      </a>
-
-    </div>
+          return (
+            <CategoryCard
+              name={cat.name}
+              slug={cat.slug}
+              description={cat.description}
+              icon={cat.icon}
+              imageUrl={imageUrl}
+              productCount={cat.products?.length || 0}
+            />
+          );
+        })}
+      </div>
+    ) : (
+      <div class="text-center py-16">
+        <span class="text-6xl mb-4 block">🐝</span>
+        <p class="text-gray-500 text-lg">No hay categorías disponibles todavía.</p>
+      </div>
+    )}
   </div>
 </section>
 
+<!-- Productos Destacados -->
 <section class="py-20 bg-gradient-to-b from-white to-[#FEF3C7]">
   <div class="container mx-auto px-4 lg:px-8">
     <div class="text-center max-w-3xl mx-auto mb-16">
@@ -277,6 +259,7 @@ const buttonsByName = buttons.reduce((acc, btn) => {
   </div>
 </section>
 
+<!-- ¿Por Qué Elegir The Hive? -->
 <section class="py-20 bg-white">
   <div class="container mx-auto px-4 lg:px-8">
     <div class="text-center max-w-3xl mx-auto mb-16">
@@ -352,6 +335,7 @@ const buttonsByName = buttons.reduce((acc, btn) => {
   </div>
 </section>
 
+<!-- Testimonios -->
 <section class="py-20 bg-gradient-to-b from-white to-[#FEF3C7]">
   <div class="container mx-auto px-4 lg:px-8">
     <div class="text-center max-w-3xl mx-auto mb-16">
@@ -394,15 +378,15 @@ const buttonsByName = buttons.reduce((acc, btn) => {
           ))}
         </div>
         <p class="text-gray-700 mb-6 italic">
-          "Excelente calidad y envío rapidísimo. Me encanta conocer la historia de cada apicultor. Es miel con alma."
+          "Excelente calidad y envío rapidísimo. Funciona de maravilla y además está deliciosa. ¡Totalmente recomendable!"
         </p>
         <div class="flex items-center gap-3">
           <div class="w-12 h-12 bg-gradient-to-br from-[#F59E0B] to-[#D97706] rounded-full flex items-center justify-center text-white font-bold">
-            JL
+            JP
           </div>
           <div>
-            <div class="font-semibold text-gray-900">Javier López</div>
-            <div class="text-sm text-gray-500">Granada</div>
+            <div class="font-semibold text-gray-900">Javier Pérez</div>
+            <div class="text-sm text-gray-500">Madrid</div>
           </div>
         </div>
       </article>
@@ -416,7 +400,7 @@ const buttonsByName = buttons.reduce((acc, btn) => {
           ))}
         </div>
         <p class="text-gray-700 mb-6 italic">
-          "Compré la miel de eucalipto para mi hijo que tiene tos. Funciona de maravilla y además está deliciosa. ¡Totalmente recomendable!"
+          "Desde que descubrí The Hive no compro otra miel. La de romero es espectacular para el desayuno."
         </p>
         <div class="flex items-center gap-3">
           <div class="w-12 h-12 bg-gradient-to-br from-[#F59E0B] to-[#D97706] rounded-full flex items-center justify-center text-white font-bold">
@@ -433,6 +417,7 @@ const buttonsByName = buttons.reduce((acc, btn) => {
   </div>
 </section>
 
+<!-- Blog (DINÁMICO) -->
 <section class="py-20 bg-white">
   <div class="container mx-auto px-4 lg:px-8">
     <div class="flex justify-between items-end mb-12">
@@ -442,94 +427,46 @@ const buttonsByName = buttons.reduce((acc, btn) => {
           Aprende más sobre la miel y sus beneficios
         </p>
       </div>
-      {buttonsByName['Leer más'] && (
-        <div class="hidden md:block">
-          <Button {...buttonsByName['Leer más']} variant="ghost" />
-        </div>
-      )}
+      <div class="hidden md:block">
+        <a href="/blog" class="inline-flex items-center gap-2 text-[#F59E0B] font-semibold hover:underline">
+          Ver todos
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </a>
+      </div>
     </div>
 
-    <div class="grid md:grid-cols-3 gap-8">
-      
-      <article class="group">
-        <a href="/blog/beneficios-miel" class="block">
-          <div class="relative overflow-hidden rounded-xl mb-4">
-            <img 
-              src="https://images.unsplash.com/photo-1587049352846-4a222e784387?w=600&h=400&fit=crop" 
-              alt="Beneficios de la miel para la salud"
-              class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
-              loading="lazy"
-            >
-          </div>
-          <span class="text-sm text-[#F59E0B] font-semibold">Salud y Bienestar</span>
-          <h3 class="text-xl font-bold text-gray-900 mt-2 mb-2 group-hover:text-[#F59E0B] transition-colors">
-            10 Beneficios de la Miel para Tu Salud
-          </h3>
-          <p class="text-gray-600 text-sm mb-3">
-            Descubre por qué la miel es considerada un superalimento y cómo puede mejorar tu bienestar.
-          </p>
-          <div class="flex items-center gap-2 text-sm text-gray-500">
-            <span>5 min lectura</span>
-            <span>•</span>
-            <span>12 Feb 2026</span>
-          </div>
-        </a>
-      </article>
+    {latestBlogs.length > 0 ? (
+      <div class="grid md:grid-cols-3 gap-8">
+        {latestBlogs.map((blog) => {
+          const imgUrl = blog.featuredImage?.url 
+            ? `${PUBLIC_STRAPI_URL}${blog.featuredImage.url}` 
+            : undefined;
 
-      <article class="group">
-        <a href="/blog/tipos-miel" class="block">
-          <div class="relative overflow-hidden rounded-xl mb-4">
-            <img 
-              src="https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?w=600&h=400&fit=crop" 
-              alt="Diferentes tipos de miel"
-              class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
-              loading="lazy"
-            >
-          </div>
-          <span class="text-sm text-[#F59E0B] font-semibold">Educación</span>
-          <h3 class="text-xl font-bold text-gray-900 mt-2 mb-2 group-hover:text-[#F59E0B] transition-colors">
-            Guía Completa de Tipos de Miel
-          </h3>
-          <p class="text-gray-600 text-sm mb-3">
-            Aprende a diferenciar entre miel monoflora, multiflora y premium. Características únicas de cada una.
-          </p>
-          <div class="flex items-center gap-2 text-sm text-gray-500">
-            <span>8 min lectura</span>
-            <span>•</span>
-            <span>10 Feb 2026</span>
-          </div>
-        </a>
-      </article>
-
-      <article class="group">
-        <a href="/blog/recetas-miel" class="block">
-          <div class="relative overflow-hidden rounded-xl mb-4">
-            <img 
-              src="https://images.unsplash.com/photo-1587049352851-8d4e89133924?w=600&h=400&fit=crop" 
-              alt="Recetas con miel"
-              class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
-              loading="lazy"
-            >
-          </div>
-          <span class="text-sm text-[#F59E0B] font-semibold">Recetas</span>
-          <h3 class="text-xl font-bold text-gray-900 mt-2 mb-2 group-hover:text-[#F59E0B] transition-colors">
-            5 Recetas Deliciosas con Miel
-          </h3>
-          <p class="text-gray-600 text-sm mb-3">
-            Desde desayunos hasta postres, descubre cómo incorporar miel en tu cocina diaria.
-          </p>
-          <div class="flex items-center gap-2 text-sm text-gray-500">
-            <span>6 min lectura</span>
-            <span>•</span>
-            <span>8 Feb 2026</span>
-          </div>
-        </a>
-      </article>
-
-    </div>
+          return (
+            <BlogCard
+              title={blog.title}
+              slug={blog.slug}
+              excerpt={blog.excerpt}
+              imageUrl={imgUrl}
+              author={blog.author}
+              blogPublishedAt={blog.blogPublishedAt}
+              categoryName={blog.blog_category?.name}
+            />
+          );
+        })}
+      </div>
+    ) : (
+      <div class="text-center py-16">
+        <span class="text-6xl mb-4 block">📝</span>
+        <p class="text-gray-500 text-lg">Pronto publicaremos artículos.</p>
+      </div>
+    )}
   </div>
 </section>
 
+<!-- CTA Final -->
 <section class="py-20 bg-gradient-to-br from-[#F59E0B] to-[#D97706] text-white relative overflow-hidden">
   <div class="absolute inset-0 opacity-10">
     <div class="hexagon-white hex-cta-1"></div>
@@ -554,21 +491,20 @@ const buttonsByName = buttons.reduce((acc, btn) => {
       
       <div class="flex flex-wrap justify-center items-center gap-8 pt-8 text-white/80">
         <div class="flex items-center gap-2">
-          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
           </svg>
-          <span class="text-sm font-medium">Pago Seguro</span>
+          <span class="text-sm font-medium">Envío Gratis +50€</span>
         </div>
         <div class="flex items-center gap-2">
-          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"></path>
-            <path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1v-5a1 1 0 00-.293-.707l-2-2A1 1 0 0015 7h-1z"></path>
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
           </svg>
-          <span class="text-sm font-medium">Envío 24-48h</span>
+          <span class="text-sm font-medium">Garantía de Calidad</span>
         </div>
         <div class="flex items-center gap-2">
-          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
           </svg>
           <span class="text-sm font-medium">100% Natural</span>
         </div>
@@ -596,25 +532,11 @@ const buttonsByName = buttons.reduce((acc, btn) => {
     opacity: 0;
   }
 
-  .animation-delay-100 {
-    animation-delay: 0.1s;
-  }
-
-  .animation-delay-200 {
-    animation-delay: 0.2s;
-  }
-
-  .animation-delay-300 {
-    animation-delay: 0.3s;
-  }
-
-  .animation-delay-400 {
-    animation-delay: 0.4s;
-  }
-
-  .animation-delay-500 {
-    animation-delay: 0.5s;
-  }
+  .animation-delay-100 { animation-delay: 0.1s; }
+  .animation-delay-200 { animation-delay: 0.2s; }
+  .animation-delay-300 { animation-delay: 0.3s; }
+  .animation-delay-400 { animation-delay: 0.4s; }
+  .animation-delay-500 { animation-delay: 0.5s; }
 
   .hexagon {
     position: absolute;
@@ -654,35 +576,11 @@ const buttonsByName = buttons.reduce((acc, btn) => {
     }
   }
 
-  .hex-1 {
-    top: 10%;
-    left: 5%;
-    animation: float 25s infinite ease-in-out;
-  }
-
-  .hex-2 {
-    top: 60%;
-    left: 80%;
-    animation: float 20s infinite ease-in-out 2s;
-  }
-
-  .hex-3 {
-    top: 30%;
-    right: 10%;
-    animation: float 22s infinite ease-in-out 4s;
-  }
-
-  .hex-4 {
-    bottom: 10%;
-    left: 15%;
-    animation: float 28s infinite ease-in-out 6s;
-  }
-
-  .hex-5 {
-    top: 50%;
-    left: 40%;
-    animation: float 24s infinite ease-in-out 3s;
-  }
+  .hex-1 { top: 10%; left: 5%; animation: float 25s infinite ease-in-out; }
+  .hex-2 { top: 60%; left: 80%; animation: float 20s infinite ease-in-out 2s; }
+  .hex-3 { top: 30%; right: 10%; animation: float 22s infinite ease-in-out 4s; }
+  .hex-4 { bottom: 10%; left: 15%; animation: float 28s infinite ease-in-out 6s; }
+  .hex-5 { top: 50%; left: 40%; animation: float 24s infinite ease-in-out 3s; }
 
   .hexagon-white {
     position: absolute;
@@ -711,21 +609,7 @@ const buttonsByName = buttons.reduce((acc, btn) => {
     border-top: 34.64px solid rgba(255, 255, 255, 0.1);
   }
 
-  .hex-cta-1 {
-    top: 20%;
-    left: 10%;
-    animation: float 20s infinite ease-in-out;
-  }
-
-  .hex-cta-2 {
-    top: 60%;
-    right: 15%;
-    animation: float 25s infinite ease-in-out 3s;
-  }
-
-  .hex-cta-3 {
-    bottom: 20%;
-    left: 70%;
-    animation: float 22s infinite ease-in-out 5s;
-  }
+  .hex-cta-1 { top: 20%; left: 10%; animation: float 20s infinite ease-in-out; }
+  .hex-cta-2 { top: 60%; right: 15%; animation: float 25s infinite ease-in-out 3s; }
+  .hex-cta-3 { bottom: 20%; left: 70%; animation: float 22s infinite ease-in-out 5s; }
 </style>

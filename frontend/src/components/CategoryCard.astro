@@ -1,0 +1,51 @@
+---
+interface Props {
+  name: string;
+  slug: string;
+  description?: string;
+  icon?: string;
+  imageUrl?: string;
+  productCount?: number;
+  className?: string;
+}
+
+const { 
+  name, 
+  slug, 
+  description, 
+  icon, 
+  imageUrl, 
+  productCount = 0,
+  className = '' 
+} = Astro.props;
+
+const placeholder = 'https://images.unsplash.com/photo-1587049352846-4a222e784387?w=600&h=400&fit=crop';
+const imgSrc = imageUrl || placeholder;
+---
+
+<a 
+  href={`/categoria/${slug}`} 
+  class={`group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all transform hover:scale-105 block ${className}`}
+>
+  <img 
+    src={imgSrc} 
+    alt={name}
+    class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+    loading="lazy"
+  />
+  <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
+  <div class="absolute bottom-0 left-0 right-0 p-6">
+    <div class="flex items-center gap-2 mb-2">
+      {icon && <span class="text-3xl" set:html={icon} />}
+      <h3 class="text-white text-2xl font-bold">{name}</h3>
+    </div>
+    {description && (
+      <p class="text-gray-200 text-sm line-clamp-2">{description}</p>
+    )}
+    {productCount > 0 && (
+      <span class="inline-block mt-2 text-xs text-white/80 bg-white/20 px-3 py-1 rounded-full">
+        {productCount} {productCount === 1 ? 'producto' : 'productos'}
+      </span>
+    )}
+  </div>
+</a>
