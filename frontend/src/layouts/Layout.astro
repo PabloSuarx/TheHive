@@ -1,17 +1,17 @@
 ---
-import '../styles/global.css';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import Logo from '../components/Logo.astro';
+import "../styles/global.css";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import Logo from "../components/Logo.astro";
 
-import { getSiteConfig } from '../lib/strapi';
+import { get } from "../lib/strapi";
 
-const {titulo, descripcion, imagen, tipo = 'website', keywords} = Astro.props;
+const { titulo, descripcion, imagen, tipo = "website", keywords } = Astro.props;
 
-const siteConfig = await getSiteConfig();
-const PUBLIC_STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL ;
+const siteConfig = await get("site-config", { populate: "*" });
+const PUBLIC_STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL;
 
-const siteName = siteConfig?.siteName; 
+const siteName = siteConfig?.siteName;
 const defaultDescription = siteConfig?.tagline;
 const defaultKeywords = keywords;
 const primaryColor = siteConfig?.primaryColor;
@@ -20,53 +20,53 @@ const tituloCompleto = titulo ? `${titulo} | ${siteName}` : siteName;
 const descripcionFinal = descripcion || defaultDescription;
 const imagenFinal = imagen;
 
-const faviconUrl = siteConfig?.favicon?.url 
-  ? `${PUBLIC_STRAPI_URL}${siteConfig.favicon.url}` 
-  : '/favicon.svg';
+const faviconUrl = siteConfig?.favicon?.url
+  ? `${PUBLIC_STRAPI_URL}${siteConfig.favicon.url}`
+  : "/favicon.svg";
 
-const logoUrl = siteConfig?.logo?.url 
-  ? `${PUBLIC_STRAPI_URL}${siteConfig.logo.url}` 
-  : '/logo.svg';
+const logoUrl = siteConfig?.logo?.url
+  ? `${PUBLIC_STRAPI_URL}${siteConfig.logo.url}`
+  : "/logo.svg";
 
 const logoAlt = siteConfig?.logoAlt;
 ---
 
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content={descripcionFinal}>
-  <meta name="keywords" content={defaultKeywords}>
-  <meta name="author" content={siteName}>
-  
-  <title>{tituloCompleto}</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={descripcionFinal} />
+    <meta name="keywords" content={defaultKeywords} />
+    <meta name="author" content={siteName} />
 
-  <meta property="og:type" content={tipo}>
-  <meta property="og:url" content={urlActual}>
-  <meta property="og:title" content={tituloCompleto}>
-  <meta property="og:description" content={descripcionFinal}>
-  <meta property="og:image" content={imagenFinal}>
-  <meta property="og:site_name" content={siteName}>
+    <title>{tituloCompleto}</title>
 
-  <link rel="icon" type="image/svg+xml" href={faviconUrl}>
-  <link rel="apple-touch-icon" sizes="180x180" href={faviconUrl}>
-  
-  <link rel="canonical" href={urlActual}>
-  
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+    <meta property="og:type" content={tipo} />
+    <meta property="og:url" content={urlActual} />
+    <meta property="og:title" content={tituloCompleto} />
+    <meta property="og:description" content={descripcionFinal} />
+    <meta property="og:image" content={imagenFinal} />
+    <meta property="og:site_name" content={siteName} />
 
-  <meta name="theme-color" content={primaryColor}>
-  <meta name="robots" content="index, follow">
-</head>
+    <link rel="icon" type="image/svg+xml" href={faviconUrl} />
+    <link rel="apple-touch-icon" sizes="180x180" href={faviconUrl} />
 
-<body class="flex flex-col min-h-screen bg-white">
-  <Header siteConfig={siteConfig} logoUrl={logoUrl} logoAlt={logoAlt} />
-  
-  <main id="main-content" class="grow">
-    <slot />
-  </main>
-  
-  <Footer siteConfig={siteConfig} logoUrl={logoUrl} logoAlt={logoAlt} />
-</body>
+    <link rel="canonical" href={urlActual} />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+
+    <meta name="theme-color" content={primaryColor} />
+    <meta name="robots" content="index, follow" />
+  </head>
+
+  <body class="flex flex-col min-h-screen bg-white">
+    <Header siteConfig={siteConfig} logoUrl={logoUrl} logoAlt={logoAlt} />
+
+    <main id="main-content" class="grow">
+      <slot />
+    </main>
+
+    <Footer siteConfig={siteConfig} logoUrl={logoUrl} logoAlt={logoAlt} />
+  </body>
 </html>

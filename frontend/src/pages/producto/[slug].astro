@@ -1,279 +1,388 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import { getProducts, getProductBySlug } from '../../lib/strapi';
+import Layout from "../../layouts/Layout.astro";
+import { get } from "../../lib/strapi";
 
 const PUBLIC_STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL;
 const { slug } = Astro.params;
 
-const product = await getProductBySlug(slug);
+const product = await get("products", {
+  filters: { slug: { $eq: slug } },
+  populate: {
+    mainImage: true,
+    images: true,
+    category: true,
+    tags: true,
+    seo: true,
+    reviews: true,
+  },
+}).then((res) => res?.[0] || null);
 
 if (!product) {
-  return Astro.redirect('/404');
+  return Astro.redirect("/404");
 }
 
-const imgUrl = product.mainImage?.url 
-  ? `${PUBLIC_STRAPI_URL}${product.mainImage.url}` 
-  : 'https://images.unsplash.com/photo-1587049352846-4a222e784387?w=800&h=800&fit=crop';
+const imgUrl = product.mainImage?.url
+  ? `${PUBLIC_STRAPI_URL}${product.mainImage.url}`
+  : "https://images.unsplash.com/photo-1587049352846-4a222e784387?w=800&h=800&fit=crop";
 
 const reviews = product.reviews || [];
-const avgRating = reviews.length > 0 
-  ? (reviews.reduce((sum, r) => sum + (r.rating || 0), 0) / reviews.length).toFixed(1)
-  : null;
+const avgRating =
+  reviews.length > 0
+    ? (
+        reviews.reduce((sum, r) => sum + (r.rating || 0), 0) / reviews.length
+      ).toFixed(1)
+    : null;
 
 const outOfStock = (product.stock || 0) <= 0;
 
 const seoTitle = product.seo?.metaTitle || product.name;
-const seoDescription = product.seo?.metaDescription || product.shortDescription || `Compra ${product.name} - Miel artesanal 100% natural`;
+const seoDescription =
+  product.seo?.metaDescription ||
+  product.shortDescription ||
+  `Compra ${product.name} - Miel artesanal 100% natural`;
 
-const formatPrice = (p) => p.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const formatPrice = (p) =>
+  p.toLocaleString("es-ES", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
 
 export async function getStaticPaths() {
-  const products = await getProducts();
+  const products = await get("products");
   return products.map((product) => ({
     params: { slug: product.slug },
   }));
 }
 ---
 
-<Layout 
+<Layout
   titulo={seoTitle}
   descripcion={seoDescription}
   keywords={`miel ${product.name}, comprar ${product.name}, miel artesanal`}
 >
-
-<!-- Breadcrumb -->
-<nav class="bg-gray-50 py-3">
-  <div class="container mx-auto px-4 lg:px-8">
-    <ol class="flex items-center gap-2 text-sm text-gray-500">
-      <li><a href="/" class="hover:text-[#F59E0B] transition-colors">Inicio</a></li>
-      <li><span class="mx-1">/</span></li>
-      <li><a href="/productos" class="hover:text-[#F59E0B] transition-colors">Productos</a></li>
-      {product.category && (
-        <>
-          <li><span class="mx-1">/</span></li>
-          <li>
-            <a href={`/categoria/${product.category.slug}`} class="hover:text-[#F59E0B] transition-colors">
-              {product.category.name}
-            </a>
-          </li>
-        </>
-      )}
-      <li><span class="mx-1">/</span></li>
-      <li class="text-gray-900 font-medium">{product.name}</li>
-    </ol>
-  </div>
-</nav>
-
-<!-- Producto -->
-<section class="py-12 bg-white">
-  <div class="container mx-auto px-4 lg:px-8">
-    <div class="grid lg:grid-cols-2 gap-12">
-
-      <!-- Imagen -->
-      <div class="space-y-4">
-        <div class="relative overflow-hidden rounded-2xl shadow-lg">
-          <img 
-            src={imgUrl}
-            alt={product.name}
-            class="w-full h-auto object-cover"
-            loading="eager"
-          />
-          {product.organic && (
-            <span class="absolute top-4 left-4 px-4 py-2 bg-green-500 text-white text-sm font-bold rounded-full">
-              🌿 Ecológico
-            </span>
-          )}
-          {product.featured && (
-            <span class="absolute top-4 right-4 px-4 py-2 bg-[#F59E0B] text-white text-sm font-bold rounded-full">
-              ⭐ Destacado
-            </span>
-          )}
-        </div>
-      </div>
-
-      <!-- Info -->
-      <div class="space-y-6">
-        {product.category && (
-          <a 
-            href={`/categoria/${product.category.slug}`}
-            class="inline-block text-sm text-[#F59E0B] font-semibold uppercase tracking-wide hover:underline"
-          >
-            {product.category.name}
-          </a>
-        )}
-
-        <h1 class="text-4xl font-bold text-gray-900">{product.name}</h1>
-
-        {/* Rating */}
-        {avgRating && (
-          <div class="flex items-center gap-2">
-            <div class="flex items-center gap-1">
-              {[...Array(5)].map((_, i) => (
-                <svg 
-                  class={`w-5 h-5 ${i < Math.round(Number(avgRating)) ? 'text-[#F59E0B]' : 'text-gray-300'}`}
-                  fill="currentColor" 
-                  viewBox="0 0 20 20"
+  <!-- Breadcrumb -->
+  <nav class="bg-gray-50 py-3">
+    <div class="container mx-auto px-4 lg:px-8">
+      <ol class="flex items-center gap-2 text-sm text-gray-500">
+        <li>
+          <a href="/" class="hover:text-[#F59E0B] transition-colors">Inicio</a>
+        </li>
+        <li><span class="mx-1">/</span></li>
+        <li>
+          <a href="/productos" class="hover:text-[#F59E0B] transition-colors"
+            >Productos</a>
+        </li>
+        {
+          product.category && (
+            <>
+              <li>
+                <span class="mx-1">/</span>
+              </li>
+              <li>
+                <a
+                  href={`/categoria/${product.category.slug}`}
+                  class="hover:text-[#F59E0B] transition-colors"
                 >
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                </svg>
-              ))}
-            </div>
-            <span class="text-sm text-gray-600">{avgRating} ({reviews.length} {reviews.length === 1 ? 'reseña' : 'reseñas'})</span>
-          </div>
-        )}
-
-        {product.shortDescription && (
-          <p class="text-lg text-gray-600">{product.shortDescription}</p>
-        )}
-
-        <!-- Precio -->
-        <div class="flex items-end gap-4">
-          <span class="text-4xl font-bold text-[#F59E0B]">{formatPrice(product.price)}€</span>
-          {product.weightValue && product.weightUnit && (
-            <span class="text-lg text-gray-500 mb-1">/ {product.weightValue}{product.weightUnit}</span>
-          )}
-        </div>
-
-        <!-- Stock -->
-        <div class="flex items-center gap-2">
-          {outOfStock ? (
-            <span class="inline-flex items-center gap-1 text-red-600 font-medium">
-              <span class="w-2 h-2 bg-red-500 rounded-full"></span>
-              Agotado
-            </span>
-          ) : (
-            <span class="inline-flex items-center gap-1 text-green-600 font-medium">
-              <span class="w-2 h-2 bg-green-500 rounded-full"></span>
-              En stock ({product.stock} disponibles)
-            </span>
-          )}
-        </div>
-
-        <!-- Botón añadir -->
-        <button 
-          class={`w-full py-4 rounded-xl font-bold text-lg transition-colors ${
-            outOfStock 
-              ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
-              : 'bg-[#F59E0B] hover:bg-[#D97706] text-white shadow-lg hover:shadow-xl'
-          }`}
-          disabled={outOfStock}
-        >
-          {outOfStock ? 'Sin Stock' : '🛒 Añadir al Carrito'}
-        </button>
-
-        <!-- Detalles rápidos -->
-        <div class="grid grid-cols-2 gap-4 pt-4 border-t border-gray-200">
-          {product.origin && (
-            <div>
-              <span class="text-xs text-gray-500 uppercase tracking-wide">Origen</span>
-              <p class="font-medium text-gray-900">{product.origin}</p>
-            </div>
-          )}
-          {product.beekeeper && (
-            <div>
-              <span class="text-xs text-gray-500 uppercase tracking-wide">Apicultor</span>
-              <p class="font-medium text-gray-900">{product.beekeeper}</p>
-            </div>
-          )}
-          {product.crystallization && (
-            <div>
-              <span class="text-xs text-gray-500 uppercase tracking-wide">Textura</span>
-              <p class="font-medium text-gray-900">{product.crystallization}</p>
-            </div>
-          )}
-          {product.harvestSeason && (
-            <div>
-              <span class="text-xs text-gray-500 uppercase tracking-wide">Cosecha</span>
-              <p class="font-medium text-gray-900">{product.harvestSeason}</p>
-            </div>
-          )}
-          {product.flavorNotes && (
-            <div class="col-span-2">
-              <span class="text-xs text-gray-500 uppercase tracking-wide">Notas de sabor</span>
-              <p class="font-medium text-gray-900">{product.flavorNotes}</p>
-            </div>
-          )}
-        </div>
-
-        <!-- Tags -->
-        {product.tags && product.tags.length > 0 && (
-          <div class="flex flex-wrap gap-2 pt-2">
-            {product.tags.map((tag) => (
-              <span class="px-3 py-1 bg-[#FEF3C7] text-[#D97706] text-xs font-medium rounded-full">
-                {tag.name}
-              </span>
-            ))}
-          </div>
-        )}
-      </div>
+                  {product.category.name}
+                </a>
+              </li>
+            </>
+          )
+        }
+        <li><span class="mx-1">/</span></li>
+        <li class="text-gray-900 font-medium">{product.name}</li>
+      </ol>
     </div>
+  </nav>
 
-    <!-- Descripción completa -->
-    {product.description && (
-      <div class="mt-16 max-w-3xl">
-        <h2 class="text-2xl font-bold text-gray-900 mb-6">Descripción</h2>
-        <div class="prose prose-gray max-w-none" set:html={product.description} />
-      </div>
-    )}
+  <!-- Producto -->
+  <section class="py-12 bg-white">
+    <div class="container mx-auto px-4 lg:px-8">
+      <div class="grid lg:grid-cols-2 gap-12">
+        <!-- Imagen -->
+        <div class="space-y-4">
+          <div class="relative overflow-hidden rounded-2xl shadow-lg">
+            <img
+              src={imgUrl}
+              alt={product.name}
+              class="w-full h-auto object-cover"
+              loading="eager"
+            />
+            {
+              product.organic && (
+                <span class="absolute top-4 left-4 px-4 py-2 bg-green-500 text-white text-sm font-bold rounded-full">
+                  🌿 Ecológico
+                </span>
+              )
+            }
+            {
+              product.featured && (
+                <span class="absolute top-4 right-4 px-4 py-2 bg-[#F59E0B] text-white text-sm font-bold rounded-full">
+                  ⭐ Destacado
+                </span>
+              )
+            }
+          </div>
+        </div>
 
-    <!-- Beneficios -->
-    {product.benefits && (
-      <div class="mt-12 max-w-3xl">
-        <h2 class="text-2xl font-bold text-gray-900 mb-6">Beneficios</h2>
-        <p class="text-gray-600 leading-relaxed">{product.benefits}</p>
-      </div>
-    )}
-
-    <!-- Reseñas -->
-    {reviews.length > 0 && (
-      <div class="mt-16 max-w-3xl">
-        <h2 class="text-2xl font-bold text-gray-900 mb-8">
-          Reseñas ({reviews.length})
-        </h2>
+        <!-- Info -->
         <div class="space-y-6">
-          {reviews.map((review) => (
-            <article class="bg-gray-50 p-6 rounded-xl">
-              <div class="flex items-center justify-between mb-3">
-                <div class="flex items-center gap-3">
-                  <div class="w-10 h-10 bg-gradient-to-br from-[#F59E0B] to-[#D97706] rounded-full flex items-center justify-center text-white font-bold text-sm">
-                    {review.userName ? review.userName.charAt(0).toUpperCase() : '?'}
-                  </div>
-                  <span class="font-semibold text-gray-900">{review.userName || 'Anónimo'}</span>
-                </div>
+          {
+            product.category && (
+              <a
+                href={`/categoria/${product.category.slug}`}
+                class="inline-block text-sm text-[#F59E0B] font-semibold uppercase tracking-wide hover:underline"
+              >
+                {product.category.name}
+              </a>
+            )
+          }
+
+          <h1 class="text-4xl font-bold text-gray-900">{product.name}</h1>
+
+          {/* Rating */}
+          {
+            avgRating && (
+              <div class="flex items-center gap-2">
                 <div class="flex items-center gap-1">
                   {[...Array(5)].map((_, i) => (
-                    <svg 
-                      class={`w-4 h-4 ${i < (review.rating || 0) ? 'text-[#F59E0B]' : 'text-gray-300'}`}
-                      fill="currentColor" 
+                    <svg
+                      class={`w-5 h-5 ${
+                        i < Math.round(Number(avgRating))
+                          ? "text-[#F59E0B]"
+                          : "text-gray-300"
+                      }`}
+                      fill="currentColor"
                       viewBox="0 0 20 20"
                     >
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                     </svg>
                   ))}
                 </div>
+                <span class="text-sm text-gray-600">
+                  {avgRating} ({reviews.length}{" "}
+                  {reviews.length === 1 ? "reseña" : "reseñas"})
+                </span>
               </div>
-              {review.comment && (
-                <p class="text-gray-700 italic">"{review.comment}"</p>
-              )}
-            </article>
-          ))}
+            )
+          }
+
+          {
+            product.shortDescription && (
+              <p class="text-lg text-gray-600">{product.shortDescription}</p>
+            )
+          }
+
+          <!-- Precio -->
+          <div class="flex items-end gap-4">
+            <span class="text-4xl font-bold text-[#F59E0B]"
+              >{formatPrice(product.price)}€</span
+            >
+            {
+              product.weightValue && product.weightUnit && (
+                <span class="text-lg text-gray-500 mb-1">
+                  / {product.weightValue}
+                  {product.weightUnit}
+                </span>
+              )
+            }
+          </div>
+
+          <!-- Stock -->
+          <div class="flex items-center gap-2">
+            {
+              outOfStock ? (
+                <span class="inline-flex items-center gap-1 text-red-600 font-medium">
+                  <span class="w-2 h-2 bg-red-500 rounded-full" />
+                  Agotado
+                </span>
+              ) : (
+                <span class="inline-flex items-center gap-1 text-green-600 font-medium">
+                  <span class="w-2 h-2 bg-green-500 rounded-full" />
+                  En stock ({product.stock} disponibles)
+                </span>
+              )
+            }
+          </div>
+
+          <!-- Botón añadir -->
+          <button
+            class={`w-full py-4 rounded-xl font-bold text-lg transition-colors ${
+              outOfStock
+                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                : "bg-[#F59E0B] hover:bg-[#D97706] text-white shadow-lg hover:shadow-xl"
+            }`}
+            disabled={outOfStock}
+          >
+            {outOfStock ? "Sin Stock" : "🛒 Añadir al Carrito"}
+          </button>
+
+          <!-- Detalles rápidos -->
+          <div class="grid grid-cols-2 gap-4 pt-4 border-t border-gray-200">
+            {
+              product.origin && (
+                <div>
+                  <span class="text-xs text-gray-500 uppercase tracking-wide">
+                    Origen
+                  </span>
+                  <p class="font-medium text-gray-900">{product.origin}</p>
+                </div>
+              )
+            }
+            {
+              product.beekeeper && (
+                <div>
+                  <span class="text-xs text-gray-500 uppercase tracking-wide">
+                    Apicultor
+                  </span>
+                  <p class="font-medium text-gray-900">{product.beekeeper}</p>
+                </div>
+              )
+            }
+            {
+              product.crystallization && (
+                <div>
+                  <span class="text-xs text-gray-500 uppercase tracking-wide">
+                    Textura
+                  </span>
+                  <p class="font-medium text-gray-900">
+                    {product.crystallization}
+                  </p>
+                </div>
+              )
+            }
+            {
+              product.harvestSeason && (
+                <div>
+                  <span class="text-xs text-gray-500 uppercase tracking-wide">
+                    Cosecha
+                  </span>
+                  <p class="font-medium text-gray-900">
+                    {product.harvestSeason}
+                  </p>
+                </div>
+              )
+            }
+            {
+              product.flavorNotes && (
+                <div class="col-span-2">
+                  <span class="text-xs text-gray-500 uppercase tracking-wide">
+                    Notas de sabor
+                  </span>
+                  <p class="font-medium text-gray-900">{product.flavorNotes}</p>
+                </div>
+              )
+            }
+          </div>
+
+          <!-- Tags -->
+          {
+            product.tags && product.tags.length > 0 && (
+              <div class="flex flex-wrap gap-2 pt-2">
+                {product.tags.map((tag) => (
+                  <span class="px-3 py-1 bg-[#FEF3C7] text-[#D97706] text-xs font-medium rounded-full">
+                    {tag.name}
+                  </span>
+                ))}
+              </div>
+            )
+          }
         </div>
       </div>
-    )}
 
-  </div>
-</section>
+      <!-- Descripción completa -->
+      {
+        product.description && (
+          <div class="mt-16 max-w-3xl">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Descripción</h2>
+            <div
+              class="prose prose-gray max-w-none"
+              set:html={product.description}
+            />
+          </div>
+        )
+      }
 
-<!-- Volver -->
-<section class="py-8 bg-gray-50">
-  <div class="container mx-auto px-4 lg:px-8 text-center">
-    <a href="/productos" class="inline-flex items-center gap-2 text-[#F59E0B] font-semibold hover:underline">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-      </svg>
-      Volver a todos los productos
-    </a>
-  </div>
-</section>
+      <!-- Beneficios -->
+      {
+        product.benefits && (
+          <div class="mt-12 max-w-3xl">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Beneficios</h2>
+            <p class="text-gray-600 leading-relaxed">{product.benefits}</p>
+          </div>
+        )
+      }
 
+      <!-- Reseñas -->
+      {
+        reviews.length > 0 && (
+          <div class="mt-16 max-w-3xl">
+            <h2 class="text-2xl font-bold text-gray-900 mb-8">
+              Reseñas ({reviews.length})
+            </h2>
+            <div class="space-y-6">
+              {reviews.map((review) => (
+                <article class="bg-gray-50 p-6 rounded-xl">
+                  <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center gap-3">
+                      <div class="w-10 h-10 bg-gradient-to-br from-[#F59E0B] to-[#D97706] rounded-full flex items-center justify-center text-white font-bold text-sm">
+                        {review.userName
+                          ? review.userName.charAt(0).toUpperCase()
+                          : "?"}
+                      </div>
+                      <span class="font-semibold text-gray-900">
+                        {review.userName || "Anónimo"}
+                      </span>
+                    </div>
+                    <div class="flex items-center gap-1">
+                      {[...Array(5)].map((_, i) => (
+                        <svg
+                          class={`w-4 h-4 ${
+                            i < (review.rating || 0)
+                              ? "text-[#F59E0B]"
+                              : "text-gray-300"
+                          }`}
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                      ))}
+                    </div>
+                  </div>
+                  {review.comment && (
+                    <p class="text-gray-700 italic">"{review.comment}"</p>
+                  )}
+                </article>
+              ))}
+            </div>
+          </div>
+        )
+      }
+    </div>
+  </section>
+
+  <!-- Volver -->
+  <section class="py-8 bg-gray-50">
+    <div class="container mx-auto px-4 lg:px-8 text-center">
+      <a
+        href="/productos"
+        class="inline-flex items-center gap-2 text-[#F59E0B] font-semibold hover:underline"
+      >
+        <svg
+          class="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"></path>
+        </svg>
+        Volver a todos los productos
+      </a>
+    </div>
+  </section>
 </Layout>

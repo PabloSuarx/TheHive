@@ -6,6 +6,6 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
   image: {
-    domains: ['thehive.pablosuarez.dev'],
+    domains: ['thehive.pablosuarez.dev', '127.0.0.1'],
   }
 });

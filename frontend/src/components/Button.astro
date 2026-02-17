@@ -1,27 +1,35 @@
 ---
 interface Props {
-  content: string;
-  link: string;
-  variant?: string;
+  content?: string;
+  link?: string;
+  variant?: "primary" | "secondary" | "outline" | "ghost";
   isExternal?: boolean;
   className?: string;
+  type?: "button" | "submit" | "reset";
+  onclick?: string;
 }
 
-const { 
-  content, 
-  link, 
-  variant = 'primary', 
-  isExternal = false, 
-  className = '' 
+const {
+  content,
+  link,
+  variant = "primary",
+  isExternal = false,
+  className = "",
+  type,
+  onclick,
 } = Astro.props;
 
-const baseClasses = 'inline-flex items-center justify-center px-6 py-3 rounded-lg font-semibold transition-all duration-200';
+const baseClasses =
+  "inline-flex items-center justify-center rounded-lg font-semibold transition-all duration-200 cursor-pointer";
 
 const variantClasses: Record<string, string> = {
-  primary: 'bg-primary hover:bg-primary-dark text-white shadow-md hover:shadow-lg',
-  secondary: 'bg-secondary hover:bg-secondary-light text-white shadow-md hover:shadow-lg',
-  outline: 'border-2 border-primary text-primary hover:bg-primary hover:text-white',
-  ghost: 'text-primary hover:bg-primary-pale'
+  primary:
+    "bg-primary hover:bg-primary-dark text-white shadow-md hover:shadow-lg px-6 py-3",
+  secondary:
+    "bg-secondary hover:bg-secondary-light text-white shadow-md hover:shadow-lg px-6 py-3",
+  outline:
+    "border-2 border-primary text-primary hover:bg-primary hover:text-white px-6 py-3",
+  ghost: "text-primary hover:bg-primary-pale px-6 py-3",
 };
 
 const getVariantClass = (v: string) => {
@@ -31,11 +39,19 @@ const getVariantClass = (v: string) => {
 const buttonClasses = `${baseClasses} ${getVariantClass(variant)} ${className}`;
 ---
 
-<a 
-  href={link}
-  class={buttonClasses}
-  target={isExternal ? '_blank' : undefined}
-  rel={isExternal ? 'noopener noreferrer' : undefined}
->
-  {content}
-</a>
+{
+  type ? (
+    <button type={type} class={buttonClasses} onclick={onclick}>
+      <slot>{content}</slot>
+    </button>
+  ) : (
+    <a
+      href={link}
+      class={buttonClasses}
+      target={isExternal ? "_blank" : undefined}
+      rel={isExternal ? "noopener noreferrer" : undefined}
+    >
+      <slot>{content}</slot>
+    </a>
+  )
+}

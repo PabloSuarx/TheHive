@@ -1,0 +1,27 @@
+{
+  "kind": "singleType",
+  "collectionName": "product_cards",
+  "info": {
+    "singularName": "product-card",
+    "pluralName": "product-cards",
+    "displayName": "productCard"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "icon_add_to_cart": {
+      "type": "text"
+    },
+    "icon_star_empty": {
+      "type": "text"
+    },
+    "icon_start_full": {
+      "type": "text"
+    },
+    "icon_star_half": {
+      "type": "text"
+    }
+  }
+}

@@ -1,123 +1,161 @@
 ---
-import Logo from './Logo.astro';
-import { getNavigation } from '../lib/strapi';
-
-interface NavLink {
-  order: number;
-  id: number;
-  label: string;
-  url: string;
-  isExternal: boolean;
-  newTab: boolean;
-}
+import Logo from "./Logo.astro";
+import { get } from "../lib/strapi";
+import type { NavLink } from "../types/header";
 
 const { siteConfig, logoUrl, logoAlt } = Astro.props;
 
 const siteName = siteConfig.siteName;
 
-const navigationData = await getNavigation();
-const navLinks: NavLink[] = navigationData?.menuItems;
+const navigationData = await get("navigation", { populate: "menuItems" });
+
+const navLinks: NavLink[] = navigationData?.menuItems || [];
 
 const sortedLinks = navLinks.sort((a, b) => a.order - b.order);
 ---
 
-<header class="bg-bg-primary sticky top-0 z-50 ">
-  <nav class="container mx-auto px-4 lg:px-8 py-4" aria-label="Navegación principal">
+<header class="bg-bg-primary sticky top-0 z-50">
+  <nav
+    class="container mx-auto px-4 lg:px-8 py-4"
+    aria-label="Navegación principal"
+  >
     <div class="flex items-center justify-between">
-      
-      <a href="/" class="flex items-center gap-3 group" aria-label=`${siteName} - Inicio`>
+      <a
+        href="/"
+        class="flex items-center gap-3 group"
+        aria-label={`${siteName} - Inicio`}
+      >
         <div class="w-32 min-h-16 -my-9">
           <Logo logoUrl={logoUrl} logoAlt={logoAlt} />
         </div>
       </a>
 
       <ul class="hidden lg:flex items-center gap-8">
-        {sortedLinks.map(link => (
-          <li>
-            <a 
-              href={link.url}
-              target={link.newTab ? '_blank' : undefined}
-              rel={link.isExternal ? 'noopener noreferrer' : undefined}
-              class="text-primary transition-colors font-medium relative group"
-            >
-              {link.label}
-              <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full"></span>
-            </a>
-          </li>
-        ))}
+        {
+          sortedLinks.map((link) => (
+            <li>
+              <a
+                href={link.url}
+                target={link.newTab ? "_blank" : undefined}
+                rel={link.isExternal ? "noopener noreferrer" : undefined}
+                class="text-primary transition-colors font-medium relative group"
+              >
+                {link.label}
+                <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full" />
+              </a>
+            </li>
+          ))
+        }
       </ul>
 
       <div class="flex items-center gap-4">
-        <a 
-          href="/carrito" 
+        <a
+          href="/carrito"
           class="relative p-2 text-primary hover:text-primary transition-colors rounded-lg hover:bg-bg-primary-pale"
           aria-label="Carrito de compra"
         >
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+          <svg
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+            ></path>
           </svg>
-          <span class="absolute -top-1 -right-1 bg-primary text-[var(--text-inverse)] text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+          <span
+            class="absolute -top-1 -right-1 bg-primary text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center"
+          >
             0
           </span>
         </a>
 
-        <button 
+        <button
           id="mobile-menu-button"
           class="lg:hidden text-primary hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary rounded-lg p-2 transition-colors"
           aria-label="Abrir menú de navegación"
           aria-expanded="false"
         >
-          <svg id="menu-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          <svg
+            id="menu-icon"
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"></path>
           </svg>
-          <svg id="close-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          <svg
+            id="close-icon"
+            class="w-6 h-6 hidden"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"></path>
           </svg>
         </button>
       </div>
     </div>
 
-    <div id="mobile-menu" class="hidden lg:hidden mt-4 pb-4 border-t border-gray-200 pt-4">
+    <div
+      id="mobile-menu"
+      class="hidden lg:hidden mt-4 pb-4 border-t border-gray-200 pt-4"
+    >
       <ul class="flex flex-col gap-2">
-        {sortedLinks.map(link => (
-          <li>
-            <a 
-              href={link.url}
-              target={link.newTab ? '_blank' : undefined}
-              rel={link.isExternal ? 'noopener noreferrer' : undefined}
-              class="block text-primary hover:text-primary hover:bg-bg-primary-pale transition-colors font-medium py-3 px-4 rounded-lg"
-            >
-              {link.label}
-            </a>
-          </li>
-        ))}
+        {
+          sortedLinks.map((link) => (
+            <li>
+              <a
+                href={link.url}
+                target={link.newTab ? "_blank" : undefined}
+                rel={link.isExternal ? "noopener noreferrer" : undefined}
+                class="block text-primary hover:text-primary hover:bg-bg-primary-pale transition-colors font-medium py-3 px-4 rounded-lg"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
       </ul>
     </div>
   </nav>
 </header>
 
 <script>
-  const button = document.getElementById('mobile-menu-button');
-  const menu = document.getElementById('mobile-menu');
-  const menuIcon = document.getElementById('menu-icon');
-  const closeIcon = document.getElementById('close-icon');
+  const button = document.getElementById("mobile-menu-button");
+  const menu = document.getElementById("mobile-menu");
+  const menuIcon = document.getElementById("menu-icon");
+  const closeIcon = document.getElementById("close-icon");
 
   const toggleMenu = () => {
-    const isOpen = button?.getAttribute('aria-expanded') === 'true';
-    button?.setAttribute('aria-expanded', String(!isOpen));
-    menu?.classList.toggle('hidden');
-    menuIcon?.classList.toggle('hidden');
-    closeIcon?.classList.toggle('hidden');
+    const isOpen = button?.getAttribute("aria-expanded") === "true";
+    button?.setAttribute("aria-expanded", String(!isOpen));
+    menu?.classList.toggle("hidden");
+    menuIcon?.classList.toggle("hidden");
+    closeIcon?.classList.toggle("hidden");
   };
 
-  button?.addEventListener('click', toggleMenu);
+  button?.addEventListener("click", toggleMenu);
 
-  menu?.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => {
-      menu.classList.add('hidden');
-      menuIcon?.classList.remove('hidden');
-      closeIcon?.classList.add('hidden');
-      button?.setAttribute('aria-expanded', 'false');
+  menu?.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => {
+      menu.classList.add("hidden");
+      menuIcon?.classList.remove("hidden");
+      closeIcon?.classList.add("hidden");
+      button?.setAttribute("aria-expanded", "false");
     });
   });
 </script>

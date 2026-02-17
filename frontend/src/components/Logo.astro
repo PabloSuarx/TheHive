@@ -1,17 +1,23 @@
 ---
-import { Image } from 'astro:assets';
+import { Image } from "astro:assets";
 
-interface Props {logoUrl: string; logoAlt: string; className?: string;}
+interface Props {
+  logoUrl: string;
+  logoAlt: string;
+  className?: string;
+}
 
-const { logoUrl, logoAlt, className = '' } = Astro.props;
+const { logoUrl, logoAlt, className = "" } = Astro.props;
 ---
 
 <div class={`flex items-center justify-center w-full h-full ${className}`}>
-  <Image 
-    src={logoUrl} 
-    alt={logoAlt} 
+  <Image
+    src={logoUrl}
+    alt={logoAlt}
     loading="eager"
     inferSize
+    width={500}
+    height={500}
     class="w-full h-full object-contain"
   />
 </div>

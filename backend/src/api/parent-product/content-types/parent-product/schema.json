@@ -1,0 +1,14 @@
+{
+  "kind": "singleType",
+  "collectionName": "parent_products",
+  "info": {
+    "singularName": "parent-product",
+    "pluralName": "parent-products",
+    "displayName": "parent_product"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {}
+}

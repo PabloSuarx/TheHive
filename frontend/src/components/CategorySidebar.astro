@@ -1,0 +1,70 @@
+---
+import type { Category } from "../types/category";
+
+interface Props {
+    mainHeading?: string;
+    otherCategories: Category[];
+    originHeading?: string;
+    uniqueOrigins: string[];
+}
+
+const {
+    mainHeading = "Categorías",
+    otherCategories,
+    originHeading = "Origen",
+    uniqueOrigins,
+} = Astro.props;
+---
+
+<aside class="w-full lg:w-64 space-y-10 shrink-0">
+    <div>
+        <h3 class="text-sm font-bold tracking-wider text-primary mb-4">
+            {mainHeading}
+        </h3>
+
+        <ul class="space-y-3">
+            {
+                otherCategories.map((category) => (
+                    <li>
+                        <a
+                            class="flex items-center gap-3 text-slate-400 hover:text-white transition-colors group"
+                            href={`/categoria/${category.slug}`}
+                        >
+                            <span class="material-symbols-outlined text-sm text-slate-600 group-hover:text-primary">
+                                {category.icon ?? null}
+                            </span>
+                            <span class="text-sm font-medium">
+                                {category.name}
+                            </span>
+                        </a>
+                    </li>
+                ))
+            }
+        </ul>
+    </div>
+
+    <div>
+        <h3
+            class="text-sm font-bold uppercase tracking-wider text-primary mb-4"
+        >
+            {originHeading}
+        </h3>
+        <div class="space-y-3">
+            {
+                uniqueOrigins.map((origin) => (
+                    <label class="flex items-center gap-3 cursor-pointer group">
+                        <input
+                            type="checkbox"
+                            value={origin}
+                            class="origin-filter rounded border-white/10 bg-white/5 text-primary focus:ring-primary"
+                            checked
+                        />
+                        <span class="text-sm text-slate-400 group-hover:text-white transition-colors">
+                            {origin}
+                        </span>
+                    </label>
+                ))
+            }
+        </div>
+    </div>
+</aside>

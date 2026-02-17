@@ -1,34 +1,17 @@
 ---
-import { fetchAPI, getFooter } from "../lib/strapi";
-import Logo from './Logo.astro';
+import { get } from "../lib/strapi";
+import Logo from "./Logo.astro";
+import type { Link, Social, LinksByColumn } from "../types/footer";
 
-const { siteConfig, logoUrl, logoAlt } = Astro.props;
+const { logoUrl, logoAlt } = Astro.props;
 
-interface Link {
-  id: number;
-  label: string;
-  url: string;
-  column: string;
-  order: number;
-}
-interface Social {
-  id: number;
-  platform: string;
-  url: string;
-  icon: string;
-}
-interface LinksByColumn {
-  [key: string]: Link[];
-}
+const footerData = await get("footer", { populate: "*" });
 
-const footerData = await getFooter();
-
-const siteName: string = siteConfig.siteName;
-const companyDescription: string = footerData.companyDescription;
-const copyrightText: string = footerData.copyrightText;
-const links: Link[] = footerData.links;
-const socialMedia: Social[] = footerData.socialMedia;
-const showSocialMedia: boolean = footerData.showSocialMedia;
+const companyDescription: string = footerData?.companyDescription;
+const copyrightText: string = footerData?.copyrightText;
+const links: Link[] = footerData?.links || [];
+const socialMedia: Social[] = footerData?.socialMedia || [];
+const showSocialMedia: boolean = footerData?.showSocialMedia;
 
 const linksByColumn = links.reduce<LinksByColumn>((acc, link) => {
   const column = link.column?.trim();
@@ -37,15 +20,7 @@ const linksByColumn = links.reduce<LinksByColumn>((acc, link) => {
   return acc;
 }, {});
 
-
-
-// const columnOrder = fetchAPI("ui-component");
-
-// console.log(columnOrder);
-
-const columnOrder = ["General","Empresa", "Ayuda", "Legal"];
-
-
+const columnOrder = ["General", "Empresa", "Ayuda", "Legal"];
 ---
 
 <footer class="bg-bg-footer text-tertiary mt-auto">
@@ -82,11 +57,9 @@ const columnOrder = ["General","Empresa", "Ayuda", "Legal"];
 
       {
         columnOrder.map((columnName) => {
-
           const columnLinks = linksByColumn[columnName];
 
           return columnLinks && columnLinks.length > 0 ? (
-
             <div>
               <h3 class="text-inverse font-semibold text-lg mb-4">
                 {columnName}
@@ -106,18 +79,13 @@ const columnOrder = ["General","Empresa", "Ayuda", "Legal"];
                   ))}
               </ul>
             </div>
-          ) 
-          : null;
+          ) : null;
         })
       }
-
-      
     </div>
-    
   </div>
 
-
-  <div class="border-t border-divider ">
+  <div class="border-t border-divider">
     <div class="container mx-auto px-4 lg:px-8 py-6">
       <div class="flex flex-col md:flex-row justify-between items-center gap-4">
         <p class="text-sm text-secondary text-center md:text-left">

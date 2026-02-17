@@ -1,0 +1,14 @@
+{
+  "kind": "singleType",
+  "collectionName": "single_404s",
+  "info": {
+    "singularName": "single-404",
+    "pluralName": "single-404s",
+    "displayName": "single_404"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {}
+}

@@ -1,11 +1,11 @@
-import { getProducts, getCategories, getBlogs } from '../lib/strapi';
+import { get } from '../lib/strapi';
 
 const SITE_URL = import.meta.env.SITE || 'https://thehive.pablosuarez.dev';
 
 export async function GET() {
-  const products = await getProducts();
-  const categories = await getCategories();
-  const blogs = await getBlogs();
+  const products = await get('products') || [];
+  const categories = await get('categories') || [];
+  const blogs = await get('blogs') || [];
 
   const today = new Date().toISOString().split('T')[0];
 

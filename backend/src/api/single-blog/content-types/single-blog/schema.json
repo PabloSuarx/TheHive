@@ -1,0 +1,14 @@
+{
+  "kind": "singleType",
+  "collectionName": "single_blogs",
+  "info": {
+    "singularName": "single-blog",
+    "pluralName": "single-blogs",
+    "displayName": "single_blog"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {}
+}

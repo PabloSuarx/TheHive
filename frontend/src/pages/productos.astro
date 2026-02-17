@@ -1,207 +1,289 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import ProductCard from '../components/ProductCard.astro';
-import { getProducts, getCategories } from '../lib/strapi';
+import Layout from "../layouts/Layout.astro";
+import ProductCard from "../components/ProductCard.astro";
+import { get } from "../lib/strapi";
 
 const PUBLIC_STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL;
 
-const products = await getProducts();
-const categories = await getCategories();
+const products =
+  (await get("products", {
+    populate: {
+      mainImage: true,
+      category: true,
+      tags: true,
+    },
+  })) || [];
+const categories = (await get("categories")) || [];
 ---
 
-<Layout 
+<Layout
   titulo="Productos"
   descripcion="Descubre nuestra selección completa de mieles artesanales. Miel monoflora, multiflora, premium y más. 100% natural, directamente de la colmena."
   keywords="comprar miel, miel artesanal, miel natural, tienda miel, miel online, miel premium"
 >
+  <!-- Hero -->
+  <section class="relative overflow-hidden py-20 lg:py-28">
+    <div class="mb-8">
+      <nav class="flex text-sm text-gray-500 mb-4 gap-2">
+        <a class="hover:text-primary transition-colors" href="#">Inicio</a>
+        <span>/</span>
+        <span class="text-gray-900 font-medium">Productos</span>
+      </nav>
 
-<!-- Hero -->
-<section class="relative overflow-hidden bg-gradient-to-br from-[#FEF3C7] via-white to-[#FEF3C7] py-20 lg:py-28">
-  <div class="absolute inset-0 overflow-hidden pointer-events-none opacity-30">
-    <div class="hexagon hex-1"></div>
-    <div class="hexagon hex-2"></div>
-    <div class="hexagon hex-3"></div>
-  </div>
-  <div class="container mx-auto px-4 lg:px-8 relative z-10">
-    <div class="max-w-3xl mx-auto text-center space-y-6 animate-fade-in-up">
-
-      <h1 class="text-gradient-honey">Nuestros Productos</h1>
-      <p class="text-lead text-gray-600">
-        Miel artesanal 100% natural, directamente de la colmena a tu mesa
-      </p>
-    </div>
-  </div>
-</section>
-
-<!-- Controles: Buscador + Filtros + Orden -->
-<section class="py-6 bg-gray-50 border-b border-gray-200 sticky top-0 z-30">
-  <div class="container mx-auto px-4 lg:px-8">
-
-    <!-- Buscador -->
-    <div class="max-w-xl mx-auto mb-5 relative">
-      <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-      </svg>
-      <input 
-        type="text" 
-        id="product-search" 
-        placeholder="Buscar productos... (ej: azahar, romero, ecológico)" 
-        class="w-full pl-12 pr-10 py-3 bg-white border-2 border-gray-200 rounded-xl focus:border-[#F59E0B] focus:outline-none focus:ring-2 focus:ring-[#F59E0B]/20 transition-colors"
-        autocomplete="off"
-      />
-      <button id="clear-search" class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 hidden" aria-label="Limpiar búsqueda">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-        </svg>
-      </button>
-    </div>
-
-    <div class="flex flex-wrap justify-between items-center gap-4">
-      <!-- Filtros categoría -->
-      <div class="flex flex-wrap gap-2" id="category-filters">
-        <button class="filter-btn active px-4 py-2 rounded-full text-sm font-medium transition-all bg-[#F59E0B] text-white shadow-md" data-category="all">Todas</button>
-        {categories.map((cat) => (
-          <button class="filter-btn px-4 py-2 rounded-full text-sm font-medium transition-all bg-white text-gray-700 hover:bg-[#FEF3C7] hover:text-[#D97706] border border-gray-200" data-category={cat.slug}>
-            {cat.icon && <span class="mr-1">{cat.icon}</span>}{cat.name}
-          </button>
-        ))}
-      </div>
-
-      <!-- Ordenación -->
-      <div class="flex items-center gap-2">
-        <label for="sort-select" class="text-sm text-gray-500 whitespace-nowrap">Ordenar:</label>
-        <select id="sort-select" class="px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:border-[#F59E0B] focus:outline-none">
-          <option value="featured">Destacados</option>
-          <option value="name-asc">Nombre A-Z</option>
-          <option value="name-desc">Nombre Z-A</option>
-          <option value="price-asc">Precio ↑</option>
-          <option value="price-desc">Precio ↓</option>
-        </select>
-      </div>
-    </div>
-
-    <p class="text-sm text-gray-500 mt-4" id="results-count"></p>
-  </div>
-</section>
-
-<!-- Loading skeleton -->
-<section id="loading-skeleton" class="py-12 bg-white">
-  <div class="container mx-auto px-4 lg:px-8">
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-      {[...Array(8)].map(() => (
-        <div class="bg-white rounded-2xl shadow-lg overflow-hidden animate-pulse">
-          <div class="h-64 bg-gray-200"></div>
-          <div class="p-6 space-y-3">
-            <div class="h-3 bg-gray-200 rounded w-1/3"></div>
-            <div class="h-5 bg-gray-200 rounded w-3/4"></div>
-            <div class="h-3 bg-gray-200 rounded w-full"></div>
-            <div class="flex justify-between">
-              <div class="h-6 bg-gray-200 rounded w-1/4"></div>
-              <div class="h-4 bg-gray-200 rounded w-1/6"></div>
-            </div>
-            <div class="h-12 bg-gray-200 rounded-xl"></div>
-          </div>
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <h1 class="text-4xl font-black text-gray-900 tracking-tight">
+            Nuestras Mieles
+          </h1>
+          <p class="text-gray-500 mt-2">
+            24 productos de apicultura sostenible encontrados
+          </p>
         </div>
-      ))}
-    </div>
-  </div>
-</section>
-
-<!-- Grid de productos -->
-<section id="products-section" class="py-12 bg-white hidden">
-  <div class="container mx-auto px-4 lg:px-8">
-
-    <div id="no-results" class="text-center py-16 hidden">
-      <span class="text-6xl mb-4 block">🔍</span>
-      <p class="text-gray-500 text-lg mb-2">No se encontraron productos</p>
-      <p class="text-gray-400 text-sm">Prueba con otro término de búsqueda o cambia los filtros</p>
-    </div>
-
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="products-grid">
-      {products.map((product) => {
-        const imgUrl = product.mainImage?.url 
-          ? `${PUBLIC_STRAPI_URL}${product.mainImage.url}` 
-          : undefined;
-
-        return (
-          <div 
-            class="product-item"
-            data-category={product.category?.slug || 'sin-categoria'}
-            data-name={product.name}
-            data-price={product.price}
-            data-featured={product.featured ? '1' : '0'}
-            data-short={product.shortDescription || ''}
-            data-organic={product.organic ? 'ecologico organico eco' : ''}
+        <div class="flex items-center gap-3">
+          <span class="text-sm font-medium text-gray-600 whitespace-nowrap"
+            >Ordenar por:</span
           >
-            <ProductCard
-              name={product.name}
-              slug={product.slug}
-              price={product.price}
-              shortDescription={product.shortDescription}
-              imageUrl={imgUrl}
-              weightValue={product.weightValue}
-              weightUnit={product.weightUnit}
-              featured={product.featured}
-              organic={product.organic}
-              stock={product.stock}
-              rating={product.rating}
-              categoryName={product.category?.name}
-            />
-          </div>
-        );
-      })}
+          <select
+            class="bg-white border-gray-200 rounded-lg text-sm focus:ring-primary focus:border-primary pr-10"
+          >
+            <option>Novedades</option>
+            <option>Precio: Menor a Mayor</option>
+            <option>Precio: Mayor a Menor</option>
+            <option>Nombre (A-Z)</option>
+            <option>Valoración</option>
+          </select>
+        </div>
+      </div>
     </div>
+  </section>
 
-    <!-- Paginación -->
-    <nav id="pagination" class="flex justify-center items-center gap-2 mt-12" aria-label="Paginación de productos"></nav>
-  </div>
-</section>
+  <!-- Controles: Buscador + Filtros + Orden -->
+  <section class="py-6 bg-gray-50 border-b border-gray-200 sticky top-0 z-30">
+    <div class="container mx-auto px-4 lg:px-8">
+      <!-- Buscador -->
+      <div class="max-w-xl mx-auto mb-5 relative">
+        <svg
+          class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+        <input
+          type="text"
+          id="product-search"
+          placeholder="Buscar productos... (ej: azahar, romero, ecológico)"
+          class="w-full pl-12 pr-10 py-3 bg-white border-2 border-gray-200 rounded-xl focus:border-[#F59E0B] focus:outline-none focus:ring-2 focus:ring-[#F59E0B]/20 transition-colors"
+          autocomplete="off"
+        />
+        <button
+          id="clear-search"
+          class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 hidden"
+          aria-label="Limpiar búsqueda"
+        >
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
 
+      <div class="flex flex-wrap justify-between items-center gap-4">
+        <!-- Filtros categoría -->
+        <div class="flex flex-wrap gap-2" id="category-filters">
+          <button
+            class="filter-btn active px-4 py-2 rounded-full text-sm font-medium transition-all bg-[#F59E0B] text-white shadow-md"
+            data-category="all">Todas</button
+          >
+          {
+            categories.map((cat) => (
+              <button
+                class="filter-btn px-4 py-2 rounded-full text-sm font-medium transition-all bg-white text-gray-700 hover:bg-[#FEF3C7] hover:text-[#D97706] border border-gray-200"
+                data-category={cat.slug}
+              >
+                {cat.icon && <span class="mr-1">{cat.icon}</span>}
+                {cat.name}
+              </button>
+            ))
+          }
+        </div>
+
+        <!-- Ordenación -->
+        <div class="flex items-center gap-2">
+          <label
+            for="sort-select"
+            class="text-sm text-gray-500 whitespace-nowrap">Ordenar:</label
+          >
+          <select
+            id="sort-select"
+            class="px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:border-[#F59E0B] focus:outline-none"
+          >
+            <option value="featured">Destacados</option>
+            <option value="name-asc">Nombre A-Z</option>
+            <option value="name-desc">Nombre Z-A</option>
+            <option value="price-asc">Precio ↑</option>
+            <option value="price-desc">Precio ↓</option>
+          </select>
+        </div>
+      </div>
+
+      <p class="text-sm text-gray-500 mt-4" id="results-count"></p>
+    </div>
+  </section>
+
+  <!-- Loading skeleton -->
+  <section id="loading-skeleton" class="py-12 bg-white">
+    <div class="container mx-auto px-4 lg:px-8">
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        {
+          [...Array(8)].map(() => (
+            <div class="bg-white rounded-2xl shadow-lg overflow-hidden animate-pulse">
+              <div class="h-64 bg-gray-200" />
+              <div class="p-6 space-y-3">
+                <div class="h-3 bg-gray-200 rounded w-1/3" />
+                <div class="h-5 bg-gray-200 rounded w-3/4" />
+                <div class="h-3 bg-gray-200 rounded w-full" />
+                <div class="flex justify-between">
+                  <div class="h-6 bg-gray-200 rounded w-1/4" />
+                  <div class="h-4 bg-gray-200 rounded w-1/6" />
+                </div>
+                <div class="h-12 bg-gray-200 rounded-xl" />
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Grid de productos -->
+  <section id="products-section" class="py-12 bg-white hidden">
+    <div class="container mx-auto px-4 lg:px-8">
+      <div id="no-results" class="text-center py-16 hidden">
+        <span class="text-6xl mb-4 block">🔍</span>
+        <p class="text-gray-500 text-lg mb-2">No se encontraron productos</p>
+        <p class="text-gray-400 text-sm">
+          Prueba con otro término de búsqueda o cambia los filtros
+        </p>
+      </div>
+
+      <div
+        class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
+        id="products-grid"
+      >
+        {
+          products.map((product) => {
+            const imgUrl = product.mainImage?.url
+              ? `${PUBLIC_STRAPI_URL}${product.mainImage.url}`
+              : undefined;
+
+            return (
+              <div
+                class="product-item"
+                data-category={product.category?.slug || "sin-categoria"}
+                data-name={product.name}
+                data-price={product.price}
+                data-featured={product.featured ? "1" : "0"}
+                data-short={product.shortDescription || ""}
+                data-organic={product.organic ? "ecologico organico eco" : ""}
+              >
+                <ProductCard product={product} />
+              </div>
+            );
+          })
+        }
+      </div>
+
+      <!-- Paginación -->
+      <nav
+        id="pagination"
+        class="flex justify-center items-center gap-2 mt-12"
+        aria-label="Paginación de productos"
+      >
+      </nav>
+    </div>
+  </section>
 </Layout>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener("DOMContentLoaded", () => {
     const ITEMS_PER_PAGE = 8;
     let currentPage = 1;
-    let currentCategory = 'all';
-    let currentSort = 'featured';
-    let currentSearch = '';
+    let currentCategory = "all";
+    let currentSort = "featured";
+    let currentSearch = "";
 
-    const searchInput = document.getElementById('product-search') as HTMLInputElement;
-    const clearBtn = document.getElementById('clear-search') as HTMLElement;
-    const filterBtns = document.querySelectorAll('.filter-btn');
-    const sortSelect = document.getElementById('sort-select') as HTMLSelectElement;
-    const allItems = Array.from(document.querySelectorAll('.product-item')) as HTMLElement[];
-    const grid = document.getElementById('products-grid') as HTMLElement;
-    const pagination = document.getElementById('pagination') as HTMLElement;
-    const noResults = document.getElementById('no-results') as HTMLElement;
-    const resultsCount = document.getElementById('results-count') as HTMLElement;
-    const loadingSkeleton = document.getElementById('loading-skeleton') as HTMLElement;
-    const productsSection = document.getElementById('products-section') as HTMLElement;
+    const searchInput = document.getElementById(
+      "product-search"
+    ) as HTMLInputElement;
+    const clearBtn = document.getElementById("clear-search") as HTMLElement;
+    const filterBtns = document.querySelectorAll(".filter-btn");
+    const sortSelect = document.getElementById(
+      "sort-select"
+    ) as HTMLSelectElement;
+    const allItems = Array.from(
+      document.querySelectorAll(".product-item")
+    ) as HTMLElement[];
+    const grid = document.getElementById("products-grid") as HTMLElement;
+    const pagination = document.getElementById("pagination") as HTMLElement;
+    const noResults = document.getElementById("no-results") as HTMLElement;
+    const resultsCount = document.getElementById(
+      "results-count"
+    ) as HTMLElement;
+    const loadingSkeleton = document.getElementById(
+      "loading-skeleton"
+    ) as HTMLElement;
+    const productsSection = document.getElementById(
+      "products-section"
+    ) as HTMLElement;
 
     /** Normalización de texto: quita tildes, pasa a minúsculas */
     function normalize(text: string): string {
-      return text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      return text
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
     }
 
     /** Buscador con expresión regular */
     function matchesSearch(item: HTMLElement, query: string): boolean {
       if (!query) return true;
-      const safeQuery = normalize(query).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const safeQuery = normalize(query).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
       try {
-        const regex = new RegExp(safeQuery, 'i');
+        const regex = new RegExp(safeQuery, "i");
         const searchable = [
-          item.dataset.name, item.dataset.short, 
-          item.dataset.category, item.dataset.organic
-        ].map(s => normalize(s || '')).join(' ');
+          item.dataset.name,
+          item.dataset.short,
+          item.dataset.category,
+          item.dataset.organic,
+        ]
+          .map((s) => normalize(s || ""))
+          .join(" ");
         return regex.test(searchable);
-      } catch { return true; }
+      } catch {
+        return true;
+      }
     }
 
     /** Filtrar items visibles */
     function getVisibleItems(): HTMLElement[] {
-      return allItems.filter(item => {
-        const catMatch = currentCategory === 'all' || item.dataset.category === currentCategory;
+      return allItems.filter((item) => {
+        const catMatch =
+          currentCategory === "all" ||
+          item.dataset.category === currentCategory;
         return catMatch && matchesSearch(item, currentSearch);
       });
     }
@@ -210,11 +292,31 @@ const categories = await getCategories();
     function sortItems(items: HTMLElement[]): HTMLElement[] {
       return [...items].sort((a, b) => {
         switch (currentSort) {
-          case 'name-asc': return (a.dataset.name || '').localeCompare(b.dataset.name || '', 'es');
-          case 'name-desc': return (b.dataset.name || '').localeCompare(a.dataset.name || '', 'es');
-          case 'price-asc': return parseFloat(a.dataset.price || '0') - parseFloat(b.dataset.price || '0');
-          case 'price-desc': return parseFloat(b.dataset.price || '0') - parseFloat(a.dataset.price || '0');
-          default: return parseInt(b.dataset.featured || '0') - parseInt(a.dataset.featured || '0');
+          case "name-asc":
+            return (a.dataset.name || "").localeCompare(
+              b.dataset.name || "",
+              "es"
+            );
+          case "name-desc":
+            return (b.dataset.name || "").localeCompare(
+              a.dataset.name || "",
+              "es"
+            );
+          case "price-asc":
+            return (
+              parseFloat(a.dataset.price || "0") -
+              parseFloat(b.dataset.price || "0")
+            );
+          case "price-desc":
+            return (
+              parseFloat(b.dataset.price || "0") -
+              parseFloat(a.dataset.price || "0")
+            );
+          default:
+            return (
+              parseInt(b.dataset.featured || "0") -
+              parseInt(a.dataset.featured || "0")
+            );
         }
       });
     }
@@ -222,38 +324,56 @@ const categories = await getCategories();
     /** Renderizar paginación */
     function renderPagination(total: number) {
       const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
-      pagination.innerHTML = '';
+      pagination.innerHTML = "";
       if (totalPages <= 1) return;
 
-      const createBtn = (text: string, page: number, disabled: boolean, active: boolean) => {
-        const btn = document.createElement('button');
+      const createBtn = (
+        text: string,
+        page: number,
+        disabled: boolean,
+        active: boolean
+      ) => {
+        const btn = document.createElement("button");
         btn.innerHTML = text;
         btn.disabled = disabled;
         btn.className = active
-          ? 'w-10 h-10 rounded-lg text-sm font-bold bg-[#F59E0B] text-white shadow-md'
+          ? "w-10 h-10 rounded-lg text-sm font-bold bg-[#F59E0B] text-white shadow-md"
           : disabled
-            ? 'px-4 py-2 rounded-lg text-sm bg-gray-100 text-gray-400 cursor-not-allowed'
-            : 'px-4 py-2 rounded-lg text-sm bg-white text-gray-700 hover:bg-[#FEF3C7] hover:text-[#D97706] border border-gray-200';
-        if (!disabled && !active) btn.addEventListener('click', () => { currentPage = page; render(); });
+          ? "px-4 py-2 rounded-lg text-sm bg-gray-100 text-gray-400 cursor-not-allowed"
+          : "px-4 py-2 rounded-lg text-sm bg-white text-gray-700 hover:bg-[#FEF3C7] hover:text-[#D97706] border border-gray-200";
+        if (!disabled && !active)
+          btn.addEventListener("click", () => {
+            currentPage = page;
+            render();
+          });
         return btn;
       };
 
-      pagination.appendChild(createBtn('&larr;', currentPage - 1, currentPage === 1, false));
+      pagination.appendChild(
+        createBtn("&larr;", currentPage - 1, currentPage === 1, false)
+      );
       for (let i = 1; i <= totalPages; i++) {
-        if (totalPages > 7 && i > 2 && i < totalPages - 1 && Math.abs(i - currentPage) > 1) {
+        if (
+          totalPages > 7 &&
+          i > 2 &&
+          i < totalPages - 1 &&
+          Math.abs(i - currentPage) > 1
+        ) {
           if (i === 3 || i === totalPages - 2) {
-            const dots = document.createElement('span');
-            dots.textContent = '…';
-            dots.className = 'px-2 text-gray-400';
+            const dots = document.createElement("span");
+            dots.textContent = "…";
+            dots.className = "px-2 text-gray-400";
             pagination.appendChild(dots);
           }
           continue;
         }
         const pageBtn = createBtn(String(i), i, false, i === currentPage);
-        if (i === currentPage) pageBtn.classList.add('w-10', 'h-10');
+        if (i === currentPage) pageBtn.classList.add("w-10", "h-10");
         pagination.appendChild(pageBtn);
       }
-      pagination.appendChild(createBtn('&rarr;', currentPage + 1, currentPage === totalPages, false));
+      pagination.appendChild(
+        createBtn("&rarr;", currentPage + 1, currentPage === totalPages, false)
+      );
     }
 
     /** Render principal */
@@ -266,48 +386,137 @@ const categories = await getCategories();
       const start = (currentPage - 1) * ITEMS_PER_PAGE;
       const pageItems = sorted.slice(start, start + ITEMS_PER_PAGE);
 
-      allItems.forEach(item => item.style.display = 'none');
-      pageItems.forEach(item => { item.style.display = ''; grid.appendChild(item); });
+      allItems.forEach((item) => (item.style.display = "none"));
+      pageItems.forEach((item) => {
+        item.style.display = "";
+        grid.appendChild(item);
+      });
 
-      noResults.classList.toggle('hidden', sorted.length > 0);
-      resultsCount.textContent = sorted.length === 0 
-        ? 'Sin resultados'
-        : `Mostrando ${start + 1}–${Math.min(start + ITEMS_PER_PAGE, sorted.length)} de ${sorted.length} productos`;
+      noResults.classList.toggle("hidden", sorted.length > 0);
+      resultsCount.textContent =
+        sorted.length === 0
+          ? "Sin resultados"
+          : `Mostrando ${start + 1}–${Math.min(
+              start + ITEMS_PER_PAGE,
+              sorted.length
+            )} de ${sorted.length} productos`;
       renderPagination(sorted.length);
     }
 
     // --- Events ---
     let debounce: ReturnType<typeof setTimeout>;
-    searchInput.addEventListener('input', () => {
-      clearBtn.classList.toggle('hidden', !searchInput.value);
+    searchInput.addEventListener("input", () => {
+      clearBtn.classList.toggle("hidden", !searchInput.value);
       clearTimeout(debounce);
-      debounce = setTimeout(() => { currentSearch = searchInput.value.trim(); currentPage = 1; render(); }, 300);
+      debounce = setTimeout(() => {
+        currentSearch = searchInput.value.trim();
+        currentPage = 1;
+        render();
+      }, 300);
     });
-    clearBtn.addEventListener('click', () => {
-      searchInput.value = ''; clearBtn.classList.add('hidden');
-      currentSearch = ''; currentPage = 1; render(); searchInput.focus();
+    clearBtn.addEventListener("click", () => {
+      searchInput.value = "";
+      clearBtn.classList.add("hidden");
+      currentSearch = "";
+      currentPage = 1;
+      render();
+      searchInput.focus();
     });
-    filterBtns.forEach(btn => btn.addEventListener('click', () => {
-      filterBtns.forEach(b => { b.classList.remove('active','bg-[#F59E0B]','text-white','shadow-md'); b.classList.add('bg-white','text-gray-700'); });
-      btn.classList.add('active','bg-[#F59E0B]','text-white','shadow-md'); btn.classList.remove('bg-white','text-gray-700');
-      currentCategory = btn.getAttribute('data-category') || 'all'; currentPage = 1; render();
-    }));
-    sortSelect.addEventListener('change', () => { currentSort = sortSelect.value; currentPage = 1; render(); });
+    filterBtns.forEach((btn) =>
+      btn.addEventListener("click", () => {
+        filterBtns.forEach((b) => {
+          b.classList.remove(
+            "active",
+            "bg-[#F59E0B]",
+            "text-white",
+            "shadow-md"
+          );
+          b.classList.add("bg-white", "text-gray-700");
+        });
+        btn.classList.add("active", "bg-[#F59E0B]", "text-white", "shadow-md");
+        btn.classList.remove("bg-white", "text-gray-700");
+        currentCategory = btn.getAttribute("data-category") || "all";
+        currentPage = 1;
+        render();
+      })
+    );
+    sortSelect.addEventListener("change", () => {
+      currentSort = sortSelect.value;
+      currentPage = 1;
+      render();
+    });
 
     // Init: loading → render
-    setTimeout(() => { loadingSkeleton.classList.add('hidden'); productsSection.classList.remove('hidden'); render(); }, 500);
+    setTimeout(() => {
+      loadingSkeleton.classList.add("hidden");
+      productsSection.classList.remove("hidden");
+      render();
+    }, 500);
   });
 </script>
 
 <style>
-  .hexagon { position: absolute; width: 100px; height: 57.74px; background-color: rgba(245,158,11,0.05); margin: 28.87px 0; }
-  .hexagon:before,.hexagon:after { content:""; position:absolute; width:0; border-left:50px solid transparent; border-right:50px solid transparent; }
-  .hexagon:before { bottom:100%; border-bottom:28.87px solid rgba(245,158,11,0.05); }
-  .hexagon:after { top:100%; border-top:28.87px solid rgba(245,158,11,0.05); }
-  @keyframes float { 0%,100%{transform:translateY(0) rotate(0deg);opacity:.3} 50%{transform:translateY(-30px) rotate(180deg);opacity:.1} }
-  .hex-1{top:10%;left:5%;animation:float 25s infinite ease-in-out}
-  .hex-2{top:60%;left:80%;animation:float 20s infinite ease-in-out 2s}
-  .hex-3{top:30%;right:10%;animation:float 22s infinite ease-in-out 4s}
-  .animate-fade-in-up{animation:fade-in-up .8s ease-out forwards;opacity:0}
-  @keyframes fade-in-up{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+  .hexagon {
+    position: absolute;
+    width: 100px;
+    height: 57.74px;
+    background-color: rgba(245, 158, 11, 0.05);
+    margin: 28.87px 0;
+  }
+  .hexagon:before,
+  .hexagon:after {
+    content: "";
+    position: absolute;
+    width: 0;
+    border-left: 50px solid transparent;
+    border-right: 50px solid transparent;
+  }
+  .hexagon:before {
+    bottom: 100%;
+    border-bottom: 28.87px solid rgba(245, 158, 11, 0.05);
+  }
+  .hexagon:after {
+    top: 100%;
+    border-top: 28.87px solid rgba(245, 158, 11, 0.05);
+  }
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0) rotate(0deg);
+      opacity: 0.3;
+    }
+    50% {
+      transform: translateY(-30px) rotate(180deg);
+      opacity: 0.1;
+    }
+  }
+  .hex-1 {
+    top: 10%;
+    left: 5%;
+    animation: float 25s infinite ease-in-out;
+  }
+  .hex-2 {
+    top: 60%;
+    left: 80%;
+    animation: float 20s infinite ease-in-out 2s;
+  }
+  .hex-3 {
+    top: 30%;
+    right: 10%;
+    animation: float 22s infinite ease-in-out 4s;
+  }
+  .animate-fade-in-up {
+    animation: fade-in-up 0.8s ease-out forwards;
+    opacity: 0;
+  }
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 </style>
