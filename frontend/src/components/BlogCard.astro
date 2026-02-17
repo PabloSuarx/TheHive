@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets';
+
 interface Props {
   title: string;
   slug: string;
@@ -13,7 +15,7 @@ interface Props {
 
 const { title, slug, excerpt, imageUrl, author, blogPublishedAt, categoryName, className = '' } = Astro.props;
 
-const placeholder = 'https://images.unsplash.com/photo-1587049352846-4a222e784387?w=600&h=400&fit=crop';
+const placeholder = '/placeholder.svg';
 const imgSrc = imageUrl || placeholder;
 
 const formatDate = (dateStr?: string) => {
@@ -23,12 +25,13 @@ const formatDate = (dateStr?: string) => {
 
 const wordCount = excerpt ? excerpt.split(/\s+/).length : 0;
 const readTime = Math.max(3, Math.ceil(wordCount / 40));
+
 ---
 
 <article class={`group ${className}`}>
   <a href={`/blog/${slug}`} class="block">
     <div class="relative overflow-hidden rounded-xl mb-4">
-      <img src={imgSrc} alt={title} class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy" />
+      <Image src={imgSrc} alt={title} width={500} height={500} class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy" />
     </div>
 
     {categoryName && <span class="text-sm text-[#F59E0B] font-semibold">{categoryName}</span>}

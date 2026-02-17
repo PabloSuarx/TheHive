@@ -1,0 +1,42 @@
+---
+import BlogCard from "./BlogCard.astro";
+import type { Blog } from "../types/blog";
+
+interface Props {
+  relatedBlogs: Blog[];
+  strapiUrl: string;
+}
+
+const { relatedBlogs, strapiUrl } = Astro.props;
+---
+
+{
+  relatedBlogs.length > 0 && (
+    <section class="py-16 bg-linear-to-b from-white to-[#FEF3C7]">
+      <div class="container mx-auto px-4 lg:px-8">
+        <div class="max-w-5xl mx-auto">
+          <h2 class="text-2xl font-bold text-gray-900 mb-8">
+            Artículos Relacionados
+          </h2>
+          <div class="grid md:grid-cols-3 gap-8">
+            {relatedBlogs.map((blog) => (
+              <BlogCard
+                title={blog.title}
+                slug={blog.slug}
+                excerpt={blog.excerpt}
+                imageUrl={
+                  blog.featuredImage?.url
+                    ? `${strapiUrl}${blog.featuredImage.url}`
+                    : undefined
+                }
+                author={blog.author}
+                blogPublishedAt={blog.blogPublishedAt}
+                categoryName={blog.blog_category?.name}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
