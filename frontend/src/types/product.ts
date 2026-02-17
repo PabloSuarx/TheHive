@@ -29,15 +29,18 @@ export interface Product {
   mainImage: StrapiImage | null;
   category: Category;
   reviews: Review[];
-  // tags: Tag[];
+  tags?: Tag[];
 }
 
 export interface Review {
   id: number;
+  userName?: string;
+  rating?: number;
+  comment?: string;
 }
 
-// export interface Tag {
-//   id: number;
-//   name: string;
-//   slug: string;
-// }
+export interface Tag {
+  id: number;
+  name: string;
+  slug: string;
+}

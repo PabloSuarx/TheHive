@@ -80,9 +80,9 @@ export async function getStaticPaths() {
           prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4
           prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3
           prose-p:text-gray-700 prose-p:leading-relaxed prose-p:mb-6
-          prose-a:text-[#F59E0B] prose-a:font-semibold hover:prose-a:text-[#D97706]
+          prose-a:text-warning prose-a:font-semibold hover:prose-a:text-warning
           prose-img:rounded-xl prose-img:shadow-lg
-          prose-blockquote:border-l-[#F59E0B] prose-blockquote:italic prose-blockquote:text-gray-600
+          prose-blockquote:border-l-warning prose-blockquote:italic prose-blockquote:text-gray-600
           prose-strong:text-gray-900"
               set:html={blog.content}
             />
@@ -97,7 +97,7 @@ export async function getStaticPaths() {
               </h4>
               <div class="flex flex-wrap gap-2">
                 {blog.tags.map((tag) => (
-                  <span class="px-4 py-2 bg-[#FEF3C7] text-[#D97706] text-sm font-medium rounded-full">
+                  <span class="px-4 py-2 bg-warning text-warning text-sm font-medium rounded-full">
                     {tag.name}
                   </span>
                 ))}
@@ -109,7 +109,7 @@ export async function getStaticPaths() {
         {
           blog.author && (
             <div class="mt-10 p-6 bg-gray-50 rounded-2xl flex items-center gap-4">
-              <div class="w-16 h-16 bg-gradient-to-br from-[#F59E0B] to-[#D97706] rounded-full flex items-center justify-center text-white font-bold text-xl shrink-0">
+              <div class="w-16 h-16 bg-linear-to-br from-warning to-warning rounded-full flex items-center justify-center text-white font-bold text-xl shrink-0">
                 {blog.author.charAt(0).toUpperCase()}
               </div>
               <div>
@@ -131,7 +131,7 @@ export async function getStaticPaths() {
     <div class="container mx-auto px-4 lg:px-8 text-center">
       <a
         href="/blog"
-        class="inline-flex items-center gap-2 text-[#F59E0B] font-semibold hover:underline"
+        class="inline-flex items-center gap-2 text-warning font-semibold hover:underline"
       >
         <svg
           class="w-5 h-5"
