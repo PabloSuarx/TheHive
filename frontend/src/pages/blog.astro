@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import BlogCard from "../components/BlogCard.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
 import { get } from "../lib/strapi";
 
 const PUBLIC_STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL;
@@ -22,31 +23,23 @@ const blogCategories = (await get("blog-categories")) || [];
   descripcion="Lee nuestros artículos sobre miel artesanal, recetas, beneficios para la salud, sostenibilidad y el mundo de la apicultura."
   keywords="blog miel, recetas miel, beneficios miel, apicultura, miel artesanal blog"
 >
+
+
   <!-- Hero -->
-  <section
-    class="relative overflow-hidden bg-linear-to-br from-[#FEF3C7] via-white to-[#FEF3C7] py-20 lg:py-28"
-  >
-    <div
-      class="absolute inset-0 overflow-hidden pointer-events-none opacity-30"
-    >
-      <div class="hexagon hex-1"></div>
-      <div class="hexagon hex-2"></div>
-      <div class="hexagon hex-3"></div>
-    </div>
-    <div class="container mx-auto px-4 lg:px-8 relative z-10">
-      <div class="max-w-3xl mx-auto text-center space-y-6 animate-fade-in-up">
-        <h1 class="text-gradient-honey">Blog de The Hive</h1>
-        <p class="text-lead text-gray-600">
-          Recetas, consejos, beneficios y todo lo que necesitas saber sobre el
-          mundo de la miel
-        </p>
-      </div>
+  <section class="py-12 bg-white border-b border-gray-100">
+    <div class="container mx-auto px-4 lg:px-8">
+      <Breadcrumbs class="text-gray-500 font-medium mb-4" separator="/" homeLabel="Inicio" />
+      <h1 class="text-4xl font-bold text-gray-900 mb-2">Nuestro Blog</h1>
+      <p class="text-lg text-gray-600 max-w-2xl">
+        Lee nuestros artículos sobre miel artesanal, recetas, beneficios para la salud, sostenibilidad y el mundo de la apicultura.
+      </p>
     </div>
   </section>
 
   <!-- Controles: Buscador + Filtros -->
   <section class="py-6 bg-gray-50 border-b border-gray-200 sticky top-0 z-30">
     <div class="container mx-auto px-4 lg:px-8">
+
       <!-- Buscador -->
       <div class="max-w-xl mx-auto mb-5 relative">
         <svg

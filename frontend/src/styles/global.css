@@ -37,34 +37,35 @@
   --primary-dark: var(--color-primary-dark);
   --primary-light: var(--color-primary-light);
   --primary-pale: var(--color-primary-pale);
-  
+
   --secondary: var(--color-secondary);
   --secondary-light: var(--color-secondary-light);
-  
+
   --accent: var(--color-accent);
-  
+
   --bg-primary: var(--color-bg-primary);
   --bg-secondary: var(--color-bg-secondary);
   --bg-tertiary: var(--color-bg-tertiary);
   --bg-footer: var(--color-bg-footer);
-  
+
   --text-primary: var(--color-text-primary);
   --text-secondary: var(--color-text-secondary);
   --text-tertiary: var(--color-text-tertiary);
   --text-inverse: var(--color-text-inverse);
-  
+
   --border-color: var(--color-border-DEFAULT);
   --divider: var(--color-divider);
-  
+
   --success: var(--color-success);
   --error: var(--color-error);
   --warning: var(--color-warning);
   --info: var(--color-info);
-  
+
   --transition-fast: 150ms ease-in-out;
   --transition-base: 250ms ease-in-out;
   --transition-slow: 350ms ease-in-out;
 }
+
 /*
 [data-theme="dark"] {
   --color-bg-primary: #111827;
@@ -149,7 +150,7 @@ p {
 }
 
 a {
-  color: var(--primary);
+  color: var(--accent);
   text-decoration: none;
   transition: color 0.2s ease;
 }

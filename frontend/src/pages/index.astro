@@ -19,7 +19,7 @@ const PUBLIC_STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL;
 
 const buttonsData = await get("ui-component");
 const buttons = buttonsData?.buttons || [];
-const categories = (await get("categories")) || [];
+const categories = (await get("categories", { populate: { image: true } })) || [];
 
 const buttonsByName = buttons.reduce((acc, btn) => {
   acc[btn.content] = btn;

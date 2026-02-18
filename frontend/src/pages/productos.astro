@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import ProductCard from "../components/ProductCard.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
 import { get } from "../lib/strapi";
 
 const PUBLIC_STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL;
@@ -22,38 +23,13 @@ const categories = (await get("categories")) || [];
   keywords="comprar miel, miel artesanal, miel natural, tienda miel, miel online, miel premium"
 >
   <!-- Hero -->
-  <section class="relative overflow-hidden py-20 lg:py-28">
-    <div class="mb-8">
-      <nav class="flex text-sm text-gray-500 mb-4 gap-2">
-        <a class="hover:text-primary transition-colors" href="#">Inicio</a>
-        <span>/</span>
-        <span class="text-gray-900 font-medium">Productos</span>
-      </nav>
-
-      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
-        <div>
-          <h1 class="text-4xl font-black text-gray-900 tracking-tight">
-            Nuestras Mieles
-          </h1>
-          <p class="text-gray-500 mt-2">
-            24 productos de apicultura sostenible encontrados
-          </p>
-        </div>
-        <div class="flex items-center gap-3">
-          <span class="text-sm font-medium text-gray-600 whitespace-nowrap"
-            >Ordenar por:</span
-          >
-          <select
-            class="bg-white border-gray-200 rounded-lg text-sm focus:ring-primary focus:border-primary pr-10"
-          >
-            <option>Novedades</option>
-            <option>Precio: Menor a Mayor</option>
-            <option>Precio: Mayor a Menor</option>
-            <option>Nombre (A-Z)</option>
-            <option>Valoración</option>
-          </select>
-        </div>
-      </div>
+  <section class="py-12 bg-white border-b border-gray-100">
+    <div class="container mx-auto px-4 lg:px-8">
+      <Breadcrumbs class="text-gray-500 font-medium mb-4" separator="/" homeLabel="Inicio" />
+      <h1 class="text-4xl font-bold text-gray-900 mb-2">Nuestros Productos</h1>
+      <p class="text-lg text-gray-600 max-w-2xl">
+        Descubre nuestra selección de mieles artesanales 100% naturales, recolectadas con pasión y respeto por la naturaleza.
+      </p>
     </div>
   </section>
 

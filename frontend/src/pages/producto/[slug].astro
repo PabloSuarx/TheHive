@@ -32,7 +32,10 @@ const reviews = product.reviews || [];
 const avgRating =
   reviews.length > 0
     ? (
-        reviews.reduce((sum, r) => sum + (r.rating || 0), 0) / reviews.length
+        reviews.reduce(
+          (sum: any, r: { rating: any }) => sum + (r.rating || 0),
+          0
+        ) / reviews.length
       ).toFixed(1)
     : null;
 
@@ -44,7 +47,7 @@ const seoDescription =
   product.shortDescription ||
   `Compra ${product.name} - Miel artesanal 100% natural`;
 
-const formatPrice = (p) =>
+const formatPrice = (p: any) =>
   p.toLocaleString("es-ES", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
@@ -52,7 +55,7 @@ const formatPrice = (p) =>
 
 export async function getStaticPaths() {
   const products = await get("products");
-  return products.map((product) => ({
+  return products.map((product: any) => ({
     params: { slug: product.slug },
   }));
 }
@@ -64,7 +67,6 @@ export async function getStaticPaths() {
   keywords={`miel ${product.name}, comprar ${product.name}, miel artesanal`}
 >
   <ProductHero product={product} imageUrl={imgUrl}>
-    {/* Rating */}
     {
       avgRating && (
         <div class="flex items-center gap-2">
@@ -132,7 +134,7 @@ export async function getStaticPaths() {
       }`}
       disabled={outOfStock}
     >
-      {outOfStock ? "Sin Stock" : "🛒 Añadir al Carrito"}
+      {outOfStock ? "Sin Stock" : "Añadir al Carrito"}
     </button>
 
     <!-- Detalles rápidos -->

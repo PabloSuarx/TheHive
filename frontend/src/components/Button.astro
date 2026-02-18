@@ -23,13 +23,10 @@ const baseClasses =
   "inline-flex items-center justify-center rounded-lg font-semibold transition-all duration-200 cursor-pointer";
 
 const variantClasses: Record<string, string> = {
-  primary:
-    "bg-primary hover:bg-primary-dark text-white shadow-md hover:shadow-lg px-6 py-3",
-  secondary:
-    "bg-secondary hover:bg-secondary-light text-white shadow-md hover:shadow-lg px-6 py-3",
-  outline:
-    "border-2 border-primary text-primary hover:bg-primary hover:text-white px-6 py-3",
-  ghost: "text-primary hover:bg-primary-pale px-6 py-3",
+  primary: "bg-warning !text-white px-6 py-3",
+  secondary: "bg-secondary !text-white px-6 py-3",
+  outline: "border-2 border-warning text-gray-900 px-6 py-3 font-semibold",
+  ghost: "text-primary px-6 py-3",
 };
 
 const getVariantClass = (v: string) => {

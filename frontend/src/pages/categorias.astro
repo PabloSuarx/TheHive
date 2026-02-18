@@ -1,10 +1,11 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import CategoryCard from "../components/CategoryCard.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
 import { get } from "../lib/strapi";
 
 const PUBLIC_STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL;
-const categories = (await get("categories")) || [];
+const categories = (await get("categories", { populate: { image: true } })) || [];
 ---
 
 <Layout
@@ -12,24 +13,16 @@ const categories = (await get("categories")) || [];
   descripcion="Explora nuestras categorías de miel artesanal: monoflora, multiflora, premium y más."
   keywords="categorías miel, tipos de miel, miel monoflora, miel multiflora, miel premium"
 >
-  <section
-    class="relative overflow-hidden bg-gradient-to-br from-[#FEF3C7] via-white to-[#FEF3C7] py-20 lg:py-32"
-  >
-    <div
-      class="absolute inset-0 overflow-hidden pointer-events-none opacity-30"
-    >
-      <div class="hexagon hex-1"></div>
-      <div class="hexagon hex-2"></div>
-      <div class="hexagon hex-3"></div>
-    </div>
 
-    <div class="container mx-auto px-4 lg:px-8 relative z-10">
-      <div class="max-w-3xl mx-auto text-center space-y-6 animate-fade-in-up">
-        <h1 class="text-gradient-honey">Categorías de Miel</h1>
-        <p class="text-lead text-gray-600">
-          Descubre todos los tipos de miel artesanal que tenemos para ti
-        </p>
-      </div>
+
+  <!-- Hero -->
+  <section class="py-12 bg-white border-b border-gray-100">
+    <div class="container mx-auto px-4 lg:px-8">
+      <Breadcrumbs class="text-gray-500 font-medium mb-4" separator="/" homeLabel="Inicio" />
+      <h1 class="text-4xl font-bold text-gray-900 mb-2">Nuestras Categorías</h1>
+      <p class="text-lg text-gray-600 max-w-2xl">
+        Explora nuestra variedad de mieles artesanales, cada una con su carácter y sabor único.
+      </p>
     </div>
   </section>
 

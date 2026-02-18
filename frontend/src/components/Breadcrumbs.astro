@@ -1,0 +1,39 @@
+---
+interface Props {
+  homeLabel?: string;
+  class?: string;
+  separator?: string;
+  currentClass?: string;
+}
+
+const { homeLabel = "Home", class: className, separator = ">", currentClass } = Astro.props;
+
+const paths = Astro.url.pathname.split('/').filter(Boolean);
+const parts = paths.map((part, index) => {
+  const href = `/${paths.slice(0, index + 1).join('/')}`;
+  const label = part.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+  return {
+    label,
+    href,
+    isCurrent: index === paths.length - 1,
+  };
+});
+---
+
+<nav aria-label="Breadcrumb" class:list={["flex items-center text-sm", className]}>
+  <ol class="flex items-center flex-wrap">
+    <li class="flex items-center">
+      <a href="/" class="opacity-80 hover:opacity-100 transition-opacity whitespace-nowrap">{homeLabel}</a>
+    </li>
+    {parts.map(({ label, href, isCurrent }) => (
+      <li class="flex items-center">
+        <span class="mx-2 opacity-50">{separator}</span>
+        {isCurrent ? (
+          <span class:list={["font-medium opacity-100", currentClass]} aria-current="page">{label}</span>
+        ) : (
+          <a href={href} class="opacity-80 hover:opacity-100 transition-opacity whitespace-nowrap">{label}</a>
+        )}
+      </li>
+    ))}
+  </ol>
+</nav>
