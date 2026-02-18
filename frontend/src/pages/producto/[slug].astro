@@ -68,8 +68,6 @@ export async function getStaticPaths() {
   }));
 }
 
-        console.log(product.beekeeper)
-
 ---
 
 <Layout
@@ -219,32 +217,56 @@ export async function getStaticPaths() {
   <section class="py-12 bg-white">
     <div class="container mx-auto px-4 lg:px-8">
       <!-- Descripción completa -->
-      {
-        product.description && (
-          <div class="max-w-3xl">
-            <h2 class="text-2xl font-bold text-gray-900 mb-6">Descripción</h2>
-            <div
-              class="prose prose-gray max-w-none"
-              set:html={product.description}
-            />
-          </div>
-        )
-      }
+      <div class="grid lg:grid-cols-2 gap-12 items-start">
+        <!-- Columna Izquierda: Descripción y Beneficios -->
+        <div>
+          {
+            product.description && (
+              <div class="max-w-none">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">Descripción</h2>
+                <div
+                  class="prose prose-gray max-w-none"
+                  set:html={product.description}
+                />
+              </div>
+            )
+          }
 
-      <!-- Beneficios -->
-      {
-        product.benefits && (
-          <div class="mt-12 max-w-3xl">
-            <h2 class="text-2xl font-bold text-gray-900 mb-6">Beneficios</h2>
-            <p class="text-gray-600 leading-relaxed">{product.benefits}</p>
-          </div>
-        )
-      }
+          {
+            product.benefits && (
+              <div class="mt-12 max-w-none">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">Beneficios</h2>
+                <p class="text-gray-600 leading-relaxed">{product.benefits}</p>
+              </div>
+            )
+          }
+        </div>
 
-      <!-- Reseñas -->
+        <!-- Columna Derecha: Mapa -->
+        <div>
+          {
+            product.beekeeper?.origin.latitude && product.beekeeper?.origin.longitude && (
+              <div class="rounded-2xl overflow-hidden border border-gray-100 sticky top-24">
+                 <Map 
+                    lat={product.beekeeper.origin.latitude} 
+                    lng={product.beekeeper.origin.longitude} 
+                    zoom={10} 
+                    containerId={`map-${product.slug}`}
+                    className="w-full h-[350px] z-0"
+                 />
+                 <div class="bg-gray-50 p-3 text-center text-sm text-gray-500 border-t border-gray-200">
+                    Colmenas: {product.beekeeper.origin.name}
+                 </div>
+              </div>
+            )
+          }
+        </div>
+      </div>
+
+      <!-- Sección de reseñas (Full Width) -->
       {
         reviews.length > 0 && (
-          <div class="mt-16 max-w-3xl">
+          <div class="mt-16 w-full">
             <h2 class="text-2xl font-bold text-gray-900 mb-8">
               Reseñas ({reviews.length})
             </h2>
@@ -284,23 +306,6 @@ export async function getStaticPaths() {
                 </article>
               ))}
             </div>
-          </div>
-        )
-      }
-      {
-
-        product.beekeeper?.origin.latitude && product.beekeeper?.origin.longitude  && (
-          <div class="mt-12 rounded-2xl overflow-hidden border border-gray-100 w-1/2 mx-auto">
-             <Map 
-                lat={product.beekeeper.origin.latitude} 
-                lng={product.beekeeper.origin.longitude} 
-                zoom={10} 
-                containerId={`map-${product.slug}`}
-                className="w-full h-[250px] z-0"
-             />
-             <div class="bg-gray-50 p-3 text-center text-sm text-gray-500 border-t border-gray-200">
-                Colmenas: {product.beekeeper.origin.name}
-             </div>
           </div>
         )
       }

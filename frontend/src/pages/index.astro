@@ -2,7 +2,6 @@
 import Layout from "../layouts/Layout.astro";
 import { get } from "../lib/strapi";
 
-// Components
 import Hero from "../components/home/Hero.astro";
 import CategoriesSection from "../components/home/CategoriesSection.astro";
 import FeaturedProducts from "../components/home/FeaturedProducts.astro";
@@ -10,8 +9,8 @@ import WhyChooseUs from "../components/home/WhyChooseUs.astro";
 import Testimonials from "../components/home/Testimonials.astro";
 import BlogSection from "../components/home/BlogSection.astro";
 import CallToAction from "../components/home/CallToAction.astro";
+import CalculadoraDulzor from "../components/CalculadoraDulzor.astro";
 
-// Data Fetching
 const blogs = await get("blogs", {
   populate: {
     featuredImage: true,
@@ -55,5 +54,9 @@ const buttonsByName = buttons.reduce((acc, btn) => {
 
   <BlogSection latestBlogs={latestBlogs} publicStrapiUrl={PUBLIC_STRAPI_URL} />
 
+  <CalculadoraDulzor />
+
   <CallToAction buttonsByName={buttonsByName} />
+
+  
 </Layout>
