@@ -430,6 +430,35 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiBeekeeperBeekeeper extends Struct.CollectionTypeSchema {
+  collectionName: 'beekeepers';
+  info: {
+    displayName: 'Beekeeper';
+    pluralName: 'beekeepers';
+    singularName: 'beekeeper';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::beekeeper.beekeeper'
+    > &
+      Schema.Attribute.Private;
+    nombre: Schema.Attribute.String;
+    origin: Schema.Attribute.Relation<'oneToOne', 'api::origin.origin'>;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiBlogCategoryBlogCategory
   extends Struct.CollectionTypeSchema {
   collectionName: 'blog_categories';
@@ -755,7 +784,10 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
-    beekeeper: Schema.Attribute.String;
+    beekeeper: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::beekeeper.beekeeper'
+    >;
     benefits: Schema.Attribute.Text;
     category: Schema.Attribute.Relation<'manyToOne', 'api::category.category'>;
     createdAt: Schema.Attribute.DateTime;
@@ -778,7 +810,7 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
     mainImage: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
     name: Schema.Attribute.String & Schema.Attribute.Required;
     organic: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
-    origin: Schema.Attribute.String;
+    origin: Schema.Attribute.Relation<'oneToOne', 'api::origin.origin'>;
     price: Schema.Attribute.Decimal &
       Schema.Attribute.Required &
       Schema.Attribute.SetMinMax<
@@ -1610,6 +1642,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::beekeeper.beekeeper': ApiBeekeeperBeekeeper;
       'api::blog-category.blog-category': ApiBlogCategoryBlogCategory;
       'api::blog.blog': ApiBlogBlog;
       'api::category.category': ApiCategoryCategory;

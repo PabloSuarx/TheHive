@@ -1,0 +1,57 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import FaqItem from "../components/FaqItem.astro";
+import Button from "../components/Button.astro";
+import { get } from "../lib/strapi";
+
+// Fetch data from Strapi 'faqs' collection type
+// Assuming the endpoint returns an array of objects: { question: string, answer: string }
+const faqs = (await get("faqs")) || [];
+
+// Fallback data if Strapi content is empty
+const data = faqs.length > 0 ? faqs : [
+  {
+    question: "¿De dónde proviene vuestra miel?",
+    answer: "Nuestra miel proviene de colmenas situadas en entornos naturales protegidos de la Península Ibérica. Trabajamos directamente con apicultores locales que practican una apicultura sostenible y respetuosa con las abejas."
+  }
+];
+
+---
+
+<Layout
+  titulo="Preguntas Frecuentes (FAQ)"
+  descripcion="Resuelve tus dudas sobre nuestros productos, envíos y devoluciones en nuestra sección de Preguntas Frecuentes."
+  keywords="faq miel, preguntas frecuentes, dudas compra miel, origen miel"
+>
+  <!-- Hero Section -->
+  <section class="py-12 bg-white border-b border-gray-100">
+    <div class="container mx-auto px-4 lg:px-8">
+      <Breadcrumbs class="text-gray-500 font-medium mb-4" separator="/" homeLabel="Inicio" />
+      <h1 class="text-4xl font-bold text-gray-900 mb-2">Preguntas Frecuentes</h1>
+      <p class="text-lg text-gray-600 max-w-2xl">
+        Aquí encontrarás respuestas a las dudas más comunes sobre nuestros productos y servicios.
+      </p>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <section class="py-16 bg-gray-50/50">
+    <div class="container mx-auto px-4 lg:px-8">
+      <div class="max-w-3xl mx-auto space-y-4">
+        
+        {data.map((faq: any) => (
+            <FaqItem question={faq.question} answer={faq.answer} />
+        ))}
+
+      </div>
+
+      <div class="text-center mt-12">
+          <p class="text-gray-600 mb-4">¿No encuentras lo que buscas?</p>
+          <Button link="/contacto" variant="primary" className="shadow-sm hover:shadow-lg">
+              Contáctanos
+          </Button>
+      </div>
+    </div>
+  </section>
+</Layout>

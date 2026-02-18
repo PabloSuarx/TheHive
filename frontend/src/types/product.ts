@@ -11,7 +11,7 @@ export interface Product {
   shortDescription: string;
   price: number;
   origin: string;
-  beekeeper: string;
+  beekeeper: Beekeeper | null;
   crystallization: string;
   harvestSeason: string;
   flavorNotes: string | null;
@@ -37,6 +37,22 @@ export interface Review {
   userName?: string;
   rating?: number;
   comment?: string;
+}
+
+export interface Beekeeper {
+  id: number;
+  nombre: string;
+  origin: Origin;
+
+}
+
+export interface Origin {
+  id: number;
+  name: string;
+  province: string;
+  country: string;
+  latitude: number;
+  longitude: number;
 }
 
 export interface Tag {

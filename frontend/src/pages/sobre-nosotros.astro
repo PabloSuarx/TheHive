@@ -1,0 +1,94 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import { get } from "../lib/strapi";
+import { Image } from "astro:assets";
+
+const PUBLIC_STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL;
+
+// Fetch data from Strapi 'about-us' single type
+const aboutData = await get("about-us", {
+  populate: {
+    heroImage: true,
+  },
+});
+
+// Fallback data if Strapi content is not yet created
+const data = aboutData || {
+  title: "Sobre Nosotros",
+  subtitle: "Nuestra historia, misión y valores",
+  content: `
+    <p>En The Hive, nos dedicamos a ofrecer la miel más pura y natural, directamente de apicultores locales comprometidos con la sostenibilidad y el bienestar de las abejas.</p>
+    <p>Nuestra historia comenzó con una simple pasión por los productos naturales y el deseo de conectar a las personas con el origen de sus alimentos. Hoy, trabajamos con una red de apicultores artesanos que comparten nuestra visión.</p>
+    <p>Creemos en la transparencia, la calidad y el respeto por la naturaleza. Cada frasco de miel que ofrecemos es un testimonio del trabajo arduo de las abejas y del cuidado de quienes las protegen.</p>
+  `,
+  heroImage: null
+};
+
+const title = data.title || "Sobre Nosotros";
+const subtitle = data.subtitle || "Conoce más sobre nuestra historia";
+const content = data.content || "";
+const heroImageUrl = data.heroImage?.url 
+  ? (data.heroImage.url.startsWith('http') ? data.heroImage.url : `${PUBLIC_STRAPI_URL}${data.heroImage.url}`)
+  : "/placeholder.svg"; // Fallback image
+---
+
+<Layout
+  titulo={title}
+  descripcion="Conoce la historia detrás de The Hive, nuestra misión y los valores que nos guían."
+>
+  <!-- Hero Section -->
+  <section class="py-12 bg-white border-b border-gray-100">
+    <div class="container mx-auto px-4 lg:px-8">
+      <Breadcrumbs class="text-gray-500 font-medium mb-4" separator="/" homeLabel="Inicio" />
+      <h1 class="text-4xl font-bold text-gray-900 mb-2">{title}</h1>
+      <p class="text-lg text-gray-600 max-w-2xl">
+        {subtitle}
+      </p>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <section class="py-16 bg-white">
+    <div class="container mx-auto px-4 lg:px-8">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        
+        <!-- Image Column -->
+        <div class="relative rounded-2xl overflow-hidden shadow-xl aspect-sqaure lg:aspect-4/3 group">
+          <div class="absolute inset-0 bg-primary/10 group-hover:bg-transparent transition-colors duration-500"></div>
+           <Image
+            src={heroImageUrl}
+            alt="Sobre Nosotros"
+            width={800}
+            height={600}
+            class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+            loading="eager"
+          />
+        </div>
+
+        <!-- Text Column -->
+        <div>
+           <div class="prose prose-lg prose-amber text-gray-600">
+             <!-- If content is HTML (from CKEditor etc), render it. -->
+             <!-- If it implies markdown, we might need a parser, but assuming HTML or simple text for now -->
+             <Fragment set:html={content} />
+           </div>
+
+           <div class="mt-8 grid grid-cols-2 gap-6">
+             <div class="bg-gray-50 p-4 rounded-xl border border-gray-100">
+               <span class="text-3xl mb-2 block">🌿</span>
+               <h3 class="font-bold text-gray-900 mb-1">100% Natural</h3>
+               <p class="text-sm text-gray-500">Sin aditivos ni procesados.</p>
+             </div>
+             <div class="bg-gray-50 p-4 rounded-xl border border-gray-100">
+               <span class="text-3xl mb-2 block">🤝</span>
+               <h3 class="font-bold text-gray-900 mb-1">Comercio Justo</h3>
+               <p class="text-sm text-gray-500">Apoyo a apicultores locales.</p>
+             </div>
+           </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</Layout>

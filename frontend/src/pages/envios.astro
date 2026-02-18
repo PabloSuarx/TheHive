@@ -1,0 +1,73 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import { get } from "../lib/strapi";
+
+// Fetch data from Strapi 'shipping' single type
+const shippingData = await get("shipping");
+
+// Fallback data
+const data = shippingData || {
+  title: "Envíos y Devoluciones",
+  subtitle: "Información sobre nuestros métodos de entrega y políticas",
+  content: `
+    <h3>Envíos Nacionales</h3>
+    <p>Realizamos envíos a toda la península y Baleares. Nuestros pedidos son procesados en un plazo de 24-48 horas laborables.</p>
+    <ul>
+      <li><strong>Península:</strong> Entrega en 24-72h. Envío gratuito en pedidos superiores a 50€.</li>
+      <li><strong>Baleares:</strong> Entrega en 3-5 días laborables.</li>
+    </ul>
+
+    <h3>Empaquetado Ecológico</h3>
+    <p>Comprometidos con el medio ambiente, utilizamos materiales 100% reciclables y libres de plásticos siempre que es posible para asegurar que tu miel llegue intacta y el planeta respire.</p>
+
+    <h3>Devoluciones</h3>
+    <p>Si algún producto llega dañado o no es lo que esperabas, contáctanos en las primeras 48 horas tras la recepción para gestionar el cambio o reembolso.</p>
+  `,
+  icon: "🚚"
+};
+
+const title = data.title || "Envíos y Devoluciones";
+const subtitle = data.subtitle || "Información sobre entregas";
+const content = data.content || "";
+---
+
+<Layout
+  titulo={title}
+  descripcion="Información sobre envíos, plazos de entrega y políticas de devolución de The Hive."
+  keywords="envios miel, transporte, devoluciones, plazos entrega"
+>
+  <!-- Hero Section -->
+  <section class="py-12 bg-white border-b border-gray-100">
+    <div class="container mx-auto px-4 lg:px-8">
+      <Breadcrumbs class="text-gray-500 font-medium mb-4" separator="/" homeLabel="Inicio" />
+      <h1 class="text-4xl font-bold text-gray-900 mb-2">{title}</h1>
+      <p class="text-lg text-gray-600 max-w-2xl">
+        {subtitle}
+      </p>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <section class="py-16 bg-white">
+    <div class="container mx-auto px-4 lg:px-8">
+      <div class="max-w-3xl mx-auto">
+        
+        <div class="bg-[#FEF3C7]/30 border border-[#FCD34D] rounded-2xl p-8 mb-10 flex gap-6 items-start">
+            <span class="text-4xl shrink-0">🚚</span>
+            <div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">Resumen de Envíos</h3>
+                <p class="text-gray-700">
+                    Procesamos los pedidos de lunes a viernes. Los pedidos realizados antes de las 13:00 suelen enviarse el mismo día.
+                </p>
+            </div>
+        </div>
+
+        <div class="prose prose-lg prose-amber text-gray-600 max-w-none">
+          <Fragment set:html={content} />
+        </div>
+
+      </div>
+    </div>
+  </section>
+</Layout>

@@ -1,6 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import ProductHero from "../../components/ProductHero.astro";
+import Map from "../../components/LeafletMap.astro";
 import { Image } from "astro:assets";
 import { get } from "../../lib/strapi";
 import type { Product, Review, Tag } from "../../types/product";
@@ -17,8 +18,18 @@ const product = await get("products", {
     tags: true,
     seo: true,
     reviews: true,
+    beekeeper: {
+      populate: {
+        origin: {
+          fields: ["name", "province", "country", "latitude", "longitude"],
+        },
+      },
+    },
   },
 }).then((res) => res?.[0] || null);
+
+
+console.log(product);
 
 if (!product) {
   return Astro.redirect("/404");
@@ -59,6 +70,9 @@ export async function getStaticPaths() {
     params: { slug: product.slug },
   }));
 }
+
+        console.log(product.beekeeper)
+
 ---
 
 <Layout
@@ -125,8 +139,7 @@ export async function getStaticPaths() {
       }
     </div>
 
-    <!-- Botón añadir -->
-    <button
+    <!-- <button
       class={`w-full py-4 rounded-xl font-bold text-lg transition-colors ${
         outOfStock
           ? "bg-gray-300 text-gray-500 cursor-not-allowed"
@@ -135,7 +148,7 @@ export async function getStaticPaths() {
       disabled={outOfStock}
     >
       {outOfStock ? "Sin Stock" : "Añadir al Carrito"}
-    </button>
+    </button> -->
 
     <!-- Detalles rápidos -->
     <div class="grid grid-cols-2 gap-4 pt-4 border-t border-gray-200">
@@ -155,7 +168,7 @@ export async function getStaticPaths() {
             <span class="text-xs text-gray-500 uppercase tracking-wide">
               Apicultor
             </span>
-            <p class="font-medium text-gray-900">{product.beekeeper}</p>
+            <p class="font-medium text-gray-900">{product.beekeeper.nombre}</p>
           </div>
         )
       }
@@ -277,7 +290,25 @@ export async function getStaticPaths() {
           </div>
         )
       }
+      {
+
+        product.beekeeper?.origin.latitude && product.beekeeper?.origin.longitude  && (
+          <div class="mt-12 rounded-2xl overflow-hidden border border-gray-100 w-1/2 mx-auto">
+             <Map 
+                lat={product.beekeeper.origin.latitude} 
+                lng={product.beekeeper.origin.longitude} 
+                zoom={10} 
+                containerId={`map-${product.slug}`}
+                className="w-full h-[250px] z-0"
+             />
+             <div class="bg-gray-50 p-3 text-center text-sm text-gray-500 border-t border-gray-200">
+                Colmenas: {product.beekeeper.origin.name}
+             </div>
+          </div>
+        )
+      }
     </div>
+    
   </section>
 </Layout>
 

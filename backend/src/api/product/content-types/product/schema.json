@@ -41,12 +41,6 @@
         "kg"
       ]
     },
-    "origin": {
-      "type": "string"
-    },
-    "beekeeper": {
-      "type": "string"
-    },
     "crystallization": {
       "type": "enumeration",
       "enum": [
@@ -125,6 +119,16 @@
       "relation": "manyToMany",
       "target": "api::tag.tag",
       "mappedBy": "products"
+    },
+    "origin": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::origin.origin"
+    },
+    "beekeeper": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::beekeeper.beekeeper"
     }
   }
 }

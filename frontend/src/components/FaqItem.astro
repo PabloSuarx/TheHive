@@ -1,0 +1,112 @@
+---
+interface Props {
+  question: string;
+  answer: string;
+}
+
+const { question, answer } = Astro.props;
+---
+
+<details class="group bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden open:shadow-md transition-shadow faq-item">
+  <summary class="flex justify-between items-center cursor-pointer p-6 list-none font-bold text-lg text-gray-900 select-none">
+    <span>{question}</span>
+    <span class="ml-4 transition-transform duration-300 group-open:rotate-180 text-primary">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>
+    </span>
+  </summary>
+  <div class="px-6 pb-6 text-gray-600 leading-relaxed border-t border-gray-50 pt-4 prose prose-amber max-w-none">
+    <Fragment set:html={answer} />
+  </div>
+</details>
+
+<script>
+  class Accordion {
+    el: HTMLDetailsElement;
+    summary: HTMLElement;
+    content: HTMLElement;
+    animation: Animation | null;
+    isClosing: boolean;
+    isExpanding: boolean;
+
+    constructor(el: HTMLDetailsElement) {
+      this.el = el;
+      this.summary = el.querySelector('summary') as HTMLElement;
+      this.content = el.querySelector('.prose') as HTMLElement;
+      this.animation = null;
+      this.isClosing = false;
+      this.isExpanding = false;
+      this.summary.addEventListener('click', (e) => this.onClick(e));
+    }
+
+    onClick(e: Event) {
+      e.preventDefault();
+      this.el.style.overflow = 'hidden';
+      if (this.isClosing || !this.el.open) {
+        this.open();
+      } else if (this.isExpanding || this.el.open) {
+        this.shrink();
+      }
+    }
+
+    shrink() {
+      this.isClosing = true;
+      const startHeight = `${this.el.offsetHeight}px`;
+      const endHeight = `${this.summary.offsetHeight}px`;
+
+      if (this.animation) this.animation.cancel();
+
+      this.animation = this.el.animate({
+        height: [startHeight, endHeight]
+      }, {
+        duration: 300,
+        easing: 'ease-out'
+      });
+
+      this.animation.onfinish = () => this.onAnimationFinish(false);
+      this.animation.oncancel = () => this.isClosing = false;
+    }
+
+    open() {
+      this.el.style.height = `${this.el.offsetHeight}px`;
+      this.el.open = true;
+      window.requestAnimationFrame(() => this.expand());
+    }
+
+    expand() {
+      this.isExpanding = true;
+      const startHeight = `${this.el.offsetHeight}px`;
+      const endHeight = `${this.summary.offsetHeight + this.content.offsetHeight + 30}px`;
+
+      if (this.animation) this.animation.cancel();
+
+      this.animation = this.el.animate({
+        height: [startHeight, endHeight]
+      }, {
+        duration: 300,
+        easing: 'ease-out'
+      });
+
+      this.animation.onfinish = () => this.onAnimationFinish(true);
+      this.animation.oncancel = () => this.isExpanding = false;
+    }
+
+    onAnimationFinish(open: boolean) {
+      this.el.open = open;
+      this.animation = null;
+      this.isClosing = false;
+      this.isExpanding = false;
+      this.el.style.height = '';
+      this.el.style.overflow = '';
+    }
+  }
+
+  // Initialize only new items to avoid double binding if we reused this script
+  const details = document.querySelectorAll('.faq-item');
+  details.forEach((el) => {
+     const detailsEl = el as HTMLDetailsElement;
+     if (!(detailsEl as any).__accordionInit) {
+        new Accordion(detailsEl);
+        (detailsEl as any).__accordionInit = true;
+     }
+  });
+</script>

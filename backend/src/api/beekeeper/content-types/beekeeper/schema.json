@@ -1,0 +1,23 @@
+{
+  "kind": "collectionType",
+  "collectionName": "beekeepers",
+  "info": {
+    "singularName": "beekeeper",
+    "pluralName": "beekeepers",
+    "displayName": "Beekeeper"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "nombre": {
+      "type": "string"
+    },
+    "origin": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::origin.origin"
+    }
+  }
+}
