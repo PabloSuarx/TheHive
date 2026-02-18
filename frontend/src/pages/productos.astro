@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import ProductCard from "../components/ProductCard.astro";
+import type { Product } from "../types/product";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
 import { get } from "../lib/strapi";
 
@@ -12,6 +13,7 @@ const products =
       mainImage: true,
       category: true,
       tags: true,
+      reviews: true,
     },
   })) || [];
 const categories = (await get("categories")) || [];
@@ -161,7 +163,7 @@ const categories = (await get("categories")) || [];
         id="products-grid"
       >
         {
-          products.map((product: any) => {
+          products.map((product: Product) => {
             const imgUrl = product.mainImage?.url
               ? `${PUBLIC_STRAPI_URL}${product.mainImage.url}`
               : undefined;

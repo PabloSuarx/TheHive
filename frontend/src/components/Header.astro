@@ -68,7 +68,7 @@ const sortedLinks = navLinks.sort((a, b) => a.order - b.order);
             ></path>
           </svg>
           <span
-            class="absolute -top-1 -right-1 bg-primary text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center"
+            class="cart-count absolute -top-1 -right-1 bg-primary text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center hidden"
           >
             0
           </span>
@@ -135,10 +135,13 @@ const sortedLinks = navLinks.sort((a, b) => a.order - b.order);
 </header>
 
 <script>
+  import { cartStore } from "../lib/cartStore";
+
   const button = document.getElementById("mobile-menu-button");
   const menu = document.getElementById("mobile-menu");
   const menuIcon = document.getElementById("menu-icon");
   const closeIcon = document.getElementById("close-icon");
+  const cartCount = document.querySelector(".cart-count");
 
   const toggleMenu = () => {
     const isOpen = button?.getAttribute("aria-expanded") === "true";
@@ -157,5 +160,14 @@ const sortedLinks = navLinks.sort((a, b) => a.order - b.order);
       closeIcon?.classList.add("hidden");
       button?.setAttribute("aria-expanded", "false");
     });
+  });
+
+  // Subscribe to cart updates
+  cartStore.subscribe((cart) => {
+    if (cartCount) {
+      const count = cart.reduce((acc, item) => acc + item.quantity, 0);
+      cartCount.textContent = count.toString();
+      cartCount.classList.toggle("hidden", count === 0);
+    }
   });
 </script>

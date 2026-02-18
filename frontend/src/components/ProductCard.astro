@@ -16,6 +16,14 @@ const formatPrice = (price: number) =>
   price.toLocaleString("es-ES", { minimumFractionDigits: 2 });
 
 const single = await get("product-card");
+
+const fallback_star_full = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star w-4 h-4"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
+const fallback_star_half = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star-half w-4 h-4"><path d="M12 17.8 5.8 21 7 14.1 2 9.3l7-1L12 2"/></svg>`;
+const fallback_star_empty = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star w-4 h-4"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
+
+const icon_star_full = single?.icon_star_full || fallback_star_full;
+const icon_star_half = single?.icon_star_half || fallback_star_half;
+const icon_star_empty = single?.icon_star_empty || fallback_star_empty;
 ---
 
 <div
@@ -33,13 +41,6 @@ const single = await get("product-card");
       height={product.mainImage?.height || 500}
       class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
     />
-    {
-      product.featured && (
-        <div class="absolute top-3 right-3 bg-primary text-background-dark text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded">
-          Popular
-        </div>
-      )
-    }
   </div>
   <div class="p-6">
     <h3
@@ -55,19 +56,20 @@ const single = await get("product-card");
       {
         [...Array(5)].map((_, i) => {
           const rating = product.rating || 0;
-          let iconHtml = single.icon_star_empty;
+          let iconHtml = icon_star_empty;
+          
           if (rating >= i + 1) {
-            iconHtml = single.icon_start_full;
+            iconHtml = icon_star_full;
           } else if (rating > i) {
-            iconHtml = single.icon_star_half;
+            iconHtml = icon_star_half;
           }
 
           return (
             <span
               class={`${
                 rating >= i + 1 || rating > i
-                  ? "text-primary"
-                  : "text-slate-600"
+                  ? "text-primary fill-current"
+                  : "text-slate-300"
               }`}
               set:html={iconHtml}
             />
@@ -83,9 +85,47 @@ const single = await get("product-card");
       <span class="text-xl font-bold text-white">
         {formatPrice(product.price)}€
       </span>
-      <Button type="button" className="w-10 h-10 p-0!">
-        <span set:html={single.icon_add_to_cart}></span>
+      <Button
+        type="button"
+        className="w-10 h-10 p-0! add-to-cart-btn"
+        data-product={JSON.stringify(product)}
+        aria-label={`Añadir ${product.name} al carrito`}
+      >
+        <span set:html={single.icon_add_to_cart} class="pointer-events-none"
+        ></span>
       </Button>
     </div>
   </div>
 </div>
+
+<script>
+  import { cartStore } from "../lib/cartStore";
+  import type { Product } from "../types/product";
+
+  document.addEventListener("click", (e) => {
+    const target = e.target as HTMLElement;
+    const btn = target.closest(".add-to-cart-btn") as HTMLButtonElement;
+
+    if (btn) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      try {
+        const productData = btn.dataset.product;
+        if (productData) {
+          const product: Product = JSON.parse(productData);
+          cartStore.add(product);
+
+          // Visual feedback (optional)
+          const originalContent = btn.innerHTML;
+          btn.innerHTML = `<span class="text-xs">✔</span>`;
+          setTimeout(() => {
+            btn.innerHTML = originalContent;
+          }, 1500);
+        }
+      } catch (error) {
+        console.error("Error adding to cart:", error);
+      }
+    }
+  });
+</script>

@@ -1,0 +1,72 @@
+---
+import BlogCard from "../BlogCard.astro";
+
+interface Props {
+  latestBlogs: any[]; 
+  publicStrapiUrl: string;
+}
+
+const { latestBlogs, publicStrapiUrl } = Astro.props;
+---
+
+<section class="py-20 bg-white">
+  <div class="container mx-auto px-4 lg:px-8">
+    <div class="flex justify-between items-end mb-12">
+      <div>
+        <h2>Últimas del Blog</h2>
+        <p class="text-lead text-gray-600 mt-2">
+          Aprende más sobre la miel y sus beneficios
+        </p>
+      </div>
+      <div class="hidden md:block">
+        <a
+          href="/blog"
+          class="inline-flex items-center gap-2 text-[#F59E0B] font-semibold hover:underline"
+        >
+          Ver todos
+          <svg
+            class="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5l7 7-7 7"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    {
+      latestBlogs.length > 0 ? (
+        <div class="grid md:grid-cols-3 gap-8">
+          {latestBlogs.map((blog) => {
+            const imgUrl = blog.featuredImage?.url
+              ? `${publicStrapiUrl}${blog.featuredImage.url}`
+              : undefined;
+
+            return (
+              <BlogCard
+                title={blog.title}
+                slug={blog.slug}
+                excerpt={blog.excerpt}
+                imageUrl={imgUrl}
+                author={blog.author}
+                blogPublishedAt={blog.blogPublishedAt}
+                categoryName={blog.blog_category?.name}
+              />
+            );
+          })}
+        </div>
+      ) : (
+        <div class="text-center py-16">
+          <span class="text-6xl mb-4 block">📝</span>
+          <p class="text-gray-500 text-lg">Pronto publicaremos artículos.</p>
+        </div>
+      )
+    }
+  </div>
+</section>

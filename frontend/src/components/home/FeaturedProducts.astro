@@ -1,0 +1,117 @@
+---
+import Button from "../Button.astro";
+import { get } from "../../lib/strapi";
+import type { Product } from "../../types/product";
+import { Image } from "astro:assets";
+
+interface Props {
+  buttonsByName: Record<string, any>;
+}
+
+const { buttonsByName } = Astro.props;
+const PUBLIC_STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL;
+
+// Fetch featured products from Strapi
+const products = (await get("products", {
+  filters: {
+    featured: {
+      $eq: true
+    }
+  },
+  populate: {
+    mainImage: true,
+  },
+  pagination: {
+    limit: 4
+  }
+})) || [];
+
+// Fallback if no products found or error (optional, logic allows empty array)
+const displayProducts = products.length > 0 ? products : [];
+---
+
+<section class="py-20 bg-linear-to-b from-white to-[#FEF3C7]">
+  <div class="container mx-auto px-4 lg:px-8">
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <h2>Productos Destacados</h2>
+      <p class="text-lead text-gray-600 mt-4">
+        Las mieles favoritas de nuestros clientes
+      </p>
+    </div>
+
+    {displayProducts.length > 0 ? (
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {
+          displayProducts.map((product: Product) => {
+            const imageUrl = product.mainImage?.url
+              ? (product.mainImage.url.startsWith('http') ? product.mainImage.url : `${PUBLIC_STRAPI_URL}${product.mainImage.url}`)
+              : "/public/placeholder.svg"; // Fallback image
+
+            return (
+              <article class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow group h-full flex flex-col">
+                <div class="relative overflow-hidden h-64">
+                  <Image
+                    src={imageUrl}
+                    alt={`${product.name} en frasco`}
+                    width={400}
+                    height={400}
+                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    loading="lazy"
+                  />
+                  {product.organic && (
+                    <span
+                      class="absolute top-4 right-4 px-3 py-1 bg-green-600 text-white text-xs font-bold rounded-full"
+                    >
+                      Eco
+                    </span>
+                  )}
+                   {/* Fallback for featured badge if we just want to show it explicitly */}
+                   {!product.organic && (
+                     <span
+                      class="absolute top-4 right-4 px-3 py-1 bg-[#F59E0B] text-white text-xs font-bold rounded-full"
+                    >
+                      Destacado
+                    </span>
+                   )}
+                </div>
+                <div class="p-6 space-y-3 flex flex-col flex-1">
+                  <h3 class="text-xl font-bold text-gray-900">{product.name}</h3>
+                  <p class="text-sm text-gray-600 line-clamp-2 flex-1">{product.shortDescription || product.description}</p>
+                  <div class="flex items-center justify-between mt-auto pt-4">
+                    <span class="text-2xl font-bold text-[#F59E0B]">
+                      {product.price}€
+                    </span>
+                    <span class="text-sm text-gray-500">
+                      {product.weightValue}{product.weightUnit}
+                    </span>
+                  </div>
+                  <a
+                    href={`/producto/${product.slug}`}
+                    class="block w-full text-center px-4 py-3 bg-[#F59E0B] hover:bg-warning text-white font-semibold rounded-xl transition-colors mt-4"
+                  >
+                    Ver Producto
+                  </a>
+                </div>
+              </article>
+            );
+          })
+        }
+      </div>
+    ) : (
+       <div class="text-center py-12">
+        <p class="text-gray-500">No hay productos destacados disponibles en este momento.</p>
+      </div>
+    )}
+
+    <div class="text-center mt-12">
+      {
+        buttonsByName["Ver todos los productos"] && (
+          <Button
+            {...buttonsByName["Ver todos los productos"]}
+            className="inline-flex items-center gap-2"
+          />
+        )
+      }
+    </div>
+  </div>
+</section>

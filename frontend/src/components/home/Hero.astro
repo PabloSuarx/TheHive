@@ -1,0 +1,229 @@
+---
+import Button from "../Button.astro";
+import { get } from "../../lib/strapi";
+import type { HeroSection } from "../../types/home";
+import { Image } from 'astro:assets';
+
+interface Props {
+  buttonsByName: Record<string, any>;
+}
+
+const { buttonsByName } = Astro.props;
+
+const heroData = await get("hero-section", {
+  populate: {
+    mainImage: true,
+    stats: true,
+    ctaButton: true,
+  },
+});
+
+const fallbackHero: HeroSection = {
+  title: "Miel Premium Directamente de la Colmena",
+  description:
+    "Descubre el auténtico sabor de la naturaleza. Trabajamos con apicultores locales comprometidos con la sostenibilidad para ofrecerte miel de máxima calidad.",
+  mainImage: {
+    url: "/public/placeholder.svg",
+    alternativeText: "Miel artesanal en frasco de vidrio con panal",
+  },
+  stats: [
+    { value: "15+", label: "Apicultores" },
+    { value: "100%", label: "Natural" },
+    { value: "20+", label: "Variedades" },
+  ],
+  ctaButton: {
+    text: "Nuestra Historia",
+    url: "/sobre-nosotros",
+  },
+};
+
+const hero: HeroSection = heroData || fallbackHero;
+const PUBLIC_STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL;
+const mainImageUrl = hero.mainImage?.url?.startsWith("http")
+  ? hero.mainImage.url
+  : `${PUBLIC_STRAPI_URL}${hero.mainImage?.url}`;
+
+---
+
+<section
+  class="relative overflow-hidden bg-linear-to-br from-[#FEF3C7] via-white to-[#FEF3C7] py-20 lg:py-32"
+>
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    <div class="hexagon hex-1"></div>
+    <div class="hexagon hex-2"></div>
+    <div class="hexagon hex-3"></div>
+    <div class="hexagon hex-4"></div>
+    <div class="hexagon hex-5"></div>
+  </div>
+
+  <div class="container mx-auto px-4 lg:px-8 relative z-10">
+    <div class="grid lg:grid-cols-2 gap-12 items-center">
+      <div class="space-y-8 text-center lg:text-left">
+        <h1 class="text-gradient-honey animate-fade-in-up animation-delay-100">
+          {hero.title}
+        </h1>
+
+        <p
+          class="text-lead text-gray-600 animate-fade-in-up animation-delay-200 max-w-xl mx-auto lg:mx-0"
+        >
+          {hero.description}
+        </p>
+
+        <div
+          class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-fade-in-up animation-delay-300"
+        >
+          {
+            buttonsByName["Ver todos los productos"] && (
+              <Button
+                {...buttonsByName["Ver todos los productos"]}
+                className="group"
+              />
+            )
+          }
+          {
+            hero.ctaButton && (
+              <a
+                href={hero.ctaButton.url}
+                class="px-8 py-4 bg-white hover:bg-gray-50 text-gray-900 font-semibold rounded-xl shadow-md hover:shadow-lg transition-all border-2 border-gray-200"
+              >
+                {hero.ctaButton.text}
+              </a>
+            )
+          }
+        </div>
+
+        <div
+          class="grid grid-cols-3 gap-8 pt-8 animate-fade-in-up animation-delay-400"
+        >
+          {
+            hero.stats?.map((stat) => (
+              <div class="text-center lg:text-left">
+                <div class="text-3xl lg:text-4xl font-bold text-[#F59E0B]">
+                  {stat.value}
+                </div>
+                <div class="text-sm text-gray-600">{stat.label}</div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="relative animate-fade-in-up animation-delay-500">
+        <div class="relative z-10">
+          <Image
+            src={mainImageUrl}
+            alt={hero.mainImage?.alternativeText || "Imagen principal"}
+            width={1000}
+            height={1000}
+            class="rounded-2xl shadow-2xl w-full h-auto"
+            loading="eager"
+            fit="cover"
+          />
+        </div>
+        <div
+          class="absolute -bottom-6 -right-6 w-full h-full bg-linear-to-br from-[#FCD34D] to-warning rounded-2xl -z-10 opacity-20"
+        >
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in-up {
+    animation: fade-in-up 0.8s ease-out forwards;
+    opacity: 0;
+  }
+
+  .animation-delay-100 {
+    animation-delay: 0.1s;
+  }
+  .animation-delay-200 {
+    animation-delay: 0.2s;
+  }
+  .animation-delay-300 {
+    animation-delay: 0.3s;
+  }
+  .animation-delay-400 {
+    animation-delay: 0.4s;
+  }
+  .animation-delay-500 {
+    animation-delay: 0.5s;
+  }
+
+  .hexagon {
+    position: absolute;
+    width: 100px;
+    height: 57.74px;
+    background-color: rgba(245, 158, 11, 0.05);
+    margin: 28.87px 0;
+  }
+
+  .hexagon:before,
+  .hexagon:after {
+    content: "";
+    position: absolute;
+    width: 0;
+    border-left: 50px solid transparent;
+    border-right: 50px solid transparent;
+  }
+
+  .hexagon:before {
+    bottom: 100%;
+    border-bottom: 28.87px solid rgba(245, 158, 11, 0.05);
+  }
+
+  .hexagon:after {
+    top: 100%;
+    border-top: 28.87px solid rgba(245, 158, 11, 0.05);
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0px) rotate(0deg);
+      opacity: 0.3;
+    }
+    50% {
+      transform: translateY(-30px) rotate(180deg);
+      opacity: 0.1;
+    }
+  }
+
+  .hex-1 {
+    top: 10%;
+    left: 5%;
+    animation: float 25s infinite ease-in-out;
+  }
+  .hex-2 {
+    top: 60%;
+    left: 80%;
+    animation: float 20s infinite ease-in-out 2s;
+  }
+  .hex-3 {
+    top: 30%;
+    right: 10%;
+    animation: float 22s infinite ease-in-out 4s;
+  }
+  .hex-4 {
+    bottom: 10%;
+    left: 15%;
+    animation: float 28s infinite ease-in-out 6s;
+  }
+  .hex-5 {
+    top: 50%;
+    left: 40%;
+    animation: float 24s infinite ease-in-out 3s;
+  }
+</style>

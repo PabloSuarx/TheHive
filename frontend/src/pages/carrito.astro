@@ -1,0 +1,208 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Button from "../components/Button.astro";
+import CartItem from "../components/CartItem.astro";
+import { Image } from "astro:assets";
+
+const PUBLIC_STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL;
+---
+
+<Layout
+  titulo="Carrito de Compra"
+  descripcion="Revisa los productos en tu carrito de compra."
+>
+  <section class="py-12 bg-gray-50 min-h-[60vh]">
+    <div class="container mx-auto px-4 lg:px-8">
+      <h1 class="text-4xl font-bold text-gray-900 mb-8 text-center">
+        Tu Carrito
+      </h1>
+
+      <div id="cart-empty" class="text-center py-12 hidden">
+        <div class="text-6xl mb-4">🛒</div>
+        <p class="text-xl text-gray-600 mb-8">Tu carrito está vacío</p>
+        <Button href="/productos" variant="primary">
+          Ver Productos
+        </Button>
+      </div>
+
+      <div id="cart-content" class="hidden">
+        <div class="grid lg:grid-cols-3 gap-8">
+          <!-- Lista de productos -->
+          <div class="lg:col-span-2 space-y-4" id="cart-items">
+            <!-- Items injected by JS -->
+          </div>
+
+          <!-- Resumen del pedido -->
+          <div class="lg:col-span-1">
+            <div class="bg-white p-6 rounded-2xl shadow-lg sticky top-24">
+              <h2 class="text-2xl font-bold mb-6">Resumen</h2>
+              <div class="space-y-3 mb-6">
+                <div class="flex justify-between text-gray-600">
+                  <span>Subtotal</span>
+                  <span id="cart-subtotal">0,00€</span>
+                </div>
+                <div class="flex justify-between text-gray-600">
+                  <span>Envío</span>
+                  <span class="text-green-600 font-medium">Gratis</span>
+                </div>
+                <div class="border-t pt-3 flex justify-between font-bold text-xl">
+                  <span>Total</span>
+                  <span id="cart-total" class="text-primary">0,00€</span>
+                </div>
+              </div>
+              <Button
+                href="#"
+                variant="primary"
+                className="w-full justify-center text-lg! py-3! mb-3"
+                id="checkout-btn"
+              >
+                Tramitar Pedido
+              </Button>
+              <p class="text-xs text-center text-gray-500">
+                Pagos seguros con tarjeta y PayPal
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Template for Cart Item -->
+  <template id="cart-item-template">
+    <CartItem />
+  </template>
+</Layout>
+
+<script define:vars={{ PUBLIC_STRAPI_URL }}>
+  import { cartStore } from "../lib/cartStore";
+
+  const cartEmpty = document.getElementById("cart-empty");
+  const cartContent = document.getElementById("cart-content");
+  const cartItemsContainer = document.getElementById("cart-items");
+  const cartSubtotal = document.getElementById("cart-subtotal");
+  const cartTotal = document.getElementById("cart-total");
+  const checkoutBtn = document.getElementById("checkout-btn");
+  const template = document.getElementById("cart-item-template");
+
+  function renderCart(cart) {
+    if (!cart || cart.length === 0) {
+      cartEmpty?.classList.remove("hidden");
+      cartContent?.classList.add("hidden");
+      return;
+    }
+
+    cartEmpty?.classList.add("hidden");
+    cartContent?.classList.remove("hidden");
+
+    if (cartItemsContainer && template) {
+      cartItemsContainer.innerHTML = ""; // Clear existing items
+
+      cart.forEach((item) => {
+        try {
+          const clone = template.content.cloneNode(true);
+          const { product, quantity } = item;
+
+          // Image Logic
+          let imageUrl = "/placeholder.svg";
+          if (product.mainImage?.url) {
+            imageUrl = product.mainImage.url.startsWith("http")
+              ? product.mainImage.url
+              : `${PUBLIC_STRAPI_URL}${product.mainImage.url}`;
+          }
+
+          const imgEl = clone.querySelector(".cart-item-image");
+          if (imgEl) {
+            imgEl.src = imageUrl;
+            imgEl.alt = product.name;
+          } else {
+            console.warn("CartItem: Image element not found");
+          }
+
+          // Text Content
+          const linkEl = clone.querySelector(".cart-item-link");
+          if (linkEl) {
+            linkEl.href = `/producto/${product.slug}`;
+            linkEl.textContent = product.name;
+          }
+
+          const variantEl = clone.querySelector(".cart-item-variant");
+          if (variantEl) {
+            variantEl.textContent = `${product.weightValue}${product.weightUnit}`;
+          }
+
+          const priceEl = clone.querySelector(".cart-item-price");
+          if (priceEl) {
+            priceEl.textContent = `${product.price.toLocaleString("es-ES", {
+              minimumFractionDigits: 2,
+            })}€`;
+          }
+
+          const qtyEl = clone.querySelector(".cart-item-quantity");
+          if (qtyEl) {
+            qtyEl.textContent = quantity.toString();
+          }
+
+          // Event Listeners
+          const btnDecrease = clone.querySelector(".btn-decrease");
+          if (btnDecrease) {
+            btnDecrease.addEventListener("click", () => {
+              if (quantity > 1) cartStore.updateQuantity(product.slug, quantity - 1);
+            });
+          }
+
+          const btnIncrease = clone.querySelector(".btn-increase");
+          if (btnIncrease) {
+            btnIncrease.addEventListener("click", () => {
+              cartStore.updateQuantity(product.slug, quantity + 1);
+            });
+          }
+
+          const btnRemove = clone.querySelector(".btn-remove");
+          if (btnRemove) {
+            btnRemove.addEventListener("click", () => {
+              cartStore.remove(product.slug);
+            });
+          }
+
+          cartItemsContainer.appendChild(clone);
+        } catch (err) {
+            console.error("Error rendering cart item:", err);
+        }
+      });
+    }
+
+    const total = cart.reduce(
+      (sum, item) => sum + item.product.price * item.quantity,
+      0
+    );
+    const totalFormatted = total.toLocaleString("es-ES", {
+      minimumFractionDigits: 2,
+    });
+
+    if (cartSubtotal) cartSubtotal.innerText = `${totalFormatted}€`;
+    if (cartTotal) cartTotal.innerText = `${totalFormatted}€`;
+  }
+
+  // Expose helpers to window for inline onclick handlers (simple approach)
+  // @ts-ignore
+  window.updateQuantity = (slug, qty) => {
+    if (qty < 1) return;
+    cartStore.updateQuantity(slug, qty);
+  };
+
+  // @ts-ignore
+  window.removeFromCart = (slug) => {
+    cartStore.remove(slug);
+  };
+
+  checkoutBtn?.addEventListener("click", (e) => {
+    e.preventDefault();
+    alert("¡Funcionalidad de pago próximamente!");
+  });
+
+  // Subscribe to store updates
+  cartStore.subscribe((cart) => {
+    renderCart(cart);
+  });
+</script>
