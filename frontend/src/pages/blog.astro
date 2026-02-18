@@ -89,9 +89,9 @@ const blogCategories = (await get("blog-categories")) || [];
             data-category="all">Todos</button
           >
           {
-            blogCategories.map((cat) => (
+            blogCategories.map((cat: any) => (
               <button
-                class="filter-btn px-4 py-2 rounded-full text-sm font-medium transition-all bg-white text-gray-700 hover:bg-[#FEF3C7] hover:text-[#D97706] border border-gray-200"
+                class="filter-btn px-4 py-2 rounded-full text-sm font-medium transition-all bg-white text-gray-700 hover:bg-[#FEF3C7] hover:text-warning border border-gray-200"
                 data-category={cat.slug}
               >
                 {cat.icon && <span class="mr-1">{cat.icon}</span>}
@@ -154,7 +154,7 @@ const blogCategories = (await get("blog-categories")) || [];
 
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="blog-grid">
         {
-          blogs.map((blog) => {
+          blogs.map((blog: any) => {
             const imgUrl = blog.featuredImage?.url
               ? `${PUBLIC_STRAPI_URL}${blog.featuredImage.url}`
               : undefined;

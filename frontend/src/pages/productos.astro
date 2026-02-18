@@ -81,13 +81,13 @@ const categories = (await get("categories")) || [];
         <!-- Filtros categoría -->
         <div class="flex flex-wrap gap-2" id="category-filters">
           <button
-            class="filter-btn active px-4 py-2 rounded-full text-sm font-medium transition-all bg-[#F59E0B] text-white shadow-md"
+            class="filter-btn active px-4 py-2 rounded-full text-sm font-medium transition-all bg-warning text-white shadow-md"
             data-category="all">Todas</button
           >
           {
-            categories.map((cat) => (
+            categories.map((cat: any) => (
               <button
-                class="filter-btn px-4 py-2 rounded-full text-sm font-medium transition-all bg-white text-gray-700 hover:bg-[#FEF3C7] hover:text-[#D97706] border border-gray-200"
+                class="filter-btn px-4 py-2 rounded-full text-sm font-medium transition-all bg-white text-gray-700 hover:bg-warning hover:text-warning border border-gray-200"
                 data-category={cat.slug}
               >
                 {cat.icon && <span class="mr-1">{cat.icon}</span>}
@@ -105,7 +105,7 @@ const categories = (await get("categories")) || [];
           >
           <select
             id="sort-select"
-            class="px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:border-[#F59E0B] focus:outline-none"
+            class="px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:border-warning focus:outline-none"
           >
             <option value="featured">Destacados</option>
             <option value="name-asc">Nombre A-Z</option>
@@ -161,7 +161,7 @@ const categories = (await get("categories")) || [];
         id="products-grid"
       >
         {
-          products.map((product) => {
+          products.map((product: any) => {
             const imgUrl = product.mainImage?.url
               ? `${PUBLIC_STRAPI_URL}${product.mainImage.url}`
               : undefined;

@@ -31,7 +31,7 @@ const categories = (await get("categories", { populate: { image: true } })) || [
       {
         categories.length > 0 ? (
           <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {categories.map((cat) => {
+            {categories.map((cat:any) => {
               const imageUrl = cat.image?.url
                 ? `${PUBLIC_STRAPI_URL}${cat.image.url}`
                 : undefined;
