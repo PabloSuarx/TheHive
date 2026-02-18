@@ -1,13 +1,14 @@
+import type { Button } from "./common";
 
 export interface Testimonial {
     author: string;
     location: string;
-    rating: number; // 1-5
+    rating: number;
     text: string;
 }
 
 export interface Feature {
-    icon: string; // Emoji for now, or could be an icon name
+    icon: string;
     title: string;
     description: string;
 }
@@ -37,9 +38,6 @@ export interface HeroSection {
         url: string;
         alternativeText?: string;
     };
-    stats: Stat[];
-    ctaButton?: {
-        text: string;
-        url: string;
-    };
+    stat: Stat[];
+    button?: Button[];
 }

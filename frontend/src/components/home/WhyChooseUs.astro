@@ -4,35 +4,20 @@ import type { Feature } from "../../types/home";
 
 // Fetch data from Strapi
 const single = await get("why-choose-us", {
-  populate: {
-    features: true,
-  },
+  populate: "*"
 });
 
-// Fallback data
-const fallbackData = {
-  title: "¿Por Qué Elegir The Hive?",
-  subtitle: "Compromiso con la calidad, la sostenibilidad y la autenticidad",
-  features: [
-    {
-      icon: "🐝",
-      title: "100% Natural",
-      description:
-        "Sin aditivos ni conservantes. Solo miel pura directamente de la colmena.",
-    }
-  ] as Feature[],
-};
+console.log(single);
 
-const data = single || fallbackData;
-const features = data.features || [];
+const features = single.Feature || [];
 ---
 
-<section class="py-20 bg-white">
+<section class="py-20 bg-linear-to-b from-primary-pale to-bg-primary">
   <div class="container mx-auto px-4 lg:px-8">
     <div class="text-center max-w-3xl mx-auto mb-16">
-      <h2>{data.title}</h2>
+      <h2>{single.title}</h2>
       <p class="text-lead text-gray-600 mt-4">
-        {data.subtitle}
+        {single.subtitle}
       </p>
     </div>
 
@@ -40,11 +25,10 @@ const features = data.features || [];
       features.length > 0 && (
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {features.map((feature: Feature) => (
-            <div class="text-center p-8 rounded-2xl bg-linear-to-br from-[#FEF3C7] to-white hover:shadow-xl transition-shadow">
-              <div class="w-16 h-16 mx-auto mb-6 bg-linear-to-br from-[#F59E0B] to-warning rounded-2xl flex items-center justify-center text-3xl shadow-lg">
-                {feature.icon}
+            <div class="text-center p-8 rounded-2xl hover:border-primary border border-transparent transition-colors">
+              <div class="w-16 h-16 text-primary mx-auto mb-6 flex items-center justify-center text-3xl" set:html={feature.icon}>
               </div>
-              <h3 class="text-xl font-bold text-gray-900 mb-3">
+              <h3 class="text-xl font-bold text-text-primary mb-3">
                 {feature.title}
               </h3>
               <p class="text-gray-600">{feature.description}</p>

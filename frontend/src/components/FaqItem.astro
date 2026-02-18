@@ -7,14 +7,14 @@ interface Props {
 const { question, answer } = Astro.props;
 ---
 
-<details class="group bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden open:shadow-md transition-shadow faq-item">
-  <summary class="flex justify-between items-center cursor-pointer p-6 list-none font-bold text-lg text-gray-900 select-none">
+<details class="group bg-bg-primary rounded-xl border border-divider overflow-hidden hover:border-primary transition-colors faq-item">
+  <summary class="flex justify-between items-center cursor-pointer p-6 list-none font-bold text-lg text-text-primary select-none">
     <span>{question}</span>
     <span class="ml-4 transition-transform duration-300 group-open:rotate-180 text-primary">
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>
     </span>
   </summary>
-  <div class="px-6 pb-6 text-gray-600 leading-relaxed border-t border-gray-50 pt-4 prose prose-amber max-w-none">
+  <div class="px-6 pb-6 text-text-secondary leading-relaxed border-t border-divider pt-4 prose prose-amber max-w-none">
     <Fragment set:html={answer} />
   </div>
 </details>

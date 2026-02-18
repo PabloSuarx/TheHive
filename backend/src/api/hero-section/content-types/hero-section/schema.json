@@ -1,0 +1,38 @@
+{
+  "kind": "singleType",
+  "collectionName": "hero_sections",
+  "info": {
+    "singularName": "hero-section",
+    "pluralName": "hero-sections",
+    "displayName": "Index Hero section"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "mainImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "stat": {
+      "type": "component",
+      "component": "stat.stat-item",
+      "repeatable": true
+    },
+    "button": {
+      "type": "component",
+      "component": "ui.button",
+      "repeatable": true
+    }
+  }
+}

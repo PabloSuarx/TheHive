@@ -26,18 +26,18 @@ const categories = (await get("categories")) || [];
   keywords="comprar miel, miel artesanal, miel natural, tienda miel, miel online, miel premium"
 >
   <!-- Hero -->
-  <section class="py-12 bg-white border-b border-gray-100">
+  <section class="py-12 bg-linear-to-b from-bg-primary to-primary-pale">
     <div class="container mx-auto px-4 lg:px-8">
-      <Breadcrumbs class="text-gray-500 font-medium mb-4" separator="/" homeLabel="Inicio" />
-      <h1 class="text-4xl font-bold text-gray-900 mb-2">Nuestros Productos</h1>
-      <p class="text-lg text-gray-600 max-w-2xl">
+      <Breadcrumbs class="text-primary font-medium mb-4" separator="/" homeLabel="Inicio" />
+      <h1 class="text-4xl font-bold text-primary mb-2">Nuestros Productos</h1>
+      <p class="text-lg text-primary-dark max-w-2xl">
         Descubre nuestra selección de mieles artesanales 100% naturales, recolectadas con pasión y respeto por la naturaleza.
       </p>
     </div>
   </section>
 
   <!-- Controles: Buscador + Filtros + Orden -->
-  <section class="py-6 bg-gray-50 border-b border-gray-200 sticky top-0 z-30">
+  <section class="py-6 bg-linear-to-b from-primary-pale to-bg-primary sticky top-0 z-30">
     <div class="container mx-auto px-4 lg:px-8">
       <!-- Buscador -->
       <div class="max-w-xl mx-auto mb-5 relative">
@@ -80,7 +80,7 @@ const categories = (await get("categories")) || [];
         </button>
       </div>
 
-      <div class="flex flex-wrap justify-between items-center gap-4">
+      <div class="flex flex-wrap justify-between items-center gap-4 ">
         <!-- Filtros categoría -->
         <div class="flex flex-wrap gap-2" id="category-filters">
           <button
@@ -124,7 +124,7 @@ const categories = (await get("categories")) || [];
   </section>
 
   <!-- Loading skeleton -->
-  <section id="loading-skeleton" class="py-12 bg-white">
+  <section id="loading-skeleton" class="py-12 bg-linear-to-b from-bg-primary to-primary-pale">
     <div class="container mx-auto px-4 lg:px-8">
       <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
         {
@@ -149,7 +149,7 @@ const categories = (await get("categories")) || [];
   </section>
 
   <!-- Grid de productos -->
-  <section id="products-section" class="py-12 bg-white hidden">
+  <section id="products-section" class="py-12 bg-linear-to-b from-bg-primary to-primary-pale hidden">
     <div class="container mx-auto px-4 lg:px-8">
       <div id="no-results" class="text-center py-16 hidden">
         <span class="text-6xl mb-4 block">🔍</span>

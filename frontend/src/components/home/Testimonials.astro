@@ -39,7 +39,7 @@ const data = single || fallbackData;
 const testimonials = data.testimonials || [];
 ---
 
-<section class="py-20 bg-linear-to-b from-white to-[#FEF3C7]">
+<section class="py-20 bg-linear-to-b from-bg-primary to-primary-pale">
   <div class="container mx-auto px-4 lg:px-8">
     <div class="text-center max-w-3xl mx-auto mb-16">
       <h2>{data.title}</h2>
@@ -52,11 +52,11 @@ const testimonials = data.testimonials || [];
       testimonials.length > 0 ? (
         <div class="grid md:grid-cols-3 gap-8">
           {testimonials.map((testimonial: Testimonial) => (
-            <article class="bg-white p-8 rounded-2xl shadow-lg">
+            <article class="bg-bg-primary p-8 rounded-2xl border border-divider">
               <div class="flex items-center gap-1 mb-4">
                 {[...Array(testimonial.rating)].map(() => (
                   <svg
-                    class="w-5 h-5 text-[#F59E0B]"
+                    class="w-5 h-5 text-warning"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >
@@ -66,14 +66,14 @@ const testimonials = data.testimonials || [];
               </div>
               <p class="text-gray-700 mb-6 italic">"{testimonial.text}"</p>
               <div class="flex items-center gap-3">
-                <div class="w-12 h-12 bg-linear-to-br from-[#F59E0B] to-warning rounded-full flex items-center justify-center text-white font-bold">
+                <div class="w-12 h-12 bg-linear-to-br from-primary to-warning rounded-full flex items-center justify-center text-text-inverse font-bold">
                   {testimonial.author
                     .split(" ")
                     .map((n) => n[0])
                     .join("")}
                 </div>
                 <div>
-                  <div class="font-semibold text-gray-900">
+                  <div class="font-semibold text-text-primary">
                     {testimonial.author}
                   </div>
                   <div class="text-sm text-gray-500">{testimonial.location}</div>

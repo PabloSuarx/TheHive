@@ -45,3 +45,11 @@ export interface Seo {
   noIndex: boolean;
   noFollow: boolean;
 }
+
+export interface Button {
+  id: number;
+  content: string;
+  link: string;
+  variant: "primary" | "secondary" | "outline" | "ghost";
+  isExternal: boolean;
+}

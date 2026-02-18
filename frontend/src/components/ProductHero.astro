@@ -18,7 +18,7 @@ const {
 ---
 
 <!-- Breadcrumb -->
-<nav class="bg-gray-50 py-3">
+<nav class="bg-bg-secondary py-3">
     <div class="container mx-auto px-4 lg:px-8">
         <ol class="flex items-center gap-2 text-sm text-gray-500">
             <li>
@@ -56,12 +56,12 @@ const {
 </nav>
 
 <!-- Product Hero -->
-<section class="py-12 bg-white">
+<section class="py-12 bg-bg-primary">
     <div class="container mx-auto px-4 lg:px-8">
         <div class="grid lg:grid-cols-2 gap-12 items-start">
             <!-- Imagen a la izquierda -->
             <div class="space-y-4">
-                <div class="relative overflow-hidden rounded-2xl shadow-lg bg-gray-100">
+                <div class="relative overflow-hidden rounded-2xl bg-bg-secondary border border-divider">
                     {
                         imageUrl && (
                             <Image
@@ -76,14 +76,14 @@ const {
                     }
                     {
                         product.organic && (
-                            <span class="absolute top-4 left-4 px-4 py-2 bg-green-500 text-white text-sm font-bold rounded-full shadow-lg">
+                            <span class="absolute top-4 left-4 px-4 py-2 bg-success text-white text-sm font-bold rounded-full">
                                 Ecológico
                             </span>
                         )
                     }
                     {
                         product.featured && (
-                            <span class="absolute top-4 right-4 px-4 py-2 bg-warning text-white text-sm font-bold rounded-full shadow-lg">
+                            <span class="absolute top-4 right-4 px-4 py-2 bg-warning text-white text-sm font-bold rounded-full">
                                 Destacado
                             </span>
                         )
@@ -145,7 +145,7 @@ const {
 
                     <button
                         id="hero-add-to-cart"
-                        class="flex-1 bg-primary hover:bg-primary-dark text-white font-bold py-3 px-8 rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
+                        class="flex-1 bg-primary hover:bg-primary-dark text-gray-900 font-bold py-3 px-8 rounded-xl transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
                         data-product={JSON.stringify(product)}
                     >
                         <svg

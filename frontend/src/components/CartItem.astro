@@ -8,8 +8,8 @@ interface Props {
 const { className = "" } = Astro.props;
 ---
 
-<div class={`bg-white p-4 rounded-xl shadow-sm flex gap-4 items-center ${className} cart-item-root`}>
-  <div class="w-24 h-24 shrink-0 rounded-lg overflow-hidden bg-gray-100 relative">
+<div class={`bg-bg-primary p-4 rounded-xl border border-divider flex gap-4 items-center ${className} cart-item-root`}>
+  <div class="w-24 h-24 shrink-0 rounded-lg overflow-hidden bg-bg-secondary relative">
     <Image
       src="/placeholder.svg"
       alt="Producto"
@@ -21,29 +21,29 @@ const { className = "" } = Astro.props;
     />
   </div>
   <div class="flex-1 min-w-0">
-    <h3 class="font-bold text-gray-900 truncate">
+    <h3 class="font-bold text-text-primary truncate">
       <a href="#" class="hover:text-primary transition-colors cart-item-link">Nombre del Producto</a>
     </h3>
     <p class="text-sm text-gray-500 mb-2 cart-item-variant">Peso</p>
     <div class="font-bold text-primary cart-item-price">0,00€</div>
   </div>
   <div class="flex flex-col items-end gap-2">
-    <div class="flex items-center border border-gray-200 rounded-lg">
+    <div class="flex items-center border border-divider rounded-lg">
       <button
-        class="px-2 py-1 text-gray-500 hover:bg-gray-50 hover:text-primary btn-decrease"
+        class="px-2 py-1 text-text-secondary hover:bg-bg-secondary hover:text-primary btn-decrease"
         aria-label="Disminuir cantidad"
       >
         -
       </button>
       <span class="px-2 text-sm font-medium w-8 text-center cart-item-quantity">1</span>
       <button
-        class="px-2 py-1 text-gray-500 hover:bg-gray-50 hover:text-primary btn-increase"
+        class="px-2 py-1 text-text-secondary hover:bg-bg-secondary hover:text-primary btn-increase"
         aria-label="Aumentar cantidad"
       >
         +
       </button>
     </div>
-    <button class="text-xs text-red-500 hover:text-red-700 underline btn-remove">
+    <button class="text-xs text-error hover:text-red-700 underline btn-remove">
       Eliminar
     </button>
   </div>

@@ -38,6 +38,17 @@ export interface FooterSocialMedia extends Struct.ComponentSchema {
   };
 }
 
+export interface MainImageMainImage extends Struct.ComponentSchema {
+  collectionName: 'components_main_image_main_images';
+  info: {
+    displayName: 'mainImage';
+  };
+  attributes: {
+    alternativeText: Schema.Attribute.Text;
+    image: Schema.Attribute.Media<'images', true>;
+  };
+}
+
 export interface MenuItemMenuItem extends Struct.ComponentSchema {
   collectionName: 'components_menu_item_menu_items';
   info: {
@@ -78,6 +89,29 @@ export interface SharedSeo extends Struct.ComponentSchema {
   };
 }
 
+export interface StatFeature extends Struct.ComponentSchema {
+  collectionName: 'components_stat_features';
+  info: {
+    displayName: 'feature';
+  };
+  attributes: {
+    description: Schema.Attribute.Text;
+    icon: Schema.Attribute.Text;
+    title: Schema.Attribute.String;
+  };
+}
+
+export interface StatStatItem extends Struct.ComponentSchema {
+  collectionName: 'components_stat_stat_items';
+  info: {
+    displayName: 'stat-item';
+  };
+  attributes: {
+    label: Schema.Attribute.String;
+    value: Schema.Attribute.String;
+  };
+}
+
 export interface UiButton extends Struct.ComponentSchema {
   collectionName: 'components_ui_buttons';
   info: {
@@ -111,8 +145,11 @@ declare module '@strapi/strapi' {
     export interface ComponentSchemas {
       'footer.footer-link': FooterFooterLink;
       'footer.social-media': FooterSocialMedia;
+      'main-image.main-image': MainImageMainImage;
       'menu-item.menu-item': MenuItemMenuItem;
       'shared.seo': SharedSeo;
+      'stat.feature': StatFeature;
+      'stat.stat-item': StatStatItem;
       'ui.button': UiButton;
       'ui.common-text': UiCommonText;
     }

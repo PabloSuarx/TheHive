@@ -28,10 +28,12 @@ const buttons = buttonsData?.buttons || [];
 const categories =
   (await get("categories", { populate: { image: true } })) || [];
 
-const buttonsByName = buttons.reduce((acc, btn) => {
-  acc[btn.content] = btn;
-  return acc;
+const buttonsByName = buttons.reduce((total : any, button : any) => {
+  total[button.content] = button;
+  return total;
 }, {});
+
+console.log(buttonsByName);
 ---
 
 <Layout
@@ -39,7 +41,7 @@ const buttonsByName = buttons.reduce((acc, btn) => {
   descripcion="The Hive - Miel artesanal de calidad premium directamente de la colmena a tu mesa. Descubre nuestras mieles monoflora, multiflora y productos naturales 100% puros."
   keywords="miel artesanal, miel natural, miel premium, miel pura, apicultura sostenible, productos naturales, miel de azahar, miel multiflora"
 >
-  <Hero buttonsByName={buttonsByName} />
+  <Hero />
 
   <CategoriesSection
     categories={categories}

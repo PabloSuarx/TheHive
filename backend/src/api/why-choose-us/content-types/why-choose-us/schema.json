@@ -1,0 +1,26 @@
+{
+  "kind": "singleType",
+  "collectionName": "why_choose_uss",
+  "info": {
+    "singularName": "why-choose-us",
+    "pluralName": "why-choose-uss",
+    "displayName": "Why Choose us section"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Feature": {
+      "type": "component",
+      "component": "stat.feature",
+      "repeatable": true
+    },
+    "title": {
+      "type": "string"
+    },
+    "subtitle": {
+      "type": "string"
+    }
+  }
+}
