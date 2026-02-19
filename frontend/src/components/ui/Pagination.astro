@@ -1,0 +1,298 @@
+---
+interface Props {
+  defaultPageSize?: number;
+  pageSizeOptions?: number[];
+  class?: string;
+}
+
+const {
+  defaultPageSize = 8,
+  pageSizeOptions = [8, 16, 24, 48],
+  class: className = "",
+} = Astro.props;
+---
+
+<div
+  class:list={[
+    "flex flex-col items-center w-full",
+    className,
+  ]}
+  data-default-page-size={defaultPageSize}
+>
+  <!-- Pagination Controls -->
+  <nav class="flex items-center gap-1 sm:gap-2" aria-label="Navegación de páginas">
+    <button
+      id="prev-page"
+      class="p-2 rounded-lg border border-border-default bg-bg-primary text-text-secondary hover:bg-primary-pale hover:text-primary hover:border-primary disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-bg-primary disabled:hover:text-text-secondary disabled:hover:border-border-default transition-all duration-200"
+      aria-label="Página anterior"
+      disabled
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-5 w-5"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+          clip-rule="evenodd"></path>
+      </svg>
+    </button>
+
+    <div id="page-numbers" class="flex items-center gap-1 sm:gap-2">
+      <!-- Dynamic Page Numbers -->
+    </div>
+
+    <button
+      id="next-page"
+      class="p-2 rounded-lg border border-border-default bg-bg-primary text-text-secondary hover:bg-primary-pale hover:text-primary hover:border-primary disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-bg-primary disabled:hover:text-text-secondary disabled:hover:border-border-default transition-all duration-200"
+      aria-label="Página siguiente"
+      disabled
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-5 w-5"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+          clip-rule="evenodd"></path>
+      </svg>
+    </button>
+  </nav>
+
+  <!-- Items Per Page -->
+  <div class="flex items-center gap-2 text-text-secondary text-sm mt-4">
+    <label for="items-per-page" class="whitespace-nowrap">Mostrar:</label>
+    <select
+      id="items-per-page"
+      class="bg-bg-primary border border-border-default text-text-primary text-sm rounded-lg focus:ring-primary focus:border-primary block p-2 outline-none cursor-pointer transition-colors hover:border-primary"
+    >
+      {
+        pageSizeOptions.map((option) => (
+          <option value={option} selected={option === defaultPageSize}>
+            {option}
+          </option>
+        ))
+      }
+    </select>
+  </div>
+</div>
+
+<script>
+  class PaginationComponent {
+    private container: HTMLElement;
+    private itemsPerPageSelect: HTMLSelectElement;
+    private prevBtn: HTMLButtonElement;
+    private nextBtn: HTMLButtonElement;
+    private pageNumbersContainer: HTMLElement;
+
+    private currentPage: number = 1;
+    private totalItems: number = 0;
+    // Default to the value in the DOM, e.g. 8
+    private pageSize: number = 8;
+    private totalPages: number = 0;
+
+    constructor(container: HTMLElement) {
+      this.container = container;
+      this.itemsPerPageSelect = container.querySelector(
+        "#items-per-page"
+      ) as HTMLSelectElement;
+      this.prevBtn = container.querySelector("#prev-page") as HTMLButtonElement;
+      this.nextBtn = container.querySelector("#next-page") as HTMLButtonElement;
+      this.pageNumbersContainer = container.querySelector(
+        "#page-numbers"
+      ) as HTMLElement;
+
+      this.pageSize = parseInt(this.itemsPerPageSelect.value);
+
+      this.initEventListeners();
+
+      // Listen for updates from parent
+      document.addEventListener(
+        "pagination:update",
+        this.handleUpdate.bind(this) as EventListener
+      );
+    }
+
+    private initEventListeners() {
+      // Size Change
+      this.itemsPerPageSelect.addEventListener("change", () => {
+        this.pageSize = parseInt(this.itemsPerPageSelect.value);
+        this.currentPage = 1;
+        this.dispatchSizeChange();
+      });
+
+      // Navigation
+      this.prevBtn.addEventListener("click", () => {
+        if (this.currentPage > 1) {
+          this.currentPage--;
+          this.dispatchPageChange();
+        }
+      });
+
+      this.nextBtn.addEventListener("click", () => {
+        if (this.currentPage < this.totalPages) {
+          this.currentPage++;
+          this.dispatchPageChange();
+        }
+      });
+    }
+
+    private handleUpdate(event: CustomEvent) {
+      const { totalItems, currentPage } = event.detail;
+      this.totalItems = totalItems;
+      // If parent enforces a page (e.g. reset to 1 on filter), sync it.
+      if (currentPage !== undefined) {
+        this.currentPage = currentPage;
+      }
+      this.render();
+    }
+
+    private dispatchPageChange() {
+      document.dispatchEvent(
+        new CustomEvent("pagination:page-change", {
+          detail: { page: this.currentPage },
+        })
+      );
+      this.render();
+    }
+
+    private dispatchSizeChange() {
+      document.dispatchEvent(
+        new CustomEvent("pagination:size-change", {
+          detail: { pageSize: this.pageSize },
+        })
+      );
+      // Size change usually triggers a re-render from parent which sends back 'update',
+      // but we can also re-render immediately if we assume parent honors it.
+      // Usually parent logic will reset page to 1.
+    }
+
+    private render() {
+      this.totalPages = Math.ceil(this.totalItems / this.pageSize);
+
+      // Hide if no pages or single page (optional, user might want to see controls still)
+      // Requirement says "pagination", usually hidden if <= 1 page or empty.
+      // Let's hide controls if 0 items, but maybe show if 1 page to allow changing page size?
+      // Let's keep it visible unless totalItems is 0.
+      if (this.totalItems === 0) {
+        this.container.classList.add("hidden");
+        return;
+      } else {
+        this.container.classList.remove("hidden");
+      }
+
+      this.prevBtn.disabled = this.currentPage === 1;
+      this.nextBtn.disabled = this.currentPage === this.totalPages;
+
+      this.renderPageNumbers();
+    }
+
+    private renderPageNumbers() {
+      this.pageNumbersContainer.innerHTML = "";
+
+      const createBtn = (page: number | string, isActive: boolean = false) => {
+        const btn = document.createElement("button");
+        if (typeof page === "number") {
+          btn.textContent = page.toString();
+          btn.classList.add(
+            "w-8",
+            "h-8",
+            "sm:w-10",
+            "sm:h-10",
+            "rounded-lg",
+            "text-sm",
+            "font-medium",
+            "transition-all",
+            "duration-200",
+            "flex",
+            "items-center",
+            "justify-center"
+          );
+
+          if (isActive) {
+            btn.classList.add(
+              "bg-primary",
+              "text-white",
+              "shadow-md",
+              "transform",
+              "scale-105"
+            );
+          } else {
+            btn.classList.add(
+              "bg-bg-primary",
+              "text-text-secondary",
+              "border",
+              "border-border-default",
+              "hover:bg-primary-pale",
+              "hover:text-primary",
+              "hover:border-primary"
+            );
+            btn.addEventListener("click", () => {
+              this.currentPage = page;
+              this.dispatchPageChange();
+            });
+          }
+        } else {
+          // Ellipsis
+          btn.textContent = "...";
+          btn.classList.add("px-1", "text-text-tertiary", "cursor-default");
+          btn.disabled = true;
+        }
+        return btn;
+      };
+
+      const maxVisible = 5; // How many buttons to show roughly
+      // Logic: Always show 1, Last, and neighbors of current.
+
+      if (this.totalPages <= 7) {
+        for (let i = 1; i <= this.totalPages; i++) {
+          this.pageNumbersContainer.appendChild(
+            createBtn(i, i === this.currentPage)
+          );
+        }
+      } else {
+        // Complex pagination
+        this.pageNumbersContainer.appendChild(
+          createBtn(1, 1 === this.currentPage)
+        );
+
+        if (this.currentPage > 3) {
+          this.pageNumbersContainer.appendChild(createBtn("..."));
+        }
+
+        const start = Math.max(2, this.currentPage - 1);
+        const end = Math.min(this.totalPages - 1, this.currentPage + 1);
+
+        for (let i = start; i <= end; i++) {
+          this.pageNumbersContainer.appendChild(
+            createBtn(i, i === this.currentPage)
+          );
+        }
+
+        if (this.currentPage < this.totalPages - 2) {
+          this.pageNumbersContainer.appendChild(createBtn("..."));
+        }
+
+        this.pageNumbersContainer.appendChild(
+          createBtn(this.totalPages, this.totalPages === this.currentPage)
+        );
+      }
+    }
+  }
+
+  // Initialize
+  const paginationRoot = document.querySelector(".pagination-container"); // Add this class to wrapper
+  // Wait for DOM or just init if inline script runs after DOM (Astro default mostly)
+  // But since we use class props, let's select by attribute or verify structure.
+  // We'll wrap the component in a uniquely identifiable way or just select all.
+  
+  // Actually, we can just use the script to run on all instances.
+   document.querySelectorAll('[data-default-page-size]').forEach(el => {
+       new PaginationComponent(el as HTMLElement);
+   });
+</script>

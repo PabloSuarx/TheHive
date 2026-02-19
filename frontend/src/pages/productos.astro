@@ -7,6 +7,8 @@ import ProductHeroSection from "../components/features/product/ProductHeroSectio
 import ProductSearchSection from "../components/features/product/ProductSearchSection.astro"
 import ProductLoadingSkeletonSection from "../components/features/product/ProductLoadingSkeletonSection.astro"
 import ProductGridSection from "../components/features/product/ProductGridSection.astro"
+import Pagination from "../components/ui/Pagination.astro";
+
 
 const PUBLIC_STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL;
 
@@ -46,20 +48,21 @@ const categories = (await get("categories")) || [];
   <!-- Grid de productos -->
   <section id="products-section" class="py-12 bg-linear-to-b from-bg-primary to-primary-pale hidden">
     <ProductGridSection products={products} />
+    
+    <!-- Paginación -->
+    <nav class="flex justify-center items-center gap-2 mt-12">
+      <Pagination defaultPageSize={8} pageSizeOptions={[8, 16, 24, 48]} />
+    </nav>
   </section>
 
-  <!-- Paginación -->
-  <nav
-    id="pagination"
-    class="flex justify-center items-center gap-2 mt-12"
-    aria-label="Paginación de productos"
-  >
-  </nav>
+
 </Layout>
 
 <script>
+  import type { Product } from "../types/product";
+
   document.addEventListener("DOMContentLoaded", () => {
-    const ITEMS_PER_PAGE = 8;
+    let ITEMS_PER_PAGE = 8;
     let currentPage = 1;
     let currentCategory = "all";
     let currentSort = "featured";
@@ -77,7 +80,6 @@ const categories = (await get("categories")) || [];
       document.querySelectorAll(".product-item")
     ) as HTMLElement[];
     const grid = document.getElementById("products-grid") as HTMLElement;
-    const pagination = document.getElementById("pagination") as HTMLElement;
     const noResults = document.getElementById("no-results") as HTMLElement;
     const resultsCount = document.getElementById(
       "results-count"
@@ -160,61 +162,6 @@ const categories = (await get("categories")) || [];
       });
     }
 
-    /** Renderizar paginación */
-    function renderPagination(total: number) {
-      const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
-      pagination.innerHTML = "";
-      if (totalPages <= 1) return;
-
-      const createBtn = (
-        text: string,
-        page: number,
-        disabled: boolean,
-        active: boolean
-      ) => {
-        const btn = document.createElement("button");
-        btn.innerHTML = text;
-        btn.disabled = disabled;
-        btn.className = active
-          ? "w-10 h-10 rounded-lg text-sm font-bold bg-[#F59E0B] text-white shadow-md"
-          : disabled
-          ? "px-4 py-2 rounded-lg text-sm bg-gray-100 text-gray-400 cursor-not-allowed"
-          : "px-4 py-2 rounded-lg text-sm bg-white text-gray-700 hover:bg-[#FEF3C7] hover:text-[#D97706] border border-gray-200";
-        if (!disabled && !active)
-          btn.addEventListener("click", () => {
-            currentPage = page;
-            render();
-          });
-        return btn;
-      };
-
-      pagination.appendChild(
-        createBtn("&larr;", currentPage - 1, currentPage === 1, false)
-      );
-      for (let i = 1; i <= totalPages; i++) {
-        if (
-          totalPages > 7 &&
-          i > 2 &&
-          i < totalPages - 1 &&
-          Math.abs(i - currentPage) > 1
-        ) {
-          if (i === 3 || i === totalPages - 2) {
-            const dots = document.createElement("span");
-            dots.textContent = "…";
-            dots.className = "px-2 text-gray-400";
-            pagination.appendChild(dots);
-          }
-          continue;
-        }
-        const pageBtn = createBtn(String(i), i, false, i === currentPage);
-        if (i === currentPage) pageBtn.classList.add("w-10", "h-10");
-        pagination.appendChild(pageBtn);
-      }
-      pagination.appendChild(
-        createBtn("&rarr;", currentPage + 1, currentPage === totalPages, false)
-      );
-    }
-
     /** Render principal */
     function render() {
       const visible = getVisibleItems();
@@ -239,7 +186,16 @@ const categories = (await get("categories")) || [];
               start + ITEMS_PER_PAGE,
               sorted.length
             )} de ${sorted.length} productos`;
-      renderPagination(sorted.length);
+      
+      // Emit update event to pagination component
+      document.dispatchEvent(
+        new CustomEvent("pagination:update", {
+            detail: { 
+                totalItems: sorted.length,
+                currentPage: currentPage
+            }
+        })
+      );
     }
 
     // --- Events ---
@@ -253,6 +209,7 @@ const categories = (await get("categories")) || [];
         render();
       }, 300);
     });
+    
     clearBtn.addEventListener("click", () => {
       searchInput.value = "";
       clearBtn.classList.add("hidden");
@@ -261,6 +218,7 @@ const categories = (await get("categories")) || [];
       render();
       searchInput.focus();
     });
+
     filterBtns.forEach((btn) =>
       btn.addEventListener("click", () => {
         filterBtns.forEach((b) => {
@@ -279,11 +237,27 @@ const categories = (await get("categories")) || [];
         render();
       })
     );
+
     sortSelect.addEventListener("change", () => {
       currentSort = sortSelect.value;
       currentPage = 1;
       render();
     });
+
+    // Pagination Events
+    document.addEventListener("pagination:page-change", ((e: CustomEvent) => {
+        currentPage = e.detail.page;
+        render();
+        // Scroll to top of products
+        productsSection.scrollIntoView({ behavior: "smooth" });
+    }) as EventListener);
+
+    document.addEventListener("pagination:size-change", ((e: CustomEvent) => {
+        ITEMS_PER_PAGE = e.detail.pageSize;
+        currentPage = 1; // Reset to first page
+        render();
+        productsSection.scrollIntoView({ behavior: "smooth" });
+    }) as EventListener);
 
     // Init: loading → render
     setTimeout(() => {
@@ -293,69 +267,3 @@ const categories = (await get("categories")) || [];
     }, 500);
   });
 </script>
-
-<style>
-  .hexagon {
-    position: absolute;
-    width: 100px;
-    height: 57.74px;
-    background-color: rgba(245, 158, 11, 0.05);
-    margin: 28.87px 0;
-  }
-  .hexagon:before,
-  .hexagon:after {
-    content: "";
-    position: absolute;
-    width: 0;
-    border-left: 50px solid transparent;
-    border-right: 50px solid transparent;
-  }
-  .hexagon:before {
-    bottom: 100%;
-    border-bottom: 28.87px solid rgba(245, 158, 11, 0.05);
-  }
-  .hexagon:after {
-    top: 100%;
-    border-top: 28.87px solid rgba(245, 158, 11, 0.05);
-  }
-  @keyframes float {
-    0%,
-    100% {
-      transform: translateY(0) rotate(0deg);
-      opacity: 0.3;
-    }
-    50% {
-      transform: translateY(-30px) rotate(180deg);
-      opacity: 0.1;
-    }
-  }
-  .hex-1 {
-    top: 10%;
-    left: 5%;
-    animation: float 25s infinite ease-in-out;
-  }
-  .hex-2 {
-    top: 60%;
-    left: 80%;
-    animation: float 20s infinite ease-in-out 2s;
-  }
-  .hex-3 {
-    top: 30%;
-    right: 10%;
-    animation: float 22s infinite ease-in-out 4s;
-  }
-  .animate-fade-in-up {
-    animation: fade-in-up 0.8s ease-out forwards;
-    opacity: 0;
-  }
-  @keyframes fade-in-up {
-    from {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-</style>
