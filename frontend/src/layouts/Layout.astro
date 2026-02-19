@@ -3,6 +3,7 @@ import "../styles/global.css";
 import Header from "../components/layout/Header.astro"
 import Footer from "../components/layout/Footer.astro"
 import Logo from "../components/ui/Logo.astro"
+import CustomLoader from "../components/ui/CustomLoader.astro"
 
 import { get } from "../lib/strapi";
 
@@ -61,7 +62,23 @@ const logoAlt = siteConfig?.logoAlt;
   </head>
 
   <body class="flex flex-col min-h-screen bg-white">
+    <div id="global-loader" class="fixed inset-0 bg-white z-9999 flex items-center justify-center transition-opacity duration-300">
+      <CustomLoader size={60} color={primaryColor} />
+    </div>
+
     <Header siteConfig={siteConfig} logoUrl={logoUrl} logoAlt={logoAlt} />
+
+    <script>
+      window.addEventListener("load", () => {
+        const loader = document.getElementById("global-loader");
+        if (loader) {
+          loader.style.opacity = "0";
+          setTimeout(() => {
+            loader.style.display = "none";
+          }, 300);
+        }
+      });
+    </script>
 
     <main id="main-content" class="grow">
       <slot />

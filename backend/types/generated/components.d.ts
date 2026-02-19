@@ -64,6 +64,19 @@ export interface MenuItemMenuItem extends Struct.ComponentSchema {
   };
 }
 
+export interface OrdersOrderItem extends Struct.ComponentSchema {
+  collectionName: 'components_orders_order_items';
+  info: {
+    displayName: 'OrderItem';
+  };
+  attributes: {
+    product: Schema.Attribute.Relation<'oneToOne', 'api::product.product'>;
+    quantity: Schema.Attribute.Integer;
+    totalPrice: Schema.Attribute.Decimal;
+    unitPrice: Schema.Attribute.Decimal;
+  };
+}
+
 export interface SharedSeo extends Struct.ComponentSchema {
   collectionName: 'components_shared_seos';
   info: {
@@ -140,6 +153,23 @@ export interface UiCommonText extends Struct.ComponentSchema {
   };
 }
 
+export interface UserAddresses extends Struct.ComponentSchema {
+  collectionName: 'components_user_addresses';
+  info: {
+    displayName: 'addresses';
+  };
+  attributes: {
+    alias: Schema.Attribute.String;
+    city: Schema.Attribute.String;
+    country: Schema.Attribute.String;
+    countryState: Schema.Attribute.String;
+    isDefault: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    state: Schema.Attribute.String;
+    street: Schema.Attribute.String;
+    zipCode: Schema.Attribute.String;
+  };
+}
+
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
@@ -147,11 +177,13 @@ declare module '@strapi/strapi' {
       'footer.social-media': FooterSocialMedia;
       'main-image.main-image': MainImageMainImage;
       'menu-item.menu-item': MenuItemMenuItem;
+      'orders.order-item': OrdersOrderItem;
       'shared.seo': SharedSeo;
       'stat.feature': StatFeature;
       'stat.stat-item': StatStatItem;
       'ui.button': UiButton;
       'ui.common-text': UiCommonText;
+      'user.addresses': UserAddresses;
     }
   }
 }

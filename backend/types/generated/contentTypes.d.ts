@@ -659,6 +659,46 @@ export interface ApiNavigationNavigation extends Struct.SingleTypeSchema {
   };
 }
 
+export interface ApiOrderOrder extends Struct.CollectionTypeSchema {
+  collectionName: 'orders';
+  info: {
+    displayName: 'Order';
+    pluralName: 'orders';
+    singularName: 'order';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    Address: Schema.Attribute.Component<'user.addresses', true>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::order.order'> &
+      Schema.Attribute.Private;
+    notes: Schema.Attribute.String;
+    orderNumber: Schema.Attribute.UID;
+    Orders: Schema.Attribute.Component<'orders.order-item', true>;
+    orderStatus: Schema.Attribute.Enumeration<
+      ['procesando', 'confirmado', 'enviado', 'entregado', 'cancelado']
+    >;
+    paidAt: Schema.Attribute.DateTime;
+    placedAt: Schema.Attribute.DateTime;
+    publishedAt: Schema.Attribute.DateTime;
+    shippingCost: Schema.Attribute.Decimal;
+    subtotal: Schema.Attribute.Decimal;
+    total: Schema.Attribute.Decimal;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    users_permissions_user: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+  };
+}
+
 export interface ApiOriginOrigin extends Struct.CollectionTypeSchema {
   collectionName: 'origins';
   info: {
@@ -1459,9 +1499,10 @@ export interface PluginUsersPermissionsUser
   };
   options: {
     draftAndPublish: false;
-    timestamps: true;
   };
   attributes: {
+    address: Schema.Attribute.Component<'user.addresses', true>;
+    avatar: Schema.Attribute.Media<'images'>;
     blocked: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     confirmationToken: Schema.Attribute.String & Schema.Attribute.Private;
     confirmed: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
@@ -1473,17 +1514,21 @@ export interface PluginUsersPermissionsUser
       Schema.Attribute.SetMinMaxLength<{
         minLength: 6;
       }>;
+    firstName: Schema.Attribute.String;
+    lastName: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'plugin::users-permissions.user'
     > &
       Schema.Attribute.Private;
+    orders: Schema.Attribute.Relation<'oneToMany', 'api::order.order'>;
     password: Schema.Attribute.Password &
       Schema.Attribute.Private &
       Schema.Attribute.SetMinMaxLength<{
         minLength: 6;
       }>;
+    phone: Schema.Attribute.String;
     provider: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
     resetPasswordToken: Schema.Attribute.String & Schema.Attribute.Private;
@@ -1521,6 +1566,7 @@ declare module '@strapi/strapi' {
       'api::footer.footer': ApiFooterFooter;
       'api::hero-section.hero-section': ApiHeroSectionHeroSection;
       'api::navigation.navigation': ApiNavigationNavigation;
+      'api::order.order': ApiOrderOrder;
       'api::origin.origin': ApiOriginOrigin;
       'api::product-card.product-card': ApiProductCardProductCard;
       'api::product.product': ApiProductProduct;

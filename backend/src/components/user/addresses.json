@@ -1,0 +1,35 @@
+{
+  "collectionName": "components_user_addresses",
+  "info": {
+    "displayName": "addresses"
+  },
+  "options": {},
+  "attributes": {
+    "alias": {
+      "type": "string"
+    },
+    "street": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "countryState": {
+      "type": "string"
+    },
+    "zipCode": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
+    },
+    "isDefault": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "config": {}
+}
