@@ -1,10 +1,10 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import BlogCard from "../components/BlogCard.astro";
-import BlogHeroSection from "../components/blog/BlogHeroSection.astro";
-import BlogSearchSection from "../components/blog/BlogSearchSection.astro";
-import BlogGridSection from "../components/blog/BlogGridSection.astro"; 
-import BlogLoadingSkeleton from "../components/blog/BlogLoadingSkeleton.astro";
+import BlogCard from "../components/features/blog/BlogCard.astro"
+import BlogHeroSection from "../components/features/blog/BlogHeroSection.astro"
+import BlogSearchSection from "../components/features/blog/BlogSearchSection.astro"
+import BlogGridSection from "../components/features/blog/BlogGridSection.astro" 
+import BlogLoadingSkeleton from "../components/features/blog/BlogLoadingSkeleton.astro"
 import { get } from "../lib/strapi";
 
 const PUBLIC_STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL;

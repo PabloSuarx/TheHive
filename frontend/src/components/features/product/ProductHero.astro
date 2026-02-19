@@ -1,6 +1,6 @@
 ---
 import { Image } from "astro:assets";
-import type { Product } from "../types/product";
+import type { Product } from "../../../types/product"
 
 interface Props {
     product: Product;
@@ -172,8 +172,8 @@ const {
 </section>
 
 <script>
-    import { cartStore } from "../lib/cartStore";
-    import type { Product } from "../types/product";
+    import { cartStore } from "../../../lib/cartStore"
+    import type { Product } from "../../../types/product"
 
     const addToCartBtn = document.getElementById("hero-add-to-cart");
     const quantityInput = document.getElementById(

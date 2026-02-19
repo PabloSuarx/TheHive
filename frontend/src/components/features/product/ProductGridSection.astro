@@ -1,6 +1,6 @@
 ---
-import ProductCard from "../ProductCard.astro";
-import type { Product } from "../../types/product";
+import ProductCard from "./ProductCard.astro"
+import type { Product } from "../../../types/product"
 
 const { products } = Astro.props;
 const PUBLIC_STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL;

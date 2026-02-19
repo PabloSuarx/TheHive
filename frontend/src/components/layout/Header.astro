@@ -1,7 +1,7 @@
 ---
-import Logo from "./Logo.astro";
-import { get } from "../lib/strapi";
-import type { NavLink } from "../types/header";
+import Logo from "../ui/Logo.astro"
+import { get } from "../../lib/strapi"
+import type { NavLink } from "../../types/header"
 
 const { siteConfig, logoUrl, logoAlt } = Astro.props;
 
@@ -135,7 +135,7 @@ const sortedLinks = navLinks.sort((a, b) => a.order - b.order);
 </header>
 
 <script>
-  import { cartStore } from "../lib/cartStore";
+  import { cartStore } from "../../lib/cartStore"
 
   const button = document.getElementById("mobile-menu-button");
   const menu = document.getElementById("mobile-menu");

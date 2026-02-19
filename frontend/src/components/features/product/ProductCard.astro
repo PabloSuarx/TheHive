@@ -1,8 +1,8 @@
 ---
-import type { Product } from "../types/product";
+import type { Product } from "../../../types/product"
 import { Image } from "astro:assets";
-import Button from "./Button.astro";
-import { get } from "../lib/strapi";
+import Button from "../../ui/Button.astro"
+import { get } from "../../../lib/strapi"
 
 interface Props {
   product: Product;
@@ -99,8 +99,8 @@ const icon_star_empty = single?.icon_star_empty || fallback_star_empty;
 </div>
 
 <script>
-  import { cartStore } from "../lib/cartStore";
-  import type { Product } from "../types/product";
+  import { cartStore } from "../../../lib/cartStore"
+  import type { Product } from "../../../types/product"
 
   document.addEventListener("click", (e) => {
     const target = e.target as HTMLElement;

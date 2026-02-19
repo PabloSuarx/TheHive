@@ -1,12 +1,12 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import ProductCard from "../components/ProductCard.astro";
+import ProductCard from "../components/features/product/ProductCard.astro"
 import type { Product } from "../types/product";
 import { get } from "../lib/strapi";
-import ProductHeroSection from "../components/product_section/ProductHeroSection.astro";
-import ProductSearchSection from "../components/product_section/ProductSearchSection.astro";
-import ProductLoadingSkeletonSection from "../components/product_section/ProductLoadingSkeletonSection.astro";
-import ProductGridSection from "../components/product_section/ProductGridSection.astro";
+import ProductHeroSection from "../components/features/product/ProductHeroSection.astro"
+import ProductSearchSection from "../components/features/product/ProductSearchSection.astro"
+import ProductLoadingSkeletonSection from "../components/features/product/ProductLoadingSkeletonSection.astro"
+import ProductGridSection from "../components/features/product/ProductGridSection.astro"
 
 const PUBLIC_STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL;
 

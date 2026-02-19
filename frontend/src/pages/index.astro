@@ -2,14 +2,14 @@
 import Layout from "../layouts/Layout.astro";
 import { get } from "../lib/strapi";
 
-import Hero from "../components/home/Hero.astro";
-import CategoriesSection from "../components/home/CategoriesSection.astro";
-import FeaturedProducts from "../components/home/FeaturedProducts.astro";
-import WhyChooseUs from "../components/home/WhyChooseUs.astro";
-import Testimonials from "../components/home/Testimonials.astro";
-import BlogSection from "../components/home/BlogSection.astro";
-import CallToAction from "../components/home/CallToAction.astro";
-import CalculadoraDulzor from "../components/CalculadoraDulzor.astro";
+import Hero from "../components/features/home/Hero.astro"
+import CategoriesSection from "../components/features/home/CategoriesSection.astro"
+import FeaturedProducts from "../components/features/home/FeaturedProducts.astro"
+import WhyChooseUs from "../components/features/home/WhyChooseUs.astro"
+import Testimonials from "../components/features/home/Testimonials.astro"
+import BlogSection from "../components/features/home/BlogSection.astro"
+import CallToAction from "../components/features/home/CallToAction.astro"
+import CalculadoraDulzor from "../components/features/product/CalculadoraDulzor.astro"
 
 const blogs = await get("blogs", {
   populate: {
