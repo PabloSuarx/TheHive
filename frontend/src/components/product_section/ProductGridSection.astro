@@ -1,0 +1,47 @@
+---
+import ProductCard from "../ProductCard.astro";
+import type { Product } from "../../types/product";
+
+const { products } = Astro.props;
+const PUBLIC_STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL;
+
+---
+
+    <div class="container mx-auto px-4 lg:px-8">
+      <div id="no-results" class="text-center py-16 hidden">
+        <span class="text-6xl mb-4 block">🔍</span>
+        <p class="text-gray-500 text-lg mb-2">No se encontraron productos</p>
+        <p class="text-gray-400 text-sm">
+          Prueba con otro término de búsqueda o cambia los filtros
+        </p>
+      </div>
+
+      <div
+        class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
+        id="products-grid"
+      >
+        {
+          products.map((product: Product) => {
+            const imgUrl = product.mainImage?.url
+              ? `${PUBLIC_STRAPI_URL}${product.mainImage.url}`
+              : undefined;
+
+            return (
+              <div
+                class="product-item"
+                data-category={product.category?.slug || "sin-categoria"}
+                data-name={product.name}
+                data-price={product.price}
+                data-featured={product.featured ? "1" : "0"}
+                data-short={product.shortDescription || ""}
+                data-organic={product.organic ? "ecologico organico eco" : ""}
+              >
+                <ProductCard product={product} />
+              </div>
+            );
+          })
+        }
+      </div>
+
+
+    </div>

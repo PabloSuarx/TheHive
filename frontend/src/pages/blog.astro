@@ -1,7 +1,10 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import BlogCard from "../components/BlogCard.astro";
-import Breadcrumbs from "../components/Breadcrumbs.astro";
+import BlogHeroSection from "../components/blog/BlogHeroSection.astro";
+import BlogSearchSection from "../components/blog/BlogSearchSection.astro";
+import BlogGridSection from "../components/blog/BlogGridSection.astro"; 
+import BlogLoadingSkeleton from "../components/blog/BlogLoadingSkeleton.astro";
 import { get } from "../lib/strapi";
 
 const PUBLIC_STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL;
@@ -26,171 +29,23 @@ const blogCategories = (await get("blog-categories")) || [];
 
 
   <!-- Hero -->
-  <section class="py-12 bg-white border-b border-gray-100">
-    <div class="container mx-auto px-4 lg:px-8">
-      <Breadcrumbs class="text-gray-500 font-medium mb-4" separator="/" homeLabel="Inicio" />
-      <h1 class="text-4xl font-bold text-gray-900 mb-2">Nuestro Blog</h1>
-      <p class="text-lg text-gray-600 max-w-2xl">
-        Lee nuestros artículos sobre miel artesanal, recetas, beneficios para la salud, sostenibilidad y el mundo de la apicultura.
-      </p>
-    </div>
+  <section class="py-12 bg-linear-to-b from-bg-primary to-primary-pale">
+    <BlogHeroSection />
   </section>
 
   <!-- Controles: Buscador + Filtros -->
-  <section class="py-6 bg-gray-50 border-b border-gray-200 sticky top-0 z-30">
-    <div class="container mx-auto px-4 lg:px-8">
-
-      <!-- Buscador -->
-      <div class="max-w-xl mx-auto mb-5 relative">
-        <svg
-          class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-        </svg>
-        <input
-          type="text"
-          id="blog-search"
-          placeholder="Buscar artículos... (ej: recetas, beneficios, apicultura)"
-          class="w-full pl-12 pr-10 py-3 bg-white border-2 border-gray-200 rounded-xl focus:border-[#F59E0B] focus:outline-none focus:ring-2 focus:ring-[#F59E0B]/20 transition-colors"
-          autocomplete="off"
-        />
-        <button
-          id="clear-search"
-          class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 hidden"
-          aria-label="Limpiar búsqueda"
-        >
-          <svg
-            class="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M6 18L18 6M6 6l12 12"></path>
-          </svg>
-        </button>
-      </div>
-
-      <div class="flex flex-wrap justify-between items-center gap-4">
-        <!-- Filtros categoría -->
-        <div class="flex flex-wrap gap-2" id="blog-filters">
-          <button
-            class="filter-btn active px-4 py-2 rounded-full text-sm font-medium transition-all bg-[#F59E0B] text-white shadow-md"
-            data-category="all">Todos</button
-          >
-          {
-            blogCategories.map((cat: any) => (
-              <button
-                class="filter-btn px-4 py-2 rounded-full text-sm font-medium transition-all bg-white text-gray-700 hover:bg-[#FEF3C7] hover:text-warning border border-gray-200"
-                data-category={cat.slug}
-              >
-                {cat.icon && <span class="mr-1">{cat.icon}</span>}
-                {cat.name}
-              </button>
-            ))
-          }
-        </div>
-
-        <!-- Ordenación -->
-        <div class="flex items-center gap-2">
-          <label for="blog-sort" class="text-sm text-gray-500 whitespace-nowrap"
-            >Ordenar:</label
-          >
-          <select
-            id="blog-sort"
-            class="px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:border-[#F59E0B] focus:outline-none"
-          >
-            <option value="date-desc">Más recientes</option>
-            <option value="date-asc">Más antiguos</option>
-            <option value="title-asc">Título A-Z</option>
-            <option value="title-desc">Título Z-A</option>
-          </select>
-        </div>
-      </div>
-
-      <p class="text-sm text-gray-500 mt-4" id="blog-results-count"></p>
-    </div>
+  <section class="py-12 bg-linear-to-b from-primary-pale to-bg-primary">
+    <BlogSearchSection {blogCategories} />
   </section>
 
   <!-- Loading skeleton -->
-  <section id="blog-loading" class="py-12 bg-white">
-    <div class="container mx-auto px-4 lg:px-8">
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {
-          [...Array(6)].map(() => (
-            <div class="animate-pulse">
-              <div class="h-48 bg-gray-200 rounded-xl mb-4" />
-              <div class="h-3 bg-gray-200 rounded w-1/4 mb-2" />
-              <div class="h-5 bg-gray-200 rounded w-3/4 mb-2" />
-              <div class="h-3 bg-gray-200 rounded w-full mb-2" />
-              <div class="h-3 bg-gray-200 rounded w-1/2" />
-            </div>
-          ))
-        }
-      </div>
-    </div>
+  <section id="blog-loading" class="py-12 bg-linear-to-b from-bg-primary to-primary-pale">
+    <BlogLoadingSkeleton /> 
   </section>
 
   <!-- Grid de artículos -->
-  <section id="blog-section" class="py-12 bg-white hidden">
-    <div class="container mx-auto px-4 lg:px-8">
-      <div id="blog-no-results" class="text-center py-16 hidden">
-        <span class="text-6xl mb-4 block">🔍</span>
-        <p class="text-gray-500 text-lg mb-2">No se encontraron artículos</p>
-        <p class="text-gray-400 text-sm">
-          Prueba con otro término de búsqueda o cambia los filtros
-        </p>
-      </div>
-
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="blog-grid">
-        {
-          blogs.map((blog: any) => {
-            const imgUrl = blog.featuredImage?.url
-              ? `${PUBLIC_STRAPI_URL}${blog.featuredImage.url}`
-              : undefined;
-
-            return (
-              <div
-                class="blog-item"
-                data-category={blog.blog_category?.slug || "sin-categoria"}
-                data-title={blog.title}
-                data-excerpt={blog.excerpt || ""}
-                data-author={blog.author || ""}
-                data-date={blog.blogPublishedAt || ""}
-              >
-                <BlogCard
-                  title={blog.title}
-                  slug={blog.slug}
-                  excerpt={blog.excerpt}
-                  imageUrl={imgUrl}
-                  author={blog.author}
-                  blogPublishedAt={blog.blogPublishedAt}
-                  categoryName={blog.blog_category?.name}
-                  categorySlug={blog.blog_category?.slug}
-                />
-              </div>
-            );
-          })
-        }
-      </div>
-
-      <nav
-        id="blog-pagination"
-        class="flex justify-center items-center gap-2 mt-12"
-        aria-label="Paginación del blog"
-      >
-      </nav>
-    </div>
+  <section id="blog-section" class="py-12 bg-linear-to-b from-bg-primary to-primary-pale">
+    <BlogGridSection {blogs} /> 
   </section>
 </Layout>
 

@@ -1,0 +1,57 @@
+---
+import BlogCard from "../BlogCard.astro";
+
+const {blogs} = Astro.props;
+
+const PUBLIC_STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL;
+
+
+---
+    <div class="container mx-auto px-4 lg:px-8">
+      <div id="blog-no-results" class="text-center py-16 hidden">
+        <span class="text-6xl mb-4 block">🔍</span>
+        <p class="text-gray-500 text-lg mb-2">No se encontraron artículos</p>
+        <p class="text-gray-400 text-sm">
+          Prueba con otro término de búsqueda o cambia los filtros
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="blog-grid">
+        {
+          blogs.map((blog: any) => {
+            const imgUrl = blog.featuredImage?.url
+              ? `${PUBLIC_STRAPI_URL}${blog.featuredImage.url}`
+              : undefined;
+
+            return (
+              <div
+                class="blog-item"
+                data-category={blog.blog_category?.slug || "sin-categoria"}
+                data-title={blog.title}
+                data-excerpt={blog.excerpt || ""}
+                data-author={blog.author || ""}
+                data-date={blog.blogPublishedAt || ""}
+              >
+                <BlogCard
+                  title={blog.title}
+                  slug={blog.slug}
+                  excerpt={blog.excerpt}
+                  imageUrl={imgUrl}
+                  author={blog.author}
+                  blogPublishedAt={blog.blogPublishedAt}
+                  categoryName={blog.blog_category?.name}
+                  categorySlug={blog.blog_category?.slug}
+                />
+              </div>
+            );
+          })
+        }
+      </div>
+
+      <nav
+        id="blog-pagination"
+        class="flex justify-center items-center gap-2 mt-12"
+        aria-label="Paginación del blog"
+      >
+      </nav>
+    </div>

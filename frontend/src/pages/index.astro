@@ -41,24 +41,36 @@ console.log(buttonsByName);
   descripcion="The Hive - Miel artesanal de calidad premium directamente de la colmena a tu mesa. Descubre nuestras mieles monoflora, multiflora y productos naturales 100% puros."
   keywords="miel artesanal, miel natural, miel premium, miel pura, apicultura sostenible, productos naturales, miel de azahar, miel multiflora"
 >
-  <Hero />
+  <section class="relative overflow-hidden bg-linear-to-b from-bg-primary to-primary-pale py-20 lg:py-32">
+    <Hero />
+  </section>
 
-  <CategoriesSection
-    categories={categories}
-    publicStrapiUrl={PUBLIC_STRAPI_URL}
-  />
+  <section class="py-20  bg-linear-to-b from-primary-pale to-bg-primary">
+    <CategoriesSection categories={categories} publicStrapiUrl={PUBLIC_STRAPI_URL} />
+  </section>
 
-  <FeaturedProducts buttonsByName={buttonsByName} />
+  <section class="py-20 bg-linear-to-b from-bg-primary to-primary-pale">
+    <FeaturedProducts buttonsByName={buttonsByName} />
+  </section>
 
-  <WhyChooseUs />
+  <section class="py-20 bg-linear-to-b from-primary-pale to-bg-primary">
+    <WhyChooseUs />
+  </section>
 
-  <Testimonials />
+  <section class="py-20 bg-linear-to-b from-bg-primary to-primary-pale">
+    <Testimonials />
+  </section>
 
-  <BlogSection latestBlogs={latestBlogs} publicStrapiUrl={PUBLIC_STRAPI_URL} />
+  <section class="py-20 bg-linear-to-b from-primary-pale to-bg-primary">
+    <BlogSection latestBlogs={latestBlogs} publicStrapiUrl={PUBLIC_STRAPI_URL} />
+  </section>
 
-  <CalculadoraDulzor />
+  <section>
+    <CalculadoraDulzor />
+  </section>
 
-  <CallToAction buttonsByName={buttonsByName} />
+  <section>
+    <CallToAction buttonsByName={buttonsByName} />
+  </section>
 
-  
 </Layout>

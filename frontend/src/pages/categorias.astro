@@ -3,6 +3,8 @@ import Layout from "../layouts/Layout.astro";
 import CategoryCard from "../components/CategoryCard.astro";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
 import { get } from "../lib/strapi";
+import CategorySection from "../components/category_section/CategorySection.astro";
+import CategoryHeroSection from "../components/category_section/CategoryHeroSection.astro";
 
 const PUBLIC_STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL;
 const categories = (await get("categories", { populate: { image: true } })) || [];
@@ -16,47 +18,11 @@ const categories = (await get("categories", { populate: { image: true } })) || [
 
 
   <!-- Hero -->
-  <section class="py-12 bg-white border-b border-gray-100">
-    <div class="container mx-auto px-4 lg:px-8">
-      <Breadcrumbs class="text-gray-500 font-medium mb-4" separator="/" homeLabel="Inicio" />
-      <h1 class="text-4xl font-bold text-gray-900 mb-2">Nuestras Categorías</h1>
-      <p class="text-lg text-gray-600 max-w-2xl">
-        Explora nuestra variedad de mieles artesanales, cada una con su carácter y sabor único.
-      </p>
-    </div>
+  <section class="py-12 bg-linear-to-b from-bg-primary to-primary-pale">
+    <CategoryHeroSection />
   </section>
 
-  <section class="py-20 bg-white">
-    <div class="container mx-auto px-4 lg:px-8">
-      {
-        categories.length > 0 ? (
-          <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {categories.map((cat:any) => {
-              const imageUrl = cat.image?.url
-                ? `${PUBLIC_STRAPI_URL}${cat.image.url}`
-                : undefined;
-
-              return (
-                <CategoryCard
-                  name={cat.name}
-                  slug={cat.slug}
-                  description={cat.description}
-                  icon={cat.icon}
-                  imageUrl={imageUrl}
-                  productCount={cat.products?.length || 0}
-                />
-              );
-            })}
-          </div>
-        ) : (
-          <div class="text-center py-16">
-            <span class="text-6xl mb-4 block">🐝</span>
-            <p class="text-gray-500 text-lg">
-              No hay categorías disponibles todavía.
-            </p>
-          </div>
-        )
-      }
-    </div>
+  <section class="py-12 bg-linear-to-b from-primary-pale to-bg-primary">
+    <CategorySection categories={categories} />
   </section>
 </Layout>
