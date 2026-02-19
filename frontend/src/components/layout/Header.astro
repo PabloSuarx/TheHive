@@ -1,5 +1,6 @@
 ---
 import Logo from "../ui/Logo.astro"
+import Avatar from "../ui/Avatar.astro"
 import { get } from "../../lib/strapi"
 import type { NavLink } from "../../types/header"
 
@@ -49,6 +50,13 @@ const sortedLinks = navLinks.sort((a, b) => a.order - b.order);
       </ul>
 
       <div class="flex items-center gap-4">
+        <a
+          href="/perfil"
+          class="relative p-1 text-primary hover:text-primary transition-colors rounded-full hover:bg-bg-primary-pale"
+          aria-label="Perfil de usuario"
+        >
+          <Avatar size="sm" />
+        </a>
         <a
           href="/carrito"
           class="relative p-2 text-primary hover:text-primary transition-colors rounded-lg hover:bg-bg-primary-pale"
