@@ -8,19 +8,10 @@ interface Props {
 const { buttonsByName } = Astro.props;
 ---
 
-<section
-  class="py-20 bg-linear-to-br from-primary-dark to-warning text-text-inverse relative overflow-hidden"
->
-  <div class="absolute inset-0 opacity-10">
-    <div class="hexagon-white hex-cta-1"></div>
-    <div class="hexagon-white hex-cta-2"></div>
-    <div class="hexagon-white hex-cta-3"></div>
-  </div>
-
   <div class="container mx-auto px-4 lg:px-8 text-center relative z-10">
     <div class="max-w-3xl mx-auto space-y-8">
-      <h2 class="text-text-inverse section-title">¿Listo para Probar la Mejor Miel?</h2>
-      <p class="text-xl text-white/90">
+      <h2 class="section-title">¿Listo para Probar la Mejor Miel?</h2>
+      <p class="text-xl">
         Únete a miles de clientes satisfechos y descubre el auténtico sabor de
         la miel artesanal
       </p>
@@ -77,7 +68,6 @@ const { buttonsByName } = Astro.props;
       </div>
     </div>
   </div>
-</section>
 
 <style>
   @keyframes float {

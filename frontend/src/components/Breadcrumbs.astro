@@ -1,12 +1,12 @@
 ---
 interface Props {
   homeLabel?: string;
-  class?: string;
   separator?: string;
+  class?: string;
   currentClass?: string;
 }
 
-const { homeLabel = "Home", class: className, separator = ">", currentClass } = Astro.props;
+const { homeLabel = "Home", separator = ">" } = Astro.props;
 
 const paths = Astro.url.pathname.split('/').filter(Boolean);
 const parts = paths.map((part, index) => {
@@ -20,18 +20,18 @@ const parts = paths.map((part, index) => {
 });
 ---
 
-<nav aria-label="Breadcrumb" class:list={["flex items-center text-sm", className]}>
+<nav aria-label="Breadcrumb" class="flex items-center text-sm text-text-tertiary">
   <ol class="flex items-center flex-wrap">
     <li class="flex items-center">
-      <a href="/" class="opacity-80 hover:opacity-100 transition-opacity whitespace-nowrap">{homeLabel}</a>
+      <a href="/" class="hover:text-primary transition-colors whitespace-nowrap">{homeLabel}</a>
     </li>
     {parts.map(({ label, href, isCurrent }) => (
       <li class="flex items-center">
-        <span class="mx-2 opacity-50">{separator}</span>
+        <span class="mx-2 text-divider">{separator}</span>
         {isCurrent ? (
-          <span class:list={["font-medium opacity-100", currentClass]} aria-current="page">{label}</span>
+          <span class="font-medium text-text-primary" aria-current="page">{label}</span>
         ) : (
-          <a href={href} class="opacity-80 hover:opacity-100 transition-opacity whitespace-nowrap">{label}</a>
+          <a href={href} class="hover:text-primary transition-colors whitespace-nowrap">{label}</a>
         )}
       </li>
     ))}

@@ -1,0 +1,342 @@
+---
+---
+
+<div class="bg-primary/5 p-8 lg:p-12 rounded-3xl border border-primary/10">
+  <h2 class="text-2xl font-bold text-text-primary mb-6">Envíanos un Mensaje</h2>
+  
+  <form id="contactForm" class="space-y-6" novalidate>
+    
+    <!-- Nombre -->
+    <div>
+      <label for="nombre" class="block text-sm font-semibold text-text-primary mb-2">
+        Nombre completo <span class="text-error">*</span>
+      </label>
+      <input 
+        type="text" 
+        id="nombre" 
+        name="nombre"
+        class="w-full px-4 py-3 bg-bg-primary border-2 border-divider rounded-xl focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors"
+        placeholder="Tu nombre"
+        required
+      >
+      <p class="error-message hidden text-error text-sm mt-2"></p>
+    </div>
+
+    <!-- Email -->
+    <div>
+      <label for="email" class="block text-sm font-semibold text-text-primary mb-2">
+        Email <span class="text-error">*</span>
+      </label>
+      <input 
+        type="email" 
+        id="email" 
+        name="email"
+        class="w-full px-4 py-3 bg-bg-primary border-2 border-divider rounded-xl focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors"
+        placeholder="tu@email.com"
+        required
+      >
+      <p class="error-message hidden text-error text-sm mt-2"></p>
+    </div>
+
+    <!-- Teléfono -->
+    <div>
+      <label for="telefono" class="block text-sm font-semibold text-text-primary mb-2">
+        Teléfono
+      </label>
+      <input 
+        type="tel" 
+        id="telefono" 
+        name="telefono"
+        class="w-full px-4 py-3 bg-bg-primary border-2 border-divider rounded-xl focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors"
+        placeholder="+34 612 345 678"
+      >
+      <p class="error-message hidden text-error text-sm mt-2"></p>
+    </div>
+
+    <!-- Asunto -->
+    <div>
+      <label for="asunto" class="block text-sm font-semibold text-text-primary mb-2">
+        Asunto <span class="text-error">*</span>
+      </label>
+      <select 
+        id="asunto" 
+        name="asunto"
+        class="w-full px-4 py-3 bg-bg-primary border-2 border-divider rounded-xl focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors"
+        required
+      >
+        <option value="">Selecciona un asunto</option>
+        <option value="consulta-producto">Consulta sobre productos</option>
+        <option value="pedido">Estado de mi pedido</option>
+        <option value="colaboracion">Colaboración como apicultor</option>
+        <option value="mayorista">Pedidos al por mayor</option>
+        <option value="otro">Otro</option>
+      </select>
+      <p class="error-message hidden text-error text-sm mt-2"></p>
+    </div>
+
+    <!-- Mensaje -->
+    <div>
+      <label for="mensaje" class="block text-sm font-semibold text-text-primary mb-2">
+        Mensaje <span class="text-error">*</span>
+      </label>
+      <textarea 
+        id="mensaje" 
+        name="mensaje"
+        rows="6"
+        class="w-full px-4 py-3 bg-bg-primary border-2 border-divider rounded-xl focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors resize-none"
+        placeholder="Cuéntanos en qué podemos ayudarte..."
+        required
+      ></textarea>
+      <p class="error-message hidden text-error text-sm mt-2"></p>
+    </div>
+
+    <!-- Checkbox privacidad -->
+    <div class="flex items-start gap-3">
+      <input 
+        type="checkbox" 
+        id="privacidad" 
+        name="privacidad"
+        class="mt-1 w-5 h-5 text-primary border-divider rounded focus:ring-primary"
+        required
+      >
+      <label for="privacidad" class="text-sm text-text-secondary">
+        He leído y acepto la 
+        <a href="/politica-privacidad" class="text-primary hover:text-primary-dark underline">
+          política de privacidad
+        </a> 
+        <span class="text-error">*</span>
+      </label>
+    </div>
+    <p id="privacidad-error" class="error-message hidden text-error text-sm"></p>
+
+    <!-- Botón submit -->
+    <button 
+      type="submit"
+      class="w-full px-8 py-4 bg-primary hover:bg-primary-dark text-text-inverse font-bold rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+    >
+      <span class="button-text">Enviar Mensaje</span>
+      <span class="button-loading hidden">
+        <svg class="animate-spin inline-block w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        Enviando...
+      </span>
+    </button>
+
+    <!-- Mensaje de éxito -->
+    <div id="success-message" class="hidden p-4 bg-success/10 border-2 border-success text-success rounded-xl">
+      <div class="flex items-center gap-3">
+        <svg class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+        </svg>
+        <div>
+          <p class="font-semibold">¡Mensaje enviado con éxito!</p>
+          <p class="text-sm">Te responderemos en menos de 24 horas.</p>
+        </div>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<style>
+  /* Estados de validación */
+  .input-error {
+    border-color: var(--error) !important;
+    background-color: color-mix(in srgb, var(--error) 5%, transparent) !important;
+  }
+
+  .input-success {
+    border-color: var(--success) !important;
+  }
+</style>
+
+<script>
+  // Validación del formulario con expresiones regulares
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('contactForm') as HTMLFormElement | null;
+    
+    if (!form) return;
+
+    // Expresiones regulares
+    const regexNombre = /^[a-záéíóúñA-ZÁÉÍÓÚÑ\s]{2,50}$/;
+    const regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    const regexTelefono = /^(\+34|0034|34)?[ -]*(6|7|8|9)[ -]*([0-9][ -]*){8}$/;
+
+    // Función de validación individual
+    function validarCampo(
+      campo: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement, 
+      regex: RegExp | null, 
+      mensajeError: string
+    ): boolean {
+      const valor = campo.value.trim();
+      const errorElement = campo.parentElement?.querySelector('.error-message') as HTMLElement | null;
+      
+      if (!valor && campo.hasAttribute('required')) {
+        campo.classList.add('input-error');
+        campo.classList.remove('input-success');
+        if (errorElement) {
+          errorElement.textContent = 'Este campo es obligatorio';
+          errorElement.classList.remove('hidden');
+        }
+        return false;
+      }
+      
+      if (valor && regex && !regex.test(valor)) {
+        campo.classList.add('input-error');
+        campo.classList.remove('input-success');
+        if (errorElement) {
+          errorElement.textContent = mensajeError;
+          errorElement.classList.remove('hidden');
+        }
+        return false;
+      }
+      
+      campo.classList.remove('input-error');
+      campo.classList.add('input-success');
+      if (errorElement) {
+        errorElement.classList.add('hidden');
+      }
+      return true;
+    }
+
+    // Validación en tiempo real
+    const nombreInput = document.getElementById('nombre') as HTMLInputElement | null;
+    const emailInput = document.getElementById('email') as HTMLInputElement | null;
+    const telefonoInput = document.getElementById('telefono') as HTMLInputElement | null;
+    const asuntoSelect = document.getElementById('asunto') as HTMLSelectElement | null;
+    const mensajeTextarea = document.getElementById('mensaje') as HTMLTextAreaElement | null;
+    const privacidadCheckbox = document.getElementById('privacidad') as HTMLInputElement | null;
+
+    if (nombreInput) {
+      nombreInput.addEventListener('blur', function() {
+        validarCampo(nombreInput, regexNombre, 'El nombre debe contener solo letras y tener entre 2 y 50 caracteres');
+      });
+    }
+
+    if (emailInput) {
+      emailInput.addEventListener('blur', function() {
+        validarCampo(emailInput, regexEmail, 'Por favor, introduce un email válido');
+      });
+    }
+
+    if (telefonoInput) {
+      telefonoInput.addEventListener('blur', function() {
+        if (telefonoInput.value.trim()) {
+          validarCampo(telefonoInput, regexTelefono, 'Por favor, introduce un teléfono válido (ej: +34 612 345 678)');
+        } else {
+          telefonoInput.classList.remove('input-error', 'input-success');
+          const errorElement = telefonoInput.parentElement?.querySelector('.error-message') as HTMLElement | null;
+          if (errorElement) errorElement.classList.add('hidden');
+        }
+      });
+    }
+
+    if (asuntoSelect) {
+      asuntoSelect.addEventListener('change', function() {
+        validarCampo(asuntoSelect, null, '');
+      });
+    }
+
+    if (mensajeTextarea) {
+      mensajeTextarea.addEventListener('blur', function() {
+        validarCampo(mensajeTextarea, null, '');
+      });
+    }
+
+    // Submit del formulario
+    form.addEventListener('submit', function(e: Event) {
+      e.preventDefault();
+      
+      // Validar todos los campos
+      let formValido = true;
+      
+      if (nombreInput) {
+        formValido = validarCampo(nombreInput, regexNombre, 'El nombre debe contener solo letras y tener entre 2 y 50 caracteres') && formValido;
+      }
+      
+      if (emailInput) {
+        formValido = validarCampo(emailInput, regexEmail, 'Por favor, introduce un email válido') && formValido;
+      }
+      
+      if (telefonoInput && telefonoInput.value.trim()) {
+        formValido = validarCampo(telefonoInput, regexTelefono, 'Por favor, introduce un teléfono válido') && formValido;
+      }
+      
+      if (asuntoSelect) {
+        formValido = validarCampo(asuntoSelect, null, '') && formValido;
+      }
+      
+      if (mensajeTextarea) {
+        formValido = validarCampo(mensajeTextarea, null, '') && formValido;
+      }
+      
+      // Validar checkbox de privacidad
+      const privacidadError = document.getElementById('privacidad-error') as HTMLElement | null;
+      if (privacidadCheckbox && !privacidadCheckbox.checked) {
+        if (privacidadError) {
+          privacidadError.textContent = 'Debes aceptar la política de privacidad';
+          privacidadError.classList.remove('hidden');
+        }
+        formValido = false;
+      } else {
+        if (privacidadError) {
+          privacidadError.classList.add('hidden');
+        }
+      }
+      
+      if (!formValido) {
+        // Scroll al primer error
+        const primerError = form.querySelector('.input-error') as HTMLElement | null;
+        if (primerError) {
+          primerError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          primerError.focus();
+        }
+        return;
+      }
+      
+      // Simular envío (aquí iría la lógica real de envío)
+      const submitButton = form.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+      const buttonText = submitButton?.querySelector('.button-text') as HTMLElement | null;
+      const buttonLoading = submitButton?.querySelector('.button-loading') as HTMLElement | null;
+      const successMessage = document.getElementById('success-message') as HTMLElement | null;
+      
+      if (!submitButton || !buttonText || !buttonLoading || !successMessage) return;
+      
+      // Mostrar loading
+      submitButton.disabled = true;
+      buttonText.classList.add('hidden');
+      buttonLoading.classList.remove('hidden');
+      
+      // Simular delay de envío
+      setTimeout(function() {
+        // Ocultar loading
+        buttonText.classList.remove('hidden');
+        buttonLoading.classList.add('hidden');
+        submitButton.disabled = false;
+        
+        // Mostrar mensaje de éxito
+        successMessage.classList.remove('hidden');
+        
+        // Reset form
+        form.reset();
+        
+        // Limpiar clases de validación
+        const inputs = form.querySelectorAll('input, select, textarea');
+        inputs.forEach(function(input) {
+          input.classList.remove('input-error', 'input-success');
+        });
+        
+        // Scroll al mensaje de éxito
+        successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
+        // Ocultar mensaje después de 5 segundos
+        setTimeout(function() {
+          successMessage.classList.add('hidden');
+        }, 5000);
+        
+      }, 2000);
+    });
+  });
+</script>

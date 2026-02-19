@@ -41,7 +41,7 @@ const testimonials = data.testimonials || [];
   <div class="container mx-auto px-4 lg:px-8">
     <div class="text-center max-w-3xl mx-auto mb-16">
       <h2>{data.title}</h2>
-      <p class="text-lead text-gray-600 mt-4">
+      <p class="text-lead text-text-secondary mt-4">
         {data.subtitle}
       </p>
     </div>
@@ -62,7 +62,7 @@ const testimonials = data.testimonials || [];
                   </svg>
                 ))}
               </div>
-              <p class="text-gray-700 mb-6 italic">"{testimonial.text}"</p>
+              <p class="text-text-secondary mb-6 italic">"{testimonial.text}"</p>
               <div class="flex items-center gap-3">
                 <div class="w-12 h-12 bg-linear-to-br from-primary to-warning rounded-full flex items-center justify-center text-text-inverse font-bold">
                   {testimonial.author
@@ -74,7 +74,7 @@ const testimonials = data.testimonials || [];
                   <div class="font-semibold text-text-primary">
                     {testimonial.author}
                   </div>
-                  <div class="text-sm text-gray-500">{testimonial.location}</div>
+                  <div class="text-sm text-text-tertiary">{testimonial.location}</div>
                 </div>
               </div>
             </article>
@@ -82,7 +82,7 @@ const testimonials = data.testimonials || [];
         </div>
       ) : (
         <div class="text-center py-12">
-          <p class="text-gray-500">No hay testimonios disponibles en este momento.</p>
+          <p class="text-text-tertiary">No hay testimonios disponibles en este momento.</p>
         </div>
       )
     }
