@@ -27,23 +27,18 @@ const blogCategories = (await get("blog-categories")) || [];
   keywords="blog miel, recetas miel, beneficios miel, apicultura, miel artesanal blog"
 >
 
-
-  <!-- Hero -->
   <section class="py-12 bg-linear-to-b from-bg-primary to-primary-pale">
     <BlogHeroSection />
   </section>
 
-  <!-- Controles: Buscador + Filtros -->
   <section class="py-12 bg-linear-to-b from-primary-pale to-bg-primary">
     <BlogSearchSection {blogCategories} />
   </section>
 
-  <!-- Loading skeleton -->
   <section id="blog-loading" class="py-12 bg-linear-to-b from-bg-primary to-primary-pale">
     <BlogLoadingSkeleton /> 
   </section>
 
-  <!-- Grid de artículos -->
   <section id="blog-section" class="py-12 bg-linear-to-b from-bg-primary to-primary-pale">
     <BlogGridSection {blogs} /> 
   </section>

@@ -1,0 +1,49 @@
+---
+interface Props {
+  rating: number;
+  reviewsCount?: number;
+  className?: string;
+}
+
+const { rating = 0, reviewsCount, className = "" } = Astro.props;
+
+const fallback_star_full = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star w-4 h-4"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
+const fallback_star_half = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star-half w-4 h-4"><path d="M12 17.8 5.8 21 7 14.1 2 9.3l7-1L12 2"/></svg>`;
+const fallback_star_empty = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star w-4 h-4"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
+
+const icon_star_full = fallback_star_full;
+const icon_star_half = fallback_star_half;
+const icon_star_empty = fallback_star_empty;
+---
+
+<div class={`flex items-center gap-1 ${className}`}>
+  {
+    [...Array(5)].map((_, i) => {
+      let iconHtml = icon_star_empty;
+
+      if (rating >= i + 1) {
+        iconHtml = icon_star_full;
+      } else if (rating > i) {
+        iconHtml = icon_star_half;
+      }
+
+      return (
+        <span
+          class={`${
+            rating >= i + 1 || rating > i
+              ? "text-accent fill-current"
+              : "text-text-tertiary"
+          }`}
+          set:html={iconHtml}
+        />
+      );
+    })
+  }
+  {
+    reviewsCount !== undefined && (
+      <span class="text-xs text-text-tertiary ml-1">
+        ({reviewsCount})
+      </span>
+    )
+  }
+</div>

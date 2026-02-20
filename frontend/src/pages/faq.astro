@@ -5,18 +5,14 @@ import FaqItem from "../components/features/faq/FaqItem.astro"
 import Button from "../components/ui/Button.astro"
 import { get } from "../lib/strapi";
 
-// Fetch data from Strapi 'faqs' collection type
-// Assuming the endpoint returns an array of objects: { question: string, answer: string }
 const faqs = (await get("faqs")) || [];
 
-// Fallback data if Strapi content is empty
 const data = faqs.length > 0 ? faqs : [
   {
     question: "¿De dónde proviene vuestra miel?",
     answer: "Nuestra miel proviene de colmenas situadas en entornos naturales protegidos de la Península Ibérica. Trabajamos directamente con apicultores locales que practican una apicultura sostenible y respetuosa con las abejas."
   }
 ];
-
 ---
 
 <Layout
@@ -24,7 +20,6 @@ const data = faqs.length > 0 ? faqs : [
   descripcion="Resuelve tus dudas sobre nuestros productos, envíos y devoluciones en nuestra sección de Preguntas Frecuentes."
   keywords="faq miel, preguntas frecuentes, dudas compra miel, origen miel"
 >
-  <!-- Hero Section -->
   <section class="py-12 bg-white border-b border-gray-100">
     <div class="container mx-auto px-4 lg:px-8">
       <Breadcrumbs separator="/" homeLabel="Inicio" />
@@ -35,7 +30,6 @@ const data = faqs.length > 0 ? faqs : [
     </div>
   </section>
 
-  <!-- Main Content -->
   <section class="py-16 bg-gray-50/50">
     <div class="container mx-auto px-4 lg:px-8">
       <div class="max-w-3xl mx-auto space-y-4">

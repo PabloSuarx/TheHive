@@ -2,12 +2,9 @@
 import { get } from "../../../lib/strapi"
 import type { Feature } from "../../../types/home"
 
-// Fetch data from Strapi
 const single = await get("why-choose-us", {
   populate: "*"
 });
-
-console.log(single);
 
 const features = single.Feature || [];
 ---

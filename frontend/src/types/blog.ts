@@ -37,4 +37,5 @@ export interface Blog {
     blog_category: BlogCategory | null;
     tags: Tag[];
     seo: Seo;
+    readingTime?: number;
 }

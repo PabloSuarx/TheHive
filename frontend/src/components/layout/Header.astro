@@ -50,13 +50,25 @@ const sortedLinks = navLinks.sort((a, b) => a.order - b.order);
       </ul>
 
       <div class="flex items-center gap-4">
+        <!-- User Menu (Hidden by default, toggled by JS) -->
         <a
+          id="user-menu"
           href="/perfil"
-          class="relative p-1 text-primary hover:text-primary transition-colors rounded-full hover:bg-bg-primary-pale"
+          class="relative p-1 text-primary hover:text-primary transition-colors rounded-full hover:bg-bg-primary-pale hidden"
           aria-label="Perfil de usuario"
         >
           <Avatar size="sm" />
         </a>
+
+        <!-- Login Button (Visible by default, toggled by JS) -->
+        <a
+            id="login-button"
+            href="/login"
+            class="text-sm font-medium text-primary hover:text-primary-dark transition-colors"
+        >
+            Iniciar Sesión
+        </a>
+
         <a
           href="/carrito"
           class="relative p-2 text-primary hover:text-primary transition-colors rounded-lg hover:bg-bg-primary-pale"
@@ -143,39 +155,91 @@ const sortedLinks = navLinks.sort((a, b) => a.order - b.order);
 </header>
 
 <script>
-  import { cartStore } from "../../lib/cartStore"
+  import { $user, $cart, $isAuthLoading } from "../../stores/appStore";
 
-  const button = document.getElementById("mobile-menu-button");
-  const menu = document.getElementById("mobile-menu");
-  const menuIcon = document.getElementById("menu-icon");
-  const closeIcon = document.getElementById("close-icon");
-  const cartCount = document.querySelector(".cart-count");
+  // DOM Elements
+  const loginButton = document.getElementById("login-button");
+  const userMenu = document.getElementById("user-menu");
+  const cartBadge = document.querySelector(".cart-count");
+  const mobileMenuButton = document.getElementById("mobile-menu-button");
+  const mobileMenu = document.getElementById("mobile-menu");
+  const mobileMenuIcon = document.getElementById("menu-icon");
+  const mobileCloseIcon = document.getElementById("close-icon");
 
-  const toggleMenu = () => {
-    const isOpen = button?.getAttribute("aria-expanded") === "true";
-    button?.setAttribute("aria-expanded", String(!isOpen));
-    menu?.classList.toggle("hidden");
-    menuIcon?.classList.toggle("hidden");
-    closeIcon?.classList.toggle("hidden");
-  };
+  // --- AUTH LOGIC ---
 
-  button?.addEventListener("click", toggleMenu);
+  // Subscribe to user changes
+  $user.subscribe((user) => {
+    const isAuthenticated = !!user?.jwt;
 
-  menu?.querySelectorAll("a").forEach((link) => {
-    link.addEventListener("click", () => {
-      menu.classList.add("hidden");
-      menuIcon?.classList.remove("hidden");
-      closeIcon?.classList.add("hidden");
-      button?.setAttribute("aria-expanded", "false");
-    });
+    if (isAuthenticated) {
+      loginButton?.classList.add("hidden");
+      userMenu?.classList.remove("hidden");
+    } else {
+      loginButton?.classList.remove("hidden");
+      userMenu?.classList.add("hidden");
+    }
   });
 
-  // Subscribe to cart updates
-  cartStore.subscribe((cart) => {
-    if (cartCount) {
-      const count = cart.reduce((acc, item) => acc + item.quantity, 0);
-      cartCount.textContent = count.toString();
-      cartCount.classList.toggle("hidden", count === 0);
+  // Validate session on mount
+  const validateSession = async () => {
+    const user = $user.get();
+    if (user?.jwt) {
+      try {
+        // Verify JWT with Strapi
+        // Note: Assuming a custom endpoint or standard /users/me content
+         const response = await fetch(`${import.meta.env.PUBLIC_STRAPI_URL}/api/users/me`, {
+          headers: {
+            Authorization: `Bearer ${user.jwt}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Session invalid");
+        }
+      } catch (error) {
+        console.error("Session validation failed:", error);
+        $user.set(null); // Clear invalid session
+      } finally {
+        $isAuthLoading.set(false);
+      }
+    } else {
+      $isAuthLoading.set(false);
     }
+  };
+
+  // Run validation
+  validateSession();
+
+  // --- CART LOGIC ---
+
+  // Subscribe to cart changes
+  $cart.subscribe((cart) => {
+    if (cartBadge) {
+      const count = Object.values(cart).reduce((acc: number, item: any) => acc + item.quantity, 0);
+      cartBadge.textContent = count.toString();
+      cartBadge.classList.toggle("hidden", count === 0);
+    }
+  });
+
+  // --- UI INTERACTION ---
+
+  const toggleMobileMenu = () => {
+    const isOpen = mobileMenuButton?.getAttribute("aria-expanded") === "true";
+    mobileMenuButton?.setAttribute("aria-expanded", String(!isOpen));
+    mobileMenu?.classList.toggle("hidden");
+    mobileMenuIcon?.classList.toggle("hidden");
+    mobileCloseIcon?.classList.toggle("hidden");
+  };
+
+  mobileMenuButton?.addEventListener("click", toggleMobileMenu);
+
+  mobileMenu?.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => {
+      mobileMenu.classList.add("hidden");
+      mobileMenuIcon?.classList.remove("hidden");
+      mobileCloseIcon?.classList.add("hidden");
+      mobileMenuButton?.setAttribute("aria-expanded", "false");
+    });
   });
 </script>

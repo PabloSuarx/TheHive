@@ -1,0 +1,42 @@
+---
+import { marked } from "marked";
+
+interface Props {
+  content: string;
+  className?: string;
+}
+
+const { content, className = "" } = Astro.props;
+
+const STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL;
+
+// Function to replace relative Strapi image paths with absolute URLs
+// Matches ![](/uploads/...) and []( /uploads/...)
+const processContent = (markdown: string) => {
+  if (!markdown) return "";
+  
+  // Replace /uploads/ with full URL
+  // We use a regex to find /uploads/ that might be in image sources
+  const processed = markdown.replace(/\/uploads\//g, `${STRAPI_URL}/uploads/`);
+
+  return marked.parse(processed);
+};
+
+const htmlContent = processContent(content);
+---
+
+<article
+  class:list={[
+    "prose prose-lg max-w-none",
+    "prose-headings:text-[var(--primary)]",
+    "prose-a:text-[var(--accent)] hover:prose-a:text-[var(--primary)]",
+    "prose-p:text-[var(--text-primary)]",
+    "prose-strong:text-[var(--text-primary)]",
+    "prose-ul:text-[var(--text-primary)]",
+    "prose-ol:text-[var(--text-primary)]",
+    "prose-img:rounded-xl prose-img:shadow-md",
+    "prose-blockquote:border-l-[var(--primary)] prose-blockquote:text-[var(--text-secondary)]",
+    className,
+  ]}
+  set:html={htmlContent}
+/>

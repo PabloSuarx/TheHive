@@ -3,10 +3,13 @@ import Layout from "../../layouts/Layout.astro";
 import BlogCard from "../../components/features/blog/BlogCard.astro"
 import BlogHero from "../../components/features/blog/BlogHero.astro"
 import RelatedBlogs from "../../components/features/blog/RelatedBlogs.astro"
+import MarkdownRenderer from "../../components/ui/MarkdownRenderer.astro"
 import { get } from "../../lib/strapi";
+import { calculateReadingTime } from "../../utils/readingTime";
 import type { Blog } from "../../types/blog";
 
 const PUBLIC_STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL;
+const STRAPI_TOKEN = import.meta.env.STRAPI_TOKEN;
 const { slug } = Astro.params;
 
 const [blog, allBlogs] = (await Promise.all([
@@ -29,6 +32,26 @@ const [blog, allBlogs] = (await Promise.all([
 ])) as [Blog, Blog[]];
 
 if (!blog) return Astro.redirect("/404");
+
+
+const calculatedReadingTime = calculateReadingTime(blog.content);
+
+if (blog.content && (blog.readingTime !== calculatedReadingTime) && STRAPI_TOKEN) {
+    blog.readingTime = calculatedReadingTime;
+    
+    fetch(`${PUBLIC_STRAPI_URL}/api/blogs/${blog.documentId}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${STRAPI_TOKEN}`,
+        },
+        body: JSON.stringify({
+            data: {
+                readingTime: calculatedReadingTime
+            }
+        })
+    }).catch(err => console.error("Error updating reading time:", err));
+}
 
 const imgUrl = blog.featuredImage?.url
   ? `${PUBLIC_STRAPI_URL}${blog.featuredImage.url}`
@@ -74,18 +97,7 @@ export async function getStaticPaths() {
 
         {
           blog.content && (
-            <div
-              class="prose prose-lg prose-gray max-w-none
-          prose-headings:text-gray-900 prose-headings:font-bold
-          prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4
-          prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3
-          prose-p:text-gray-700 prose-p:leading-relaxed prose-p:mb-6
-          prose-a:text-warning prose-a:font-semibold hover:prose-a:text-warning
-          prose-img:rounded-xl prose-img:shadow-lg
-          prose-blockquote:border-l-warning prose-blockquote:italic prose-blockquote:text-gray-600
-          prose-strong:text-gray-900"
-              set:html={blog.content}
-            />
+            <MarkdownRenderer content={blog.content} />
           )
         }
 

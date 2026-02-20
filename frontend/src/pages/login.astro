@@ -1,0 +1,194 @@
+---
+import Layout from "../layouts/Layout.astro";
+import CustomLoader from "../components/ui/CustomLoader.astro";
+import { $user } from "../stores/appStore";
+
+const siteConfig = {
+  siteName: "The Hive"
+};
+---
+
+<Layout
+  titulo="Iniciar Sesión"
+  descripcion="Accede a tu cuenta en The Hive"
+  siteConfig={siteConfig}
+>
+  <div class="flex items-center justify-center min-h-[60vh] px-4 py-12">
+    <div
+      class="w-full max-w-md bg-white p-8 rounded-2xl shadow-lg border border-[var(--border-color)]"
+    >
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-[var(--primary)] mb-2">Bienvenido</h1>
+        <p class="text-[var(--text-secondary)]">Inicia sesión en tu cuenta</p>
+      </div>
+
+      <div
+        id="error-container"
+        class="hidden mb-6 p-4 rounded-lg bg-red-50 border border-[var(--color-error)] text-[var(--color-error)] text-sm"
+      >
+      </div>
+
+      <form id="login-form" class="space-y-6">
+        <div>
+          <label
+            for="email"
+            class="block text-sm font-medium text-[var(--text-primary)] mb-1"
+            >Correo electrónico</label
+          >
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            class="w-full px-4 py-3 rounded-lg border border-[var(--border-color)] focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent outline-none transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
+            placeholder="tu@email.com"
+          />
+        </div>
+
+        <div>
+          <label
+            for="password"
+            class="block text-sm font-medium text-[var(--text-primary)] mb-1"
+            >Contraseña</label
+          >
+          <input
+            type="password"
+            id="password"
+            name="password"
+            required
+            class="w-full px-4 py-3 rounded-lg border border-[var(--border-color)] focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent outline-none transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
+            placeholder="••••••••"
+          />
+        </div>
+
+        <button
+          type="submit"
+          id="submit-button"
+          class="w-full flex items-center justify-center py-3.5 px-4 rounded-lg bg-[var(--primary)] text-white font-semibold hover:bg-[var(--primary-dark)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
+        >
+          <span id="button-text">Iniciar Sesión</span>
+          <div id="button-loader" class="hidden ml-2">
+           <CustomLoader size={20} color="white" />
+          </div>
+        </button>
+      </form>
+
+      <div class="mt-6 text-center text-sm text-[var(--text-secondary)]">
+        ¿No tienes una cuenta? <a
+          href="/registro"
+          class="font-medium text-[var(--primary)] hover:text-[var(--primary-dark)]"
+          >Regístrate</a
+        >
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  import { $user } from "../stores/appStore";
+
+  // Configuration
+  const STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL;
+
+  // DOM Elements
+  const form = document.getElementById("login-form") as HTMLFormElement;
+  const emailInput = document.getElementById("email") as HTMLInputElement;
+  const passwordInput = document.getElementById("password") as HTMLInputElement;
+  const submitButton = document.getElementById("submit-button") as HTMLButtonElement;
+  const buttonText = document.getElementById("button-text");
+  const buttonLoader = document.getElementById("button-loader");
+  const errorContainer = document.getElementById("error-container");
+
+  // Auth Guard: Redirect if already logged in
+  if ($user.get()?.jwt) {
+    window.location.assign("/");
+  }
+
+  // Helper to show/hide errors
+  const showError = (message: string) => {
+    if (errorContainer) {
+      errorContainer.textContent = message;
+      errorContainer.classList.remove("hidden");
+    }
+  };
+
+  const hideError = () => {
+    if (errorContainer) {
+      errorContainer.classList.add("hidden");
+      errorContainer.textContent = "";
+    }
+  };
+
+  // Helper to toggle loading state
+  const setLoading = (isLoading: boolean) => {
+    if (isLoading) {
+      submitButton.disabled = true;
+      emailInput.disabled = true;
+      passwordInput.disabled = true;
+      buttonText?.classList.add("hidden");
+      buttonLoader?.classList.remove("hidden");
+    } else {
+      submitButton.disabled = false;
+      emailInput.disabled = false;
+      passwordInput.disabled = false;
+      buttonText?.classList.remove("hidden");
+      buttonLoader?.classList.add("hidden");
+    }
+  };
+
+  // Login handler
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    hideError();
+    setLoading(true);
+
+    const identifier = emailInput.value;
+    const password = passwordInput.value;
+
+    try {
+      const response = await fetch(`${STRAPI_URL}/api/auth/local`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          identifier,
+          password,
+        }),
+      });
+
+      const data = await response.json();
+
+      console.log("hola caracola");
+
+      if (!response.ok) {
+        // Handle specific Strapi errors
+        const errorMessage =
+          data?.error?.message || "Ha ocurrido un error al iniciar sesión.";
+        throw new Error(errorMessage);
+      }
+
+      // Success!
+      // Construct User object matching our interface
+      const user = {
+        ...data.user,
+        jwt: data.jwt,
+      };
+
+      // Save to store (persistent)
+      $user.set(user);
+
+      // Redirect
+      // Use replace to prevent back-button returning to login
+      window.location.replace("/");
+      
+    } catch (error: any) {
+      console.error("Login Error:", error);
+      showError(error.message || "Error de conexión. Inténtalo de nuevo.");
+      setLoading(false);
+      // Logic for failed login: focus password for easy retry
+      passwordInput.value = "";
+      passwordInput.focus();
+    }
+  });
+</script>

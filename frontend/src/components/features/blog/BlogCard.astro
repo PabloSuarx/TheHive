@@ -11,9 +11,10 @@ interface Props {
   categoryName?: string;
   categorySlug?: string;
   className?: string;
+  readingTime?: number;
 }
 
-const { title, slug, excerpt, imageUrl, author, blogPublishedAt, categoryName, className = '' } = Astro.props;
+const { title, slug, excerpt, imageUrl, author, blogPublishedAt, categoryName, readingTime, className = '' } = Astro.props;
 
 const placeholder = '/placeholder.svg';
 const imgSrc = imageUrl || placeholder;
@@ -24,7 +25,7 @@ const formatDate = (dateStr?: string) => {
 };
 
 const wordCount = excerpt ? excerpt.split(/\s+/).length : 0;
-const readTime = Math.max(3, Math.ceil(wordCount / 40));
+const readTime = readingTime || Math.max(1, Math.ceil(wordCount / 100));
 
 ---
 

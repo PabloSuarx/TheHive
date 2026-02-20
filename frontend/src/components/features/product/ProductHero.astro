@@ -172,7 +172,7 @@ const {
 </section>
 
 <script>
-    import { cartStore } from "../../../lib/cartStore"
+    import { addToCart } from "../../../stores/appStore"
     import type { Product } from "../../../types/product"
 
     const addToCartBtn = document.getElementById("hero-add-to-cart");
@@ -188,23 +188,26 @@ const {
 
                 if (productData) {
                     const product: Product = JSON.parse(productData);
-                    cartStore.add(product, quantity);
+                    addToCart(product, quantity);
 
                     // Feedback
                     const originalText = addToCartBtn.innerHTML;
+                    const originalClasses = addToCartBtn.className;
+
                     addToCartBtn.innerHTML = `
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                         </svg>
                         ¡Añadido!
                     `;
+                    
+                    // Toggle classes manually to avoid issues
                     addToCartBtn.classList.remove("bg-primary", "hover:bg-primary-dark");
-                    addToCartBtn.classList.add("bg-green-600", "hover:bg-green-700");
+                    addToCartBtn.classList.add("bg-green-600", "hover:bg-green-700", "text-white");
 
                     setTimeout(() => {
                         addToCartBtn.innerHTML = originalText;
-                        addToCartBtn.classList.add("bg-primary", "hover:bg-primary-dark");
-                        addToCartBtn.classList.remove("bg-green-600", "hover:bg-green-700");
+                        addToCartBtn.className = originalClasses;
                     }, 2000);
                 }
             } catch (error) {

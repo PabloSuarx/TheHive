@@ -25,10 +25,7 @@ const formatDate = (dateStr: string) => {
     });
 };
 
-const wordCount = blog.content
-    ? blog.content.replace(/<[^>]*>/g, "").split(/\s+/).length
-    : 0;
-const readTime = Math.max(3, Math.ceil(wordCount / 200));
+const readTime = blog.readingTime;
 ---
 
 <section class="relative h-[400px] lg:h-[500px] overflow-hidden">

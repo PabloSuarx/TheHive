@@ -55,6 +55,7 @@ const { latestBlogs, publicStrapiUrl } = Astro.props;
                 author={blog.author}
                 blogPublishedAt={blog.blogPublishedAt}
                 categoryName={blog.blog_category?.name}
+                readingTime={blog.readingTime}
               />
             );
           })}
