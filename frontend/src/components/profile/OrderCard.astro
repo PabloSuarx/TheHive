@@ -1,0 +1,107 @@
+---
+interface Props {
+  orderNumber: string;
+  date: string;
+  status: string;
+  total: number;
+  className?: string;
+}
+
+const { orderNumber, date, status, total, className = "" } = Astro.props;
+
+const statusConfig: Record<string, { label: string; colorVar: string }> = {
+  pending: { label: "Pendiente", colorVar: "var(--warning)" },
+  pendiente: { label: "Pendiente", colorVar: "var(--warning)" },
+  processing: { label: "En proceso", colorVar: "var(--warning)" },
+  en_proceso: { label: "En proceso", colorVar: "var(--warning)" },
+  shipped: { label: "Enviado", colorVar: "var(--info)" },
+  enviado: { label: "Enviado", colorVar: "var(--info)" },
+  delivered: { label: "Entregado", colorVar: "var(--success)" },
+  entregado: { label: "Entregado", colorVar: "var(--success)" },
+  cancelled: { label: "Cancelado", colorVar: "var(--error)" },
+  cancelado: { label: "Cancelado", colorVar: "var(--error)" },
+};
+
+const normalizedStatus = status?.toLowerCase().trim() || "pending";
+const config = statusConfig[normalizedStatus] || { label: status, colorVar: "var(--text-tertiary)" };
+
+const formattedDate = new Date(date).toLocaleDateString("es-ES", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
+
+const formattedTotal = total.toLocaleString("es-ES", {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
+---
+
+<article
+  class:list={["order-card", className]}
+  style={`--status-color: ${config.colorVar};`}
+>
+  <div class="order-card__header">
+    <span class="order-card__number">Pedido #{orderNumber}</span>
+    <span class="order-card__badge">{config.label}</span>
+  </div>
+  <div class="order-card__body">
+    <span class="order-card__date">{formattedDate}</span>
+    <span class="order-card__total">{formattedTotal}€</span>
+  </div>
+</article>
+
+<style>
+  .order-card {
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    background-color: var(--bg-primary);
+    transition: border-color var(--transition-fast);
+  }
+
+  .order-card:hover {
+    border-color: var(--primary);
+  }
+
+  .order-card__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
+
+  .order-card__number {
+    font-weight: 600;
+    font-size: 0.9375rem;
+    color: var(--text-primary);
+  }
+
+  .order-card__badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.1875rem 0.625rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 9999px;
+    color: var(--status-color);
+    background-color: color-mix(in srgb, var(--status-color) 12%, transparent);
+  }
+
+  .order-card__body {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .order-card__date {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+  }
+
+  .order-card__total {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--text-primary);
+  }
+</style>

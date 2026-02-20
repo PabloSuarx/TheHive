@@ -1,0 +1,114 @@
+---
+import CustomLoader from "../ui/CustomLoader.astro"
+
+interface Props {
+  className?: string;
+}
+
+const { className = "" } = Astro.props;
+---
+
+<section class:list={["orders-list", className]} id="pedidos">
+  <h2 class="orders-list__title">Mis Pedidos</h2>
+
+  <!-- Loading state -->
+  <div id="orders-loading" class="orders-list__state">
+    <CustomLoader size={40} />
+    <p class="orders-list__state-text">Cargando tus pedidos...</p>
+  </div>
+
+  <!-- Error state -->
+  <div id="orders-error" class="orders-list__state orders-list__state--error hidden">
+    <svg class="orders-list__state-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+    </svg>
+    <p id="orders-error-message" class="orders-list__state-text">Error al cargar los pedidos.</p>
+  </div>
+
+  <!-- Empty state -->
+  <div id="orders-empty" class="orders-list__state hidden">
+    <svg class="orders-list__state-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+    </svg>
+    <p class="orders-list__state-text">Aún no tienes pedidos</p>
+    <a href="/productos" class="orders-list__cta">Explorar productos</a>
+  </div>
+
+  <!-- Orders container -->
+  <div id="orders-container" class="orders-list__grid hidden">
+    <!-- OrderCards are injected here by JS -->
+  </div>
+</section>
+
+<style>
+  .orders-list {
+    padding: 2rem 1rem 3rem;
+  }
+
+  .orders-list__title {
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .orders-list__state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 3rem 1rem;
+    text-align: center;
+  }
+
+  .orders-list__state--error {
+    color: var(--error);
+  }
+
+  .orders-list__state-icon {
+    width: 3rem;
+    height: 3rem;
+    color: var(--text-tertiary);
+  }
+
+  .orders-list__state--error .orders-list__state-icon {
+    color: var(--error);
+  }
+
+  .orders-list__state-text {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    margin-bottom: 0;
+  }
+
+  .orders-list__state--error .orders-list__state-text {
+    color: var(--error);
+  }
+
+  .orders-list__cta {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--primary);
+    border: 1px solid var(--primary);
+    border-radius: 0.5rem;
+    transition: background-color var(--transition-fast), color var(--transition-fast);
+    margin-top: 0.5rem;
+  }
+
+  .orders-list__cta:hover {
+    background-color: var(--primary);
+    color: var(--text-inverse);
+  }
+
+  .orders-list__grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-width: 40rem;
+    margin: 0 auto;
+  }
+</style>

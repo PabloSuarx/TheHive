@@ -1,0 +1,134 @@
+---
+import Avatar from "../ui/Avatar.astro"
+
+interface Props {
+  className?: string;
+}
+
+const { className = "" } = Astro.props;
+const PUBLIC_STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL;
+---
+
+<section class:list={["profile-hero", className]} id="profile-hero">
+  <div class="profile-hero__container">
+    <!-- Avatar con input oculto para cambiar foto -->
+    <div class="profile-hero__avatar-wrapper">
+      <button
+        type="button"
+        id="avatar-upload-trigger"
+        class="profile-hero__avatar-btn"
+        aria-label="Cambiar foto de perfil"
+      >
+        <div id="avatar-display" class="profile-hero__avatar">
+          <Avatar size="lg" className="w-full! h-full!" />
+        </div>
+        <div class="profile-hero__avatar-overlay">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+        </div>
+      </button>
+      <input
+        type="file"
+        id="avatar-file-input"
+        accept="image/*"
+        class="hidden"
+        aria-hidden="true"
+      />
+    </div>
+
+    <!-- Info del usuario -->
+    <div class="profile-hero__info">
+      <h1 id="profile-username" class="profile-hero__username">Cargando...</h1>
+      <p id="profile-email" class="profile-hero__email"></p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .profile-hero {
+    padding: 3rem 1rem;
+    background: linear-gradient(to bottom, var(--bg-primary), var(--bg-secondary));
+  }
+
+  .profile-hero__container {
+    max-width: 48rem;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    text-align: center;
+  }
+
+  .profile-hero__avatar-wrapper {
+    position: relative;
+  }
+
+  .profile-hero__avatar-btn {
+    position: relative;
+    width: 6rem;
+    height: 6rem;
+    border-radius: 9999px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 3px solid var(--primary);
+    background: var(--bg-secondary);
+    padding: 0;
+    transition: border-color var(--transition-base);
+  }
+
+  .profile-hero__avatar-btn:hover {
+    border-color: var(--primary-dark);
+  }
+
+  .profile-hero__avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 9999px;
+    overflow: hidden;
+  }
+
+  .profile-hero__avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .profile-hero__avatar-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.4);
+    color: var(--text-inverse);
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+    border-radius: 9999px;
+  }
+
+  .profile-hero__avatar-btn:hover .profile-hero__avatar-overlay {
+    opacity: 1;
+  }
+
+  .profile-hero__info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .profile-hero__username {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0;
+  }
+
+  .profile-hero__email {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-bottom: 0;
+  }
+</style>

@@ -1,0 +1,219 @@
+---
+import Avatar from "./Avatar.astro"
+
+interface Props {
+  avatarSrc?: string;
+  username?: string;
+}
+
+const { avatarSrc, username = "Usuario" } = Astro.props;
+const PUBLIC_STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL;
+
+const resolvedSrc = avatarSrc
+  ? (avatarSrc.startsWith("http") ? avatarSrc : `${PUBLIC_STRAPI_URL}${avatarSrc}`)
+  : undefined;
+---
+
+<div id="avatar-menu-wrapper" class="relative">
+  <!-- Avatar trigger -->
+  <button
+    id="avatar-trigger"
+    type="button"
+    class="relative p-1 rounded-full cursor-pointer transition-colors hover:bg-bg-secondary focus:outline-none focus:ring-2 focus:ring-primary/40"
+    aria-label="Menú de usuario"
+    aria-expanded="false"
+    aria-haspopup="true"
+  >
+    <Avatar src={resolvedSrc} size="sm" />
+  </button>
+
+  <!-- Dropdown -->
+  <div
+    id="avatar-dropdown"
+    class="avatar-dropdown"
+    role="menu"
+    aria-label="Opciones de usuario"
+  >
+    <!-- User info header -->
+    <div class="avatar-dropdown__header">
+      <span class="avatar-dropdown__username" id="avatar-dropdown-username">{username}</span>
+    </div>
+
+    <div class="avatar-dropdown__divider"></div>
+
+    <!-- Menu items -->
+    <a href="/perfil#pedidos" class="avatar-dropdown__item" role="menuitem">
+      <!-- <span class="avatar-dropdown__icon">📦</span> -->
+      <span>Pedidos</span>
+    </a>
+
+    <a href="/perfil" class="avatar-dropdown__item" role="menuitem">
+      <!-- <span class="avatar-dropdown__icon">👤</span> -->
+      <span>Mi cuenta</span>
+    </a>
+
+    <div class="avatar-dropdown__divider"></div>
+
+    <button
+      id="logout-btn"
+      type="button"
+      class="avatar-dropdown__item avatar-dropdown__item--danger"
+      role="menuitem"
+    >
+      <!-- <span class="avatar-dropdown__icon">🚪</span> -->
+      <span>Cerrar sesión</span>
+    </button>
+  </div>
+</div>
+
+<style>
+  .avatar-dropdown {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    right: 0;
+    min-width: 14rem;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    overflow: hidden;
+    z-index: 100;
+
+    /* Hidden by default */
+    opacity: 0;
+    transform: translateY(-0.5rem) scale(0.95);
+    pointer-events: none;
+    transition:
+      opacity var(--transition-fast),
+      transform var(--transition-fast);
+  }
+
+  .avatar-dropdown.is-open {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+
+  .avatar-dropdown__header {
+    padding: 0.75rem 1rem;
+  }
+
+  .avatar-dropdown__username {
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--text-primary);
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .avatar-dropdown__divider {
+    height: 1px;
+    background-color: var(--border-color);
+  }
+
+  .avatar-dropdown__item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem;
+    color: var(--text-primary);
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color var(--transition-fast);
+  }
+
+  .avatar-dropdown__item:hover {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+  }
+
+  .avatar-dropdown__item--danger {
+    color: var(--error);
+  }
+
+  .avatar-dropdown__item--danger:hover {
+    background-color: color-mix(in srgb, var(--error) 8%, transparent);
+    color: var(--error);
+  }
+
+  .avatar-dropdown__icon {
+    font-size: 1rem;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+</style>
+
+<script>
+  import { $user } from "../../stores/appStore";
+
+  const wrapper = document.getElementById("avatar-menu-wrapper");
+  const trigger = document.getElementById("avatar-trigger");
+  const dropdown = document.getElementById("avatar-dropdown");
+  const logoutBtn = document.getElementById("logout-btn");
+  const usernameEl = document.getElementById("avatar-dropdown-username");
+
+  // Keep username in sync with store
+  $user.subscribe((user) => {
+    if (usernameEl && user?.username) {
+      usernameEl.textContent = user.username;
+    }
+  });
+
+  function openDropdown() {
+    dropdown?.classList.add("is-open");
+    trigger?.setAttribute("aria-expanded", "true");
+  }
+
+  function closeDropdown() {
+    dropdown?.classList.remove("is-open");
+    trigger?.setAttribute("aria-expanded", "false");
+  }
+
+  function toggleDropdown() {
+    const isOpen = dropdown?.classList.contains("is-open");
+    if (isOpen) {
+      closeDropdown();
+    } else {
+      openDropdown();
+    }
+  }
+
+  // Toggle on avatar click
+  trigger?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    toggleDropdown();
+  });
+
+  // Close on click outside
+  document.addEventListener("click", (e) => {
+    if (wrapper && !wrapper.contains(e.target as Node)) {
+      closeDropdown();
+    }
+  });
+
+  // Close on Escape key
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      closeDropdown();
+    }
+  });
+
+  // Close on menu item click (links)
+  dropdown?.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => {
+      closeDropdown();
+    });
+  });
+
+  // Logout
+  logoutBtn?.addEventListener("click", () => {
+    closeDropdown();
+    $user.set(null);
+    window.location.href = "/login";
+  });
+</script>

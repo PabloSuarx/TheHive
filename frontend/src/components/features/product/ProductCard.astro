@@ -1,7 +1,6 @@
 ---
 import type { Product } from "../../../types/product"
 import { Image } from "astro:assets";
-import Button from "../../ui/Button.astro"
 import { get } from "../../../lib/strapi"
 import StarRating from "../../ui/StarRating.astro"
 
@@ -29,7 +28,7 @@ averageRating = Math.round(averageRating * 2) / 2;
 ---
 
 <div
-  class={`product-card group bg-bg-primary rounded-xl overflow-hidden border border-border-default hover:border-primary hover:shadow-lg transition-all duration-300 h-full flex flex-col ${className}`}
+  class={`product-card relative group bg-bg-primary rounded-xl overflow-hidden border border-border-default hover:border-primary hover:shadow-lg transition-all duration-300 h-full flex flex-col ${className}`}
   data-price={product.price}
   data-origin={product.origin}
 >
@@ -63,15 +62,15 @@ averageRating = Math.round(averageRating * 2) / 2;
       <span class="text-xl font-bold text-text-primary">
         {formatPrice(product.price)}€
       </span>
-      <Button
+      <button
         type="button"
-        className="size-10 p-0! add-to-cart-btn flex items-center justify-center bg-primary text-white hover:bg-primary-dark transition-colors rounded-full shadow-md"
+        class="add-to-cart-btn size-10 flex items-center justify-center bg-primary text-white hover:bg-primary-dark transition-colors rounded-full shadow-md cursor-pointer"
         data-product={JSON.stringify(product)}
         aria-label={`Añadir ${product.name} al carrito`}
       >
         <span set:html={cartIconHtml} class="pointer-events-none w-5 h-5 flex items-center justify-center"
         ></span>
-      </Button>
+      </button>
     </div>
   </div>
 </div>

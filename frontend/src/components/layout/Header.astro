@@ -1,6 +1,6 @@
 ---
 import Logo from "../ui/Logo.astro"
-import Avatar from "../ui/Avatar.astro"
+import AvatarMenu from "../ui/AvatarMenu.astro"
 import { get } from "../../lib/strapi"
 import type { NavLink } from "../../types/header"
 
@@ -50,15 +50,10 @@ const sortedLinks = navLinks.sort((a, b) => a.order - b.order);
       </ul>
 
       <div class="flex items-center gap-4">
-        <!-- User Menu (Hidden by default, toggled by JS) -->
-        <a
-          id="user-menu"
-          href="/perfil"
-          class="relative p-1 text-primary hover:text-primary transition-colors rounded-full hover:bg-bg-primary-pale hidden"
-          aria-label="Perfil de usuario"
-        >
-          <Avatar size="sm" />
-        </a>
+        <!-- User Avatar Menu (Hidden by default, toggled by JS) -->
+        <div id="user-menu" class="hidden">
+          <AvatarMenu />
+        </div>
 
         <!-- Login Button (Visible by default, toggled by JS) -->
         <a
