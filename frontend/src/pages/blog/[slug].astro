@@ -84,12 +84,12 @@ export async function getStaticPaths() {
   <BlogHero blog={blog} imageUrl={imgUrl} />
 
   <!-- Contenido -->
-  <section class="py-12 bg-white">
+  <section class="py-12 bg-bg-primary">
     <div class="container mx-auto px-4 lg:px-8">
       <div class="max-w-3xl mx-auto">
         {
           blog.excerpt && (
-            <p class="text-xl text-gray-600 leading-relaxed mb-10 border-l-4 border-[#F59E0B] pl-6 italic">
+            <p class="text-xl text-text-secondary leading-relaxed mb-10 border-l-4 border-primary pl-6 italic">
               {blog.excerpt}
             </p>
           )
@@ -103,13 +103,19 @@ export async function getStaticPaths() {
 
         {
           blog.tags && blog.tags.length > 0 && (
-            <div class="mt-12 pt-8 border-t border-gray-200">
-              <h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
-                Etiquetas
-              </h4>
+            <div class="mt-12 pt-8 border-t border-divider">
+              <div class="flex items-center gap-2 mb-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-tags text-text-tertiary" viewBox="0 0 16 16">
+                  <path d="M3 2v4.586l7 7L14.586 9l-7-7zM2 2a1 1 0 0 1 1-1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 2 6.586z"/>
+                  <path d="M5.5 5a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1m0 1a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3M1 7.086a1 1 0 0 0 .293.707L8.75 15.25l-.043.043a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 0 7.586V3a1 1 0 0 1 1-1z"/>
+                </svg>
+                <h4 class="text-sm font-semibold text-text-tertiary uppercase tracking-wide">
+                  Etiquetas
+                </h4>
+              </div>
               <div class="flex flex-wrap gap-2">
                 {blog.tags.map((tag) => (
-                  <span class="px-4 py-2 bg-warning text-warning text-sm font-medium rounded-full">
+                  <span class="px-4 py-2 bg-primary-pale text-primary-dark text-sm font-medium rounded-full">
                     {tag.name}
                   </span>
                 ))}
@@ -120,14 +126,14 @@ export async function getStaticPaths() {
 
         {
           blog.author && (
-            <div class="mt-10 p-6 bg-gray-50 rounded-2xl flex items-center gap-4">
-              <div class="w-16 h-16 bg-linear-to-br from-warning to-warning rounded-full flex items-center justify-center text-white font-bold text-xl shrink-0">
+            <div class="mt-10 p-6 bg-bg-secondary rounded-2xl flex items-center gap-4">
+              <div class="w-16 h-16 bg-linear-to-br from-primary to-primary-dark rounded-full flex items-center justify-center text-text-inverse font-bold text-xl shrink-0">
                 {blog.author.charAt(0).toUpperCase()}
               </div>
               <div>
-                <p class="text-sm text-gray-500">Escrito por</p>
-                <p class="font-bold text-gray-900 text-lg">{blog.author}</p>
-                <p class="text-sm text-gray-600">Equipo The Hive</p>
+                <p class="text-sm text-text-tertiary">Escrito por</p>
+                <p class="font-bold text-text-primary text-lg">{blog.author}</p>
+                <p class="text-sm text-text-secondary">Equipo The Hive</p>
               </div>
             </div>
           )
@@ -139,22 +145,14 @@ export async function getStaticPaths() {
   <RelatedBlogs relatedBlogs={relatedBlogs} strapiUrl={PUBLIC_STRAPI_URL} />
 
   <!-- Volver -->
-  <section class="py-8 bg-gray-50">
+  <section class="py-8 bg-bg-secondary">
     <div class="container mx-auto px-4 lg:px-8 text-center">
       <a
         href="/blog"
-        class="inline-flex items-center gap-2 text-warning font-semibold hover:underline"
+        class="inline-flex items-center gap-2 text-primary font-semibold hover:text-primary-dark transition-colors"
       >
-        <svg
-          class="w-5 h-5"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          ><path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M15 19l-7-7 7-7"></path>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left w-5 h-5" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
         </svg>
         Volver al blog
       </a>

@@ -1,77 +1,56 @@
 ---
+import FilterTabs from "../../ui/FilterTabs.astro";
+
 const { categories } = Astro.props;
+
+const filters = categories.map((cat: any) => ({
+  label: cat.name,
+  value: cat.slug,
+}));
 ---
     <div class="container mx-auto px-4 lg:px-8">
       <!-- Buscador -->
       <div class="max-w-xl mx-auto mb-5 relative">
-        <svg
-          class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+          class="bi bi-search absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-tertiary"
+          viewBox="0 0 16 16">
+          <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
         </svg>
         <input
           type="text"
           id="product-search"
           placeholder="Buscar productos... (ej: azahar, romero, ecológico)"
-          class="w-full pl-12 pr-10 py-3 bg-white border-2 border-gray-200 rounded-xl focus:border-[#F59E0B] focus:outline-none focus:ring-2 focus:ring-[#F59E0B]/20 transition-colors"
+          class="w-full pl-12 pr-10 py-3 bg-bg-primary border-2 border-divider rounded-xl focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors text-text-primary placeholder:text-text-tertiary"
           autocomplete="off"
         />
         <button
           id="clear-search"
-          class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 hidden"
+          class="absolute right-4 top-1/2 -translate-y-1/2 text-text-tertiary hover:text-text-secondary transition-colors hidden"
           aria-label="Limpiar búsqueda"
         >
-          <svg
-            class="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M6 18L18 6M6 6l12 12"></path>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            class="bi bi-x-lg w-4 h-4"
+            viewBox="0 0 16 16">
+            <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
           </svg>
         </button>
       </div>
 
-      <div class="flex flex-wrap justify-between items-center gap-4 ">
+      <div class="flex flex-wrap justify-between items-center gap-4">
         <!-- Filtros categoría -->
-        <div class="flex flex-wrap gap-2" id="category-filters">
-          <button
-            class="filter-btn active px-4 py-2 rounded-full text-sm font-medium transition-all bg-warning text-white shadow-md"
-            data-category="all">Todas</button
-          >
-          {
-            categories.map((cat: any) => (
-              <button
-                class="filter-btn px-4 py-2 rounded-full text-sm font-medium transition-all bg-white text-gray-700 hover:bg-warning hover:text-warning border border-gray-200"
-                data-category={cat.slug}
-              >
-                {cat.icon && <span class="mr-1">{cat.icon}</span>}
-                {cat.name}
-              </button>
-            ))
-          }
+        <div id="category-filters">
+          <FilterTabs filters={filters} defaultActive="all" allLabel="Todas" />
         </div>
 
         <!-- Ordenación -->
         <div class="flex items-center gap-2">
           <label
             for="sort-select"
-            class="text-sm text-gray-500 whitespace-nowrap">Ordenar:</label
+            class="text-sm text-text-tertiary whitespace-nowrap">Ordenar:</label
           >
           <select
             id="sort-select"
-            class="px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:border-warning focus:outline-none"
+            class="px-3 py-2 bg-bg-primary border border-divider rounded-lg text-sm text-text-primary focus:border-primary focus:outline-none transition-colors"
           >
             <option value="featured">Destacados</option>
             <option value="name-asc">Nombre A-Z</option>
@@ -82,5 +61,16 @@ const { categories } = Astro.props;
         </div>
       </div>
 
-      <p class="text-sm text-gray-500 mt-4" id="results-count"></p>
+      <p class="text-sm text-text-tertiary mt-4" id="results-count"></p>
     </div>
+
+<script>
+  // Añadir clase y atributo para compatibilidad con productos.astro
+  document.querySelectorAll('.filter-tab').forEach(tab => {
+    tab.classList.add('filter-btn');
+    const value = tab.getAttribute('data-value');
+    if (value) {
+      tab.setAttribute('data-category', value);
+    }
+  });
+</script>

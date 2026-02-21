@@ -20,7 +20,7 @@ const {
 <!-- Breadcrumb -->
 <nav class="bg-bg-secondary py-3">
     <div class="container mx-auto px-4 lg:px-8">
-        <ol class="flex items-center gap-2 text-sm text-gray-500">
+        <ol class="flex items-center gap-2 text-sm text-text-secondary">
             <li>
                 <a href="/" class="hover:text-warning transition-colors">
                     {breadcrumName}
@@ -50,7 +50,7 @@ const {
                 )
             }
             <li><span class="mx-1">/</span></li>
-            <li class="text-gray-900 font-medium">{product.name}</li>
+            <li class="text-text-primary font-medium">{product.name}</li>
         </ol>
     </div>
 </nav>
@@ -76,14 +76,14 @@ const {
                     }
                     {
                         product.organic && (
-                            <span class="absolute top-4 left-4 px-4 py-2 bg-success text-white text-sm font-bold rounded-full">
+                            <span class="absolute top-4 left-4 px-4 py-2 bg-success text-text-inverse text-sm font-bold rounded-full">
                                 Ecológico
                             </span>
                         )
                     }
                     {
                         product.featured && (
-                            <span class="absolute top-4 right-4 px-4 py-2 bg-warning text-white text-sm font-bold rounded-full">
+                            <span class="absolute top-4 right-4 px-4 py-2 bg-warning text-text-inverse text-sm font-bold rounded-full">
                                 Destacado
                             </span>
                         )
@@ -104,26 +104,35 @@ const {
                     )
                 }
 
-                <h1 class="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
+                <h1 class="text-4xl lg:text-5xl font-bold text-text-primary leading-tight">
                     {product.name}
                 </h1>
 
                 {
                     product.shortDescription && (
-                        <p class="text-lg text-gray-600 leading-relaxed">
+                        <p class="text-lg text-text-secondary leading-relaxed">
                             {product.shortDescription}
                         </p>
                     )
                 }
 
-                <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-100">
-                    <div class="flex items-center border border-gray-200 rounded-xl bg-gray-50 max-w-min">
+                <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-divider">
+                    <div class="flex items-center border border-divider rounded-xl bg-bg-secondary max-w-min">
                         <button
-                            class="px-4 py-3 text-gray-500 hover:text-primary transition-colors focus:outline-none"
+                            class="px-4 py-3 text-text-tertiary hover:text-primary transition-colors focus:outline-none"
                             onclick="this.nextElementSibling.stepDown()"
                             aria-label="Disminuir cantidad"
                         >
-                            -
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="20"
+                                height="20"
+                                fill="currentColor"
+                                class="bi bi-dash"
+                                viewBox="0 0 16 16"
+                            >
+                                <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8" />
+                            </svg>
                         </button>
                         <input
                             type="number"
@@ -131,35 +140,42 @@ const {
                             value="1"
                             min="1"
                             max="99"
-                            class="w-12 text-center bg-transparent border-none focus:ring-0 font-medium text-gray-900"
+                            class="w-12 text-center bg-transparent border-none focus:ring-0 font-medium text-text-primary"
                             readonly
                         />
                         <button
-                            class="px-4 py-3 text-gray-500 hover:text-primary transition-colors focus:outline-none"
+                            class="px-4 py-3 text-text-tertiary hover:text-primary transition-colors focus:outline-none"
                             onclick="this.previousElementSibling.stepUp()"
                             aria-label="Aumentar cantidad"
                         >
-                            +
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="20"
+                                height="20"
+                                fill="currentColor"
+                                class="bi bi-plus"
+                                viewBox="0 0 16 16"
+                            >
+                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
+                            </svg>
                         </button>
                     </div>
 
                     <button
                         id="hero-add-to-cart"
-                        class="flex-1 bg-primary hover:bg-primary-dark text-gray-900 font-bold py-3 px-8 rounded-xl transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
+                        class="flex-1 bg-primary hover:bg-primary-dark text-text-primary font-bold py-3 px-8 rounded-xl transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
                         data-product={JSON.stringify(product)}
                     >
                         <svg
-                            class="w-5 h-5"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="20"
+                            fill="currentColor"
+                            class="bi bi-cart-plus"
+                            viewBox="0 0 16 16"
                         >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                            ></path>
+                            <path d="M9 5.5a.5.5 0 0 0-1 0V7H6.5a.5.5 0 0 0 0 1H8v1.5a.5.5 0 0 0 1 0V8h1.5a.5.5 0 0 0 0-1H9z" />
+                            <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zm3.915 10L3.102 4h10.796l-1.313 7zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
                         </svg>
                         Añadir al Carrito
                     </button>
@@ -202,15 +218,15 @@ const {
                     const originalClasses = addToCartBtn.className;
 
                     addToCartBtn.innerHTML = `
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
                         </svg>
                         ¡Añadido!
                     `;
-                    
+
                     // Toggle classes manually to avoid issues
                     addToCartBtn.classList.remove("bg-primary", "hover:bg-primary-dark");
-                    addToCartBtn.classList.add("bg-green-600", "hover:bg-green-700", "text-white");
+                    addToCartBtn.classList.add("bg-success", "text-text-inverse");
 
                     setTimeout(() => {
                         addToCartBtn.innerHTML = originalText;

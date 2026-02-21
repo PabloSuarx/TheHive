@@ -28,14 +28,14 @@ const htmlContent = processContent(content);
 <article
   class:list={[
     "prose prose-lg max-w-none",
-    "prose-headings:text-[var(--primary)]",
-    "prose-a:text-[var(--accent)] hover:prose-a:text-[var(--primary)]",
-    "prose-p:text-[var(--text-primary)]",
-    "prose-strong:text-[var(--text-primary)]",
-    "prose-ul:text-[var(--text-primary)]",
-    "prose-ol:text-[var(--text-primary)]",
-    "prose-img:rounded-xl prose-img:shadow-md",
-    "prose-blockquote:border-l-[var(--primary)] prose-blockquote:text-[var(--text-secondary)]",
+    "prose-headings:text-primary",
+    "prose-a:text-accent hover:prose-a:text-primary",
+    "prose-p:text-text-primary",
+    "prose-strong:text-text-primary",
+    "prose-ul:text-text-primary",
+    "prose-ol:text-text-primary",
+    "prose-img:rounded-xl",
+    "prose-blockquote:border-l-primary prose-blockquote:text-text-secondary",
     className,
   ]}
   set:html={htmlContent}

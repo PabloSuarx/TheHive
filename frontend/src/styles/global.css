@@ -30,6 +30,8 @@
   --color-error: #DC2626;
   --color-warning: #D97706;
   --color-info: #2563EB;
+
+  --color-overlay-dark: rgba(0, 0, 0, 0.4);
 }
 
 :root {
@@ -60,6 +62,8 @@
   --error: var(--color-error);
   --warning: var(--color-warning);
   --info: var(--color-info);
+
+  --overlay-dark: var(--color-overlay-dark);
 
   --transition-fast: 150ms ease-in-out;
   --transition-base: 250ms ease-in-out;

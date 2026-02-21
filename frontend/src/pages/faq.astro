@@ -20,20 +20,20 @@ const data = faqs.length > 0 ? faqs : [
   descripcion="Resuelve tus dudas sobre nuestros productos, envíos y devoluciones en nuestra sección de Preguntas Frecuentes."
   keywords="faq miel, preguntas frecuentes, dudas compra miel, origen miel"
 >
-  <section class="py-12 bg-white border-b border-gray-100">
+  <section class="py-12 bg-bg-primary border-b border-divider">
     <div class="container mx-auto px-4 lg:px-8">
       <Breadcrumbs separator="/" homeLabel="Inicio" />
-      <h1 class="text-4xl font-bold text-gray-900 mb-2">Preguntas Frecuentes</h1>
-      <p class="text-lg text-gray-600 max-w-2xl">
+      <h1 class="text-4xl font-bold text-text-primary mb-2">Preguntas Frecuentes</h1>
+      <p class="text-lg text-text-secondary max-w-2xl">
         Aquí encontrarás respuestas a las dudas más comunes sobre nuestros productos y servicios.
       </p>
     </div>
   </section>
 
-  <section class="py-16 bg-gray-50/50">
+  <section class="py-16 bg-bg-secondary">
     <div class="container mx-auto px-4 lg:px-8">
       <div class="max-w-3xl mx-auto space-y-4">
-        
+
         {data.map((faq: any) => (
             <FaqItem question={faq.question} answer={faq.answer} />
         ))}
@@ -41,8 +41,8 @@ const data = faqs.length > 0 ? faqs : [
       </div>
 
       <div class="text-center mt-12">
-          <p class="text-gray-600 mb-4">¿No encuentras lo que buscas?</p>
-          <Button link="/contacto" variant="primary" className="shadow-sm hover:shadow-lg">
+          <p class="text-text-secondary mb-4">¿No encuentras lo que buscas?</p>
+          <Button link="/contacto" variant="primary">
               Contáctanos
           </Button>
       </div>

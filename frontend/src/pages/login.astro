@@ -15,32 +15,41 @@ const siteConfig = {
 >
   <div class="flex items-center justify-center min-h-[60vh] px-4 py-12">
     <div
-      class="w-full max-w-md bg-white p-8 rounded-2xl border border-[var(--border-color)]"
+      class="w-full max-w-md bg-bg-primary p-8 rounded-2xl border border-border-color"
     >
       <div class="text-center mb-8">
-        <h1 class="text-3xl font-bold text-[var(--primary)] mb-2">Bienvenido</h1>
-        <p class="text-[var(--text-secondary)]">Inicia sesión en tu cuenta</p>
+        <h1 class="text-3xl font-bold text-primary mb-2">Bienvenido</h1>
+        <p class="text-text-secondary">Inicia sesión en tu cuenta</p>
       </div>
 
       <div
         id="error-container"
-        class="hidden mb-6 p-4 rounded-lg bg-red-50 border border-[var(--color-error)] text-[var(--color-error)] text-sm"
+        class="hidden mb-6 p-4 rounded-lg bg-bg-tertiary border border-error text-error text-sm flex items-center gap-3"
       >
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-exclamation-circle flex-shrink-0" viewBox="0 0 16 16">
+          <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+          <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0M7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0z"/>
+        </svg>
+        <span id="error-message"></span>
       </div>
 
       <form id="login-form" class="space-y-6">
         <div>
           <label
             for="email"
-            class="block text-sm font-medium text-[var(--text-primary)] mb-1"
-            >Correo electrónico</label
+            class="flex items-center gap-2 text-sm font-medium text-text-primary mb-1"
           >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope" viewBox="0 0 16 16">
+              <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z"/>
+            </svg>
+            Correo electrónico
+          </label>
           <input
             type="email"
             id="email"
             name="email"
             required
-            class="w-full px-4 py-3 rounded-lg border border-[var(--border-color)] focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent outline-none transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
+            class="w-full px-4 py-3 rounded-lg border border-border-color bg-bg-primary text-text-primary focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all disabled:bg-bg-tertiary disabled:cursor-not-allowed"
             placeholder="tu@email.com"
           />
         </div>
@@ -48,15 +57,19 @@ const siteConfig = {
         <div>
           <label
             for="password"
-            class="block text-sm font-medium text-[var(--text-primary)] mb-1"
-            >Contraseña</label
+            class="flex items-center gap-2 text-sm font-medium text-text-primary mb-1"
           >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lock" viewBox="0 0 16 16">
+              <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2m3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2M5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1"/>
+            </svg>
+            Contraseña
+          </label>
           <input
             type="password"
             id="password"
             name="password"
             required
-            class="w-full px-4 py-3 rounded-lg border border-[var(--border-color)] focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent outline-none transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
+            class="w-full px-4 py-3 rounded-lg border border-border-color bg-bg-primary text-text-primary focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all disabled:bg-bg-tertiary disabled:cursor-not-allowed"
             placeholder="••••••••"
           />
         </div>
@@ -64,7 +77,7 @@ const siteConfig = {
         <button
           type="submit"
           id="submit-button"
-          class="w-full flex items-center justify-center py-3.5 px-4 rounded-lg bg-[var(--primary)] text-white font-semibold hover:bg-[var(--primary-dark)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
+          class="w-full flex items-center justify-center py-3.5 px-4 rounded-lg bg-primary text-text-inverse font-semibold hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
         >
           <span id="button-text">Iniciar Sesión</span>
           <div id="button-loader" class="hidden ml-2">
@@ -73,10 +86,10 @@ const siteConfig = {
         </button>
       </form>
 
-      <div class="mt-6 text-center text-sm text-[var(--text-secondary)]">
+      <div class="mt-6 text-center text-sm text-text-secondary">
         ¿No tienes una cuenta? <a
           href="/registro"
-          class="font-medium text-[var(--primary)] hover:text-[var(--primary-dark)]"
+          class="font-medium text-primary hover:text-primary-dark transition-colors"
           >Regístrate</a
         >
       </div>
@@ -107,16 +120,18 @@ const siteConfig = {
 
   // Helper to show/hide errors
   const showError = (message: string) => {
-    if (errorContainer) {
-      errorContainer.textContent = message;
+    const errorMessage = document.getElementById("error-message");
+    if (errorContainer && errorMessage) {
+      errorMessage.textContent = message;
       errorContainer.classList.remove("hidden");
     }
   };
 
   const hideError = () => {
-    if (errorContainer) {
+    const errorMessage = document.getElementById("error-message");
+    if (errorContainer && errorMessage) {
       errorContainer.classList.add("hidden");
-      errorContainer.textContent = "";
+      errorMessage.textContent = "";
     }
   };
 

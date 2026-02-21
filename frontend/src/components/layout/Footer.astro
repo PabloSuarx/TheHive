@@ -23,7 +23,7 @@ const linksByColumn = links.reduce<LinksByColumn>((acc, link) => {
 const columnOrder = ["General", "Empresa", "Ayuda", "Legal"];
 ---
 
-<footer class="bg-linear-to-b from-bg-primary to-bg-footer text-tertiary mt-auto">
+<footer class="bg-gradient-to-b from-bg-primary to-bg-footer text-text-tertiary mt-auto">
   <div class="container mx-auto px-4 lg:px-8 py-8">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
       <div class="space-y-4">
@@ -32,7 +32,7 @@ const columnOrder = ["General", "Empresa", "Ayuda", "Legal"];
             <Logo logoUrl={logoUrl} logoAlt={logoAlt} />
           </a>
         </div>
-        <p class="text-sm text-secondary leading-relaxed">
+        <p class="text-sm text-text-secondary leading-relaxed">
           {companyDescription}
         </p>
 
@@ -61,7 +61,7 @@ const columnOrder = ["General", "Empresa", "Ayuda", "Legal"];
 
           return columnLinks && columnLinks.length > 0 ? (
             <div>
-              <h3 class="text-inverse font-semibold text-lg mb-4">
+              <h3 class="text-text-inverse font-semibold text-lg mb-4">
                 {columnName}
               </h3>
               <ul class="space-y-2">
@@ -71,7 +71,7 @@ const columnOrder = ["General", "Empresa", "Ayuda", "Legal"];
                     <li>
                       <a
                         href={link.url}
-                        class="text-sm hover:text-primary transition-colors"
+                        class="text-sm text-text-secondary hover:text-primary transition-colors"
                       >
                         {link.label}
                       </a>
@@ -88,11 +88,11 @@ const columnOrder = ["General", "Empresa", "Ayuda", "Legal"];
   <div class="border-t border-divider">
     <div class="container mx-auto px-4 lg:px-8 py-6">
       <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-        <p class="text-sm text-secondary text-center md:text-left">
+        <p class="text-sm text-text-secondary text-center md:text-left">
           {copyrightText}
         </p>
 
-        <p class="text-xs text-tertiary text-center md:text-right max-w-md">
+        <p class="text-xs text-text-tertiary text-center md:text-right max-w-md">
           <strong class="text-primary">Proyecto Educativo:</strong> Este sitio web
           fue desarrollado con fines académicos. No se realizan transacciones reales
           ni envíos de productos.

@@ -11,7 +11,7 @@ const { categories, publicStrapiUrl } = Astro.props;
   <div class="container mx-auto px-4 lg:px-8">
     <div class="text-center max-w-3xl mx-auto mb-20">
       <h2>Nuestras Categorías</h2>
-      <p class="text-lead text-gray-600 mt-4">
+      <p class="text-lead text-text-secondary mt-4">
         Explora nuestra selección de mieles artesanales, cada una con su
         carácter único
       </p>
@@ -39,8 +39,10 @@ const { categories, publicStrapiUrl } = Astro.props;
         </div>
       ) : (
         <div class="text-center py-16">
-          <span class="text-6xl mb-4 block">🐝</span>
-          <p class="text-gray-500 text-lg">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-grid-3x3-gap mx-auto mb-4 text-text-tertiary" viewBox="0 0 16 16">
+            <path d="M4 2v2H2V2zm1 12v-2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1m0-5V7a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1m0-5V2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1m5 10v-2a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1m0-5V7a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1m0-5V2a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1m5 10v-2a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1m0-5V7a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1m0-5V2a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1"/>
+          </svg>
+          <p class="text-text-tertiary text-lg">
             No hay categorías disponibles todavía.
           </p>
         </div>

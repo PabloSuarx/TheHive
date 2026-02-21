@@ -1,5 +1,12 @@
 ---
+import FilterTabs from "../../ui/FilterTabs.astro";
+
 const { blogCategories } = Astro.props;
+
+const filters = blogCategories.map((cat: any) => ({
+  label: cat.name,
+  value: cat.slug,
+}));
 ---
 
     <div class="container mx-auto px-4 lg:px-8">
@@ -7,72 +14,54 @@ const { blogCategories } = Astro.props;
       <!-- Buscador -->
       <div class="max-w-xl mx-auto mb-5 relative">
         <svg
-          class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          fill="currentColor"
+          class="bi bi-search absolute left-4 top-1/2 -translate-y-1/2 text-text-tertiary"
+          viewBox="0 0 16 16"
         >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
         </svg>
         <input
           type="text"
           id="blog-search"
           placeholder="Buscar artículos... (ej: recetas, beneficios, apicultura)"
-          class="w-full pl-12 pr-10 py-3 bg-white border-2 border-gray-200 rounded-xl focus:border-[#F59E0B] focus:outline-none focus:ring-2 focus:ring-[#F59E0B]/20 transition-colors"
+          class="w-full pl-12 pr-10 py-3 bg-bg-primary border-2 border-divider rounded-xl focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors"
           autocomplete="off"
         />
         <button
           id="clear-search"
-          class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 hidden"
+          class="absolute right-4 top-1/2 -translate-y-1/2 text-text-tertiary hover:text-text-secondary hidden transition-colors"
           aria-label="Limpiar búsqueda"
         >
           <svg
-            class="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            fill="currentColor"
+            class="bi bi-x"
+            viewBox="0 0 16 16"
           >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M6 18L18 6M6 6l12 12"></path>
+            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
           </svg>
         </button>
       </div>
 
       <div class="flex flex-wrap justify-between items-center gap-4">
         <!-- Filtros categoría -->
-        <div class="flex flex-wrap gap-2" id="blog-filters">
-          <button
-            class="filter-btn active px-4 py-2 rounded-full text-sm font-medium transition-all bg-[#F59E0B] text-white shadow-md"
-            data-category="all">Todos</button
-          >
-          {
-            blogCategories.map((cat: any) => (
-              <button
-                class="filter-btn px-4 py-2 rounded-full text-sm font-medium transition-all bg-white text-gray-700 hover:bg-[#FEF3C7] hover:text-warning border border-gray-200"
-                data-category={cat.slug}
-              >
-                {cat.icon && <span class="mr-1">{cat.icon}</span>}
-                {cat.name}
-              </button>
-            ))
-          }
+        <div id="blog-filters">
+          <FilterTabs filters={filters} defaultActive="all" allLabel="Todos" />
         </div>
 
         <!-- Ordenación -->
         <div class="flex items-center gap-2">
-          <label for="blog-sort" class="text-sm text-gray-500 whitespace-nowrap"
+          <label for="blog-sort" class="text-sm text-text-tertiary whitespace-nowrap"
             >Ordenar:</label
           >
           <select
             id="blog-sort"
-            class="px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:border-[#F59E0B] focus:outline-none"
+            class="px-3 py-2 bg-bg-primary border border-divider rounded-lg text-sm text-text-primary focus:border-primary focus:outline-none"
           >
             <option value="date-desc">Más recientes</option>
             <option value="date-asc">Más antiguos</option>
@@ -82,5 +71,16 @@ const { blogCategories } = Astro.props;
         </div>
       </div>
 
-      <p class="text-sm text-gray-500 mt-4" id="blog-results-count"></p>
+      <p class="text-sm text-text-tertiary mt-4" id="blog-results-count"></p>
     </div>
+
+<script>
+  // Añadir clase y atributo para compatibilidad con blog.astro
+  document.querySelectorAll('.filter-tab').forEach(tab => {
+    tab.classList.add('filter-btn');
+    const value = tab.getAttribute('data-value');
+    if (value) {
+      tab.setAttribute('data-category', value);
+    }
+  });
+</script>

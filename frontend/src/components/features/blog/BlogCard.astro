@@ -38,9 +38,9 @@ const readTime = readingTime || Math.max(1, Math.ceil(wordCount / 100));
     {categoryName && <span class="text-sm text-primary font-semibold">{categoryName}</span>}
     <h3 class="text-xl font-bold text-text-primary mt-2 mb-2 group-hover:text-primary transition-colors line-clamp-2">{title}</h3>
     
-    {excerpt && <p class="text-gray-600 text-sm mb-3 line-clamp-3">{excerpt}</p>}
+    {excerpt && <p class="text-text-secondary text-sm mb-3 line-clamp-3">{excerpt}</p>}
     
-    <div class="flex items-center gap-2 text-sm text-gray-500">
+    <div class="flex items-center gap-2 text-sm text-text-tertiary">
       {author && (<><span>{author}</span><span>•</span></>)}
       {blogPublishedAt && (<><span>{formatDate(blogPublishedAt)}</span><span>•</span></>)}
       <span>{readTime} min lectura</span>

@@ -16,18 +16,22 @@ const siteConfig = {
 >
   <div class="flex items-center justify-center min-h-[70vh] px-4 py-12">
     <div
-      class="w-full max-w-lg bg-white p-8 rounded-2xl shadow-lg border border-[var(--border-color)]"
+      class="w-full max-w-lg bg-bg-primary p-8 rounded-2xl border border-border-color"
     >
       <div class="text-center mb-8">
-        <h1 class="text-3xl font-bold text-[var(--primary)] mb-2">Crear Cuenta</h1>
-        <p class="text-[var(--text-secondary)]">Únete a nuestra comunidad</p>
+        <h1 class="text-3xl font-bold text-primary mb-2">Crear Cuenta</h1>
+        <p class="text-text-secondary">Únete a nuestra comunidad</p>
       </div>
 
       <div
         id="error-container"
-        class="hidden mb-6 p-4 rounded-lg bg-red-50 border border-[var(--color-error)] text-[var(--color-error)] text-sm"
+        class="mb-6 p-4 rounded-lg bg-bg-tertiary border border-error text-error text-sm items-center gap-3 hidden"
       >
-        <!-- Error messages will be injected here -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-exclamation-circle shrink-0" viewBox="0 0 16 16">
+          <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+          <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0M7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0z"/>
+        </svg>
+        <span id="error-message"></span>
       </div>
 
       <form id="register-form" class="space-y-5">
@@ -35,30 +39,38 @@ const siteConfig = {
           <div>
             <label
               for="firstName"
-              class="block text-sm font-medium text-[var(--text-primary)] mb-1"
-              >Nombre</label
+              class="flex items-center gap-2 text-sm font-medium text-text-primary mb-1"
             >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
+              </svg>
+              Nombre
+            </label>
             <input
               type="text"
               id="firstName"
               name="firstName"
               required
-              class="w-full px-4 py-3 rounded-lg border border-[var(--border-color)] focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent outline-none transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
+              class="w-full px-4 py-3 rounded-lg border border-border-color bg-bg-primary text-text-primary focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all disabled:bg-bg-tertiary disabled:cursor-not-allowed"
               placeholder="Juan"
             />
           </div>
           <div>
             <label
               for="lastName"
-              class="block text-sm font-medium text-[var(--text-primary)] mb-1"
-              >Apellido</label
+              class="flex items-center gap-2 text-sm font-medium text-text-primary mb-1"
             >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
+              </svg>
+              Apellido
+            </label>
             <input
               type="text"
               id="lastName"
               name="lastName"
               required
-              class="w-full px-4 py-3 rounded-lg border border-[var(--border-color)] focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent outline-none transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
+              class="w-full px-4 py-3 rounded-lg border border-border-color bg-bg-primary text-text-primary focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all disabled:bg-bg-tertiary disabled:cursor-not-allowed"
               placeholder="Pérez"
             />
           </div>
@@ -67,15 +79,19 @@ const siteConfig = {
         <div>
            <label
             for="username"
-            class="block text-sm font-medium text-[var(--text-primary)] mb-1"
-            >Nombre de usuario</label
+            class="flex items-center gap-2 text-sm font-medium text-text-primary mb-1"
           >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-at" viewBox="0 0 16 16">
+              <path d="M13.106 7.222c0-2.967-2.249-5.032-5.482-5.032-3.35 0-5.646 2.318-5.646 5.702 0 3.493 2.235 5.708 5.762 5.708.862 0 1.689-.123 2.304-.335v-.862c-.43.199-1.354.328-2.29.328-2.926 0-4.813-1.88-4.813-4.798 0-2.844 1.921-4.881 4.594-4.881 2.735 0 4.608 1.688 4.608 4.156 0 1.682-.554 2.769-1.416 2.769-.492 0-.772-.28-.772-.76V5.206H8.923v.834h-.11c-.266-.595-.881-.964-1.6-.964-1.4 0-2.378 1.162-2.378 2.823 0 1.737.957 2.906 2.379 2.906.8 0 1.415-.39 1.709-1.087h.11c.081.67.703 1.148 1.503 1.148 1.572 0 2.57-1.415 2.57-3.643zm-7.177.704c0-1.197.54-1.907 1.456-1.907.93 0 1.524.738 1.524 1.907S8.308 9.84 7.371 9.84c-.895 0-1.442-.725-1.442-1.914"/>
+            </svg>
+            Nombre de usuario
+          </label>
           <input
             type="text"
             id="username"
             name="username"
             required
-            class="w-full px-4 py-3 rounded-lg border border-[var(--border-color)] focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent outline-none transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
+            class="w-full px-4 py-3 rounded-lg border border-border-color bg-bg-primary text-text-primary focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all disabled:bg-bg-tertiary disabled:cursor-not-allowed"
             placeholder="juanperez"
           />
         </div>
@@ -83,15 +99,19 @@ const siteConfig = {
         <div>
           <label
             for="email"
-            class="block text-sm font-medium text-[var(--text-primary)] mb-1"
-            >Correo electrónico</label
+            class="flex items-center gap-2 text-sm font-medium text-text-primary mb-1"
           >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope" viewBox="0 0 16 16">
+              <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z"/>
+            </svg>
+            Correo electrónico
+          </label>
           <input
             type="email"
             id="email"
             name="email"
             required
-            class="w-full px-4 py-3 rounded-lg border border-[var(--border-color)] focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent outline-none transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
+            class="w-full px-4 py-3 rounded-lg border border-border-color bg-bg-primary text-text-primary focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all disabled:bg-bg-tertiary disabled:cursor-not-allowed"
             placeholder="juan@ejemplo.com"
           />
         </div>
@@ -99,14 +119,18 @@ const siteConfig = {
         <div>
           <label
             for="phone"
-            class="block text-sm font-medium text-[var(--text-primary)] mb-1"
-            >Teléfono (Opcional)</label
+            class="flex items-center gap-2 text-sm font-medium text-text-primary mb-1"
           >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-telephone" viewBox="0 0 16 16">
+              <path d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.6 17.6 0 0 0 4.168 6.608 17.6 17.6 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.68.68 0 0 0-.58-.122l-2.19.547a1.75 1.75 0 0 1-1.657-.459L5.482 8.062a1.75 1.75 0 0 1-.46-1.657l.548-2.19a.68.68 0 0 0-.122-.58zM1.884.511a1.745 1.745 0 0 1 2.612.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.68.68 0 0 0 .178.643l2.457 2.457a.68.68 0 0 0 .644.178l2.189-.547a1.75 1.75 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.6 18.6 0 0 1-7.01-4.42 18.6 18.6 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877z"/>
+            </svg>
+            Teléfono (Opcional)
+          </label>
           <input
             type="tel"
             id="phone"
             name="phone"
-            class="w-full px-4 py-3 rounded-lg border border-[var(--border-color)] focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent outline-none transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
+            class="w-full px-4 py-3 rounded-lg border border-border-color bg-bg-primary text-text-primary focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all disabled:bg-bg-tertiary disabled:cursor-not-allowed"
             placeholder="+34 600 000 000"
           />
         </div>
@@ -114,16 +138,20 @@ const siteConfig = {
         <div>
           <label
             for="password"
-            class="block text-sm font-medium text-[var(--text-primary)] mb-1"
-            >Contraseña</label
+            class="flex items-center gap-2 text-sm font-medium text-text-primary mb-1"
           >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lock" viewBox="0 0 16 16">
+              <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2m3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2M5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1"/>
+            </svg>
+            Contraseña
+          </label>
           <input
             type="password"
             id="password"
             name="password"
             required
             minlength="6"
-            class="w-full px-4 py-3 rounded-lg border border-[var(--border-color)] focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent outline-none transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
+            class="w-full px-4 py-3 rounded-lg border border-border-color bg-bg-primary text-text-primary focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all disabled:bg-bg-tertiary disabled:cursor-not-allowed"
             placeholder="Mínimo 6 caracteres"
           />
         </div>
@@ -131,16 +159,20 @@ const siteConfig = {
         <div>
           <label
             for="confirmPassword"
-            class="block text-sm font-medium text-[var(--text-primary)] mb-1"
-            >Confirmar Contraseña</label
+            class="flex items-center gap-2 text-sm font-medium text-text-primary mb-1"
           >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lock-fill" viewBox="0 0 16 16">
+              <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2m3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2"/>
+            </svg>
+            Confirmar Contraseña
+          </label>
           <input
             type="password"
             id="confirmPassword"
             name="confirmPassword"
             required
             minlength="6"
-            class="w-full px-4 py-3 rounded-lg border border-[var(--border-color)] focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent outline-none transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
+            class="w-full px-4 py-3 rounded-lg border border-border-color bg-bg-primary text-text-primary focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all disabled:bg-bg-tertiary disabled:cursor-not-allowed"
             placeholder="Repite tu contraseña"
           />
         </div>
@@ -148,7 +180,7 @@ const siteConfig = {
         <button
           type="submit"
           id="submit-button"
-          class="w-full flex items-center justify-center py-3.5 px-4 rounded-lg bg-[var(--primary)] text-white font-semibold hover:bg-[var(--primary-dark)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 transition-colors disabled:opacity-70 disabled:cursor-not-allowed mt-2"
+          class="w-full flex items-center justify-center py-3.5 px-4 rounded-lg bg-primary text-text-inverse font-semibold hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors disabled:opacity-70 disabled:cursor-not-allowed mt-2"
         >
           <span id="button-text">Registrarse</span>
           <div id="button-loader" class="hidden ml-2">
@@ -157,10 +189,10 @@ const siteConfig = {
         </button>
       </form>
 
-      <div class="mt-6 text-center text-sm text-[var(--text-secondary)]">
+      <div class="mt-6 text-center text-sm text-text-secondary">
         ¿Ya tienes una cuenta? <a
           href="/login"
-          class="font-medium text-[var(--primary)] hover:text-[var(--primary-dark)]"
+          class="font-medium text-primary hover:text-primary-dark transition-colors"
           >Inicia Sesión</a
         >
       </div>
@@ -188,18 +220,22 @@ const siteConfig = {
 
   // Helper to show/hide errors
   const showError = (message: string) => {
-    if (errorContainer) {
-      errorContainer.textContent = message;
+    const errorMessage = document.getElementById("error-message");
+    if (errorContainer && errorMessage) {
+      errorMessage.textContent = message;
       errorContainer.classList.remove("hidden");
+      errorContainer.classList.add("flex");
       // Scroll to error
       errorContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   };
 
   const hideError = () => {
-    if (errorContainer) {
+    const errorMessage = document.getElementById("error-message");
+    if (errorContainer && errorMessage) {
       errorContainer.classList.add("hidden");
-      errorContainer.textContent = "";
+      errorContainer.classList.remove("flex");
+      errorMessage.textContent = "";
     }
   };
 

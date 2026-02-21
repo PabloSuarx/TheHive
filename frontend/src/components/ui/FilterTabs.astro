@@ -1,0 +1,67 @@
+---
+interface Filter {
+  label: string;
+  value: string;
+}
+
+interface Props {
+  filters: Filter[];
+  defaultActive?: string;
+  allLabel?: string;
+}
+
+const {
+  filters,
+  defaultActive = "all",
+  allLabel = "Todas",
+} = Astro.props;
+---
+
+<div class="flex flex-wrap gap-2" data-filter-tabs>
+  <button
+    class="filter-tab px-4 py-2 rounded-full text-sm font-medium transition-all"
+    data-value="all"
+    data-active={defaultActive === "all" ? "true" : "false"}>
+    {allLabel}
+  </button>
+  {filters.map(f => (
+    <button
+      class="filter-tab px-4 py-2 rounded-full text-sm font-medium transition-all"
+      data-value={f.value}
+      data-active={defaultActive === f.value ? "true" : "false"}>
+      {f.label}
+    </button>
+  ))}
+</div>
+
+<style>
+  .filter-tab[data-active="true"] {
+    background-color: var(--color-primary);
+    color: var(--color-text-inverse);
+  }
+  .filter-tab[data-active="false"] {
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-secondary);
+    border: 1px solid var(--color-divider);
+  }
+  .filter-tab[data-active="false"]:hover {
+    background-color: var(--color-primary-pale);
+    color: var(--color-primary-dark);
+  }
+</style>
+
+<script>
+  document.querySelectorAll('[data-filter-tabs]').forEach(container => {
+    const tabs = container.querySelectorAll('.filter-tab');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.setAttribute('data-active', 'false'));
+        tab.setAttribute('data-active', 'true');
+        container.dispatchEvent(new CustomEvent('filter-change', {
+          bubbles: true,
+          detail: { value: tab.getAttribute('data-value') }
+        }));
+      });
+    });
+  });
+</script>

@@ -23,8 +23,7 @@ const data = shippingData || {
 
     <h3>Devoluciones</h3>
     <p>Si algún producto llega dañado o no es lo que esperabas, contáctanos en las primeras 48 horas tras la recepción para gestionar el cambio o reembolso.</p>
-  `,
-  icon: "🚚"
+  `
 };
 
 const title = data.title || "Envíos y Devoluciones";
@@ -38,32 +37,34 @@ const content = data.content || "";
   keywords="envios miel, transporte, devoluciones, plazos entrega"
 >
   <!-- Hero Section -->
-  <section class="py-12 bg-white border-b border-gray-100">
+  <section class="py-12 bg-bg-primary border-b border-border-color">
     <div class="container mx-auto px-4 lg:px-8">
       <Breadcrumbs separator="/" homeLabel="Inicio" />
-      <h1 class="text-4xl font-bold text-gray-900 mb-2">{title}</h1>
-      <p class="text-lg text-gray-600 max-w-2xl">
+      <h1 class="text-4xl font-bold text-text-primary mb-2">{title}</h1>
+      <p class="text-lg text-text-secondary max-w-2xl">
         {subtitle}
       </p>
     </div>
   </section>
 
   <!-- Main Content -->
-  <section class="py-16 bg-white">
+  <section class="py-16 bg-bg-primary">
     <div class="container mx-auto px-4 lg:px-8">
       <div class="max-w-3xl mx-auto">
-        
-        <div class="bg-[#FEF3C7]/30 border border-[#FCD34D] rounded-2xl p-8 mb-10 flex gap-6 items-start">
-            <span class="text-4xl shrink-0">🚚</span>
+
+        <div class="bg-primary-pale border border-primary-light rounded-2xl p-8 mb-10 flex flex-col sm:flex-row gap-6 items-start">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-truck text-primary shrink-0" viewBox="0 0 16 16">
+              <path d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 0H5a2 2 0 1 1-3.998-.085A1.5 1.5 0 0 1 0 10.5zm1.294 7.456A2 2 0 0 1 4.732 11h5.536a2 2 0 0 1 .732-.732V3.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .294.456M12 10a2 2 0 0 1 1.732 1h.768a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12zm-9 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m9 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2"/>
+            </svg>
             <div>
-                <h3 class="text-xl font-bold text-gray-900 mb-2">Resumen de Envíos</h3>
-                <p class="text-gray-700">
+                <h3 class="text-xl font-bold text-text-primary mb-2">Resumen de Envíos</h3>
+                <p class="text-text-secondary">
                     Procesamos los pedidos de lunes a viernes. Los pedidos realizados antes de las 13:00 suelen enviarse el mismo día.
                 </p>
             </div>
         </div>
 
-        <div class="prose prose-lg prose-amber text-gray-600 max-w-none">
+        <div class="prose prose-lg prose-amber text-text-secondary max-w-none">
           <Fragment set:html={content} />
         </div>
 

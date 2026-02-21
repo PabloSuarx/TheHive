@@ -74,9 +74,9 @@ const imageUrl = category.image?.url
 
       <div class="flex-1">
         <div
-          class="flex items-center justify-between mb-8 pb-6 border-b border-white/5"
+          class="flex items-center justify-between mb-8 pb-6 border-b border-divider"
         >
-          <p class="text-sm text-slate-400">
+          <p class="text-sm text-text-secondary">
             Mostrando <span class="text-primary font-medium"
               >{products.length}
             </span> resultados para <span class="text-primary"
@@ -84,10 +84,10 @@ const imageUrl = category.image?.url
             </span>
           </p>
           <div class="flex items-center gap-4">
-            <span class="text-sm text-slate-400">Ordenar por:</span>
+            <span class="text-sm text-text-secondary">Ordenar por:</span>
             <select
               id="sort-select"
-              class="bg-white/5 border border-primary/50 rounded-full text-sm text-primary px-4 py-2 focus:outline-none focus:border-primary cursor-pointer hover:bg-white/10 transition-all"
+              class="bg-bg-secondary border border-divider rounded-full text-sm text-text-primary px-4 py-2 focus:outline-none focus:border-primary cursor-pointer hover:bg-bg-tertiary transition-all"
             >
               <option value="popular">Más Populares</option>
               <option value="price-asc">Precio: Menor a Mayor</option>

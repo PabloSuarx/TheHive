@@ -57,9 +57,7 @@ const blogCategories = (await get("blog-categories")) || [];
     ) as HTMLInputElement;
     const clearBtn = document.getElementById("clear-search") as HTMLElement;
     const filterBtns = document.querySelectorAll(".filter-btn");
-    const sortSelect = document.getElementById(
-      "blog-sort"
-    ) as HTMLSelectElement;
+    const sortSelect = document.getElementById("blog-sort"    ) as HTMLSelectElement;
     const allItems = Array.from(
       document.querySelectorAll(".blog-item")
     ) as HTMLElement[];
@@ -240,69 +238,3 @@ const blogCategories = (await get("blog-categories")) || [];
     }, 500);
   });
 </script>
-
-<style>
-  .hexagon {
-    position: absolute;
-    width: 100px;
-    height: 57.74px;
-    background-color: rgba(245, 158, 11, 0.05);
-    margin: 28.87px 0;
-  }
-  .hexagon:before,
-  .hexagon:after {
-    content: "";
-    position: absolute;
-    width: 0;
-    border-left: 50px solid transparent;
-    border-right: 50px solid transparent;
-  }
-  .hexagon:before {
-    bottom: 100%;
-    border-bottom: 28.87px solid rgba(245, 158, 11, 0.05);
-  }
-  .hexagon:after {
-    top: 100%;
-    border-top: 28.87px solid rgba(245, 158, 11, 0.05);
-  }
-  @keyframes float {
-    0%,
-    100% {
-      transform: translateY(0) rotate(0deg);
-      opacity: 0.3;
-    }
-    50% {
-      transform: translateY(-30px) rotate(180deg);
-      opacity: 0.1;
-    }
-  }
-  .hex-1 {
-    top: 10%;
-    left: 5%;
-    animation: float 25s infinite ease-in-out;
-  }
-  .hex-2 {
-    top: 60%;
-    left: 80%;
-    animation: float 20s infinite ease-in-out 2s;
-  }
-  .hex-3 {
-    top: 30%;
-    right: 10%;
-    animation: float 22s infinite ease-in-out 4s;
-  }
-  .animate-fade-in-up {
-    animation: fade-in-up 0.8s ease-out forwards;
-    opacity: 0;
-  }
-  @keyframes fade-in-up {
-    from {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-</style>
