@@ -72,121 +72,98 @@ import CartItem from "../components/features/cart/CartItem.astro";
 </Layout>
 
 <script>
-  import { $cart, updateQuantity, removeFromCart } from "../stores/appStore";
-  import type { CartItem } from "../types/cart";
+  import { cartStore, updateQuantity, removeFromCart } from "../utils/cartService";
+  import type { CartItem } from "../utils/cartService";
 
   const strapiBaseUrl = import.meta.env.PUBLIC_STRAPI_URL;
 
-  // Elementos del DOM
-  const cartEmptyState        = document.getElementById("cart-empty");
-  const cartContentSection    = document.getElementById("cart-content");
-  const cartItemsContainer    = document.getElementById("cart-items");
-  const cartSubtotalDisplay   = document.getElementById("cart-subtotal");
-  const cartTotalDisplay      = document.getElementById("cart-total");
-  const checkoutButton        = document.getElementById("checkout-btn");
-  const cartItemTemplate      = document.getElementById("cart-item-template") as HTMLTemplateElement | null;
+  // DOM elements
+  const cartEmptyState      = document.getElementById("cart-empty");
+  const cartContentSection  = document.getElementById("cart-content");
+  const cartItemsContainer  = document.getElementById("cart-items");
+  const cartSubtotalDisplay = document.getElementById("cart-subtotal");
+  const cartTotalDisplay    = document.getElementById("cart-total");
+  const checkoutButton      = document.getElementById("checkout-btn");
+  const cartItemTemplate    = document.getElementById("cart-item-template") as HTMLTemplateElement | null;
 
-  // --- Funciones auxiliares ---
+  // ── Helpers ──────────────────────────────────────────────────────────────────
 
-  function buildProductImageUrl(imageUrl?: string): string {
+  function buildImageUrl(imageUrl?: string): string {
     if (!imageUrl) return "/placeholder.svg";
     return imageUrl.startsWith("http") ? imageUrl : `${strapiBaseUrl}${imageUrl}`;
   }
 
-  function formatCurrencyEUR(amount: number): string {
+  function fmt(amount: number): string {
     return `${amount.toLocaleString("es-ES", { minimumFractionDigits: 2 })}€`;
   }
 
-  // --- Renderizado del carrito ---
+  // ── Render ───────────────────────────────────────────────────────────────────
 
-  function renderCart(cartMap: Record<string, CartItem>) {
-    const cartItems = Object.values(cartMap);
-    const isCartEmpty = cartItems.length === 0;
+  function renderCart(storeValue: { items: string; count: string; total: string }) {
+    let items: CartItem[] = [];
+    try { items = JSON.parse(storeValue.items ?? "[]"); } catch { items = []; }
 
-    cartEmptyState?.classList.toggle("hidden", !isCartEmpty);
-    cartContentSection?.classList.toggle("hidden", isCartEmpty);
+    const isEmpty = items.length === 0;
+    cartEmptyState?.classList.toggle("hidden", !isEmpty);
+    cartContentSection?.classList.toggle("hidden", isEmpty);
 
-    if (!cartItemsContainer || !cartItemTemplate || isCartEmpty) return;
+    if (!cartItemsContainer || !cartItemTemplate || isEmpty) return;
 
     cartItemsContainer.innerHTML = "";
 
-    cartItems.forEach((cartItem) => {
+    items.forEach((item) => {
       try {
-        const { product, quantity } = cartItem;
-        const productId = product.documentId || product.id.toString();
-        const cartItemClone = cartItemTemplate.content.cloneNode(true) as DocumentFragment;
+        const clone = cartItemTemplate.content.cloneNode(true) as DocumentFragment;
 
-        // Imagen del producto
-        const productImageEl = cartItemClone.querySelector(".cart-item-image") as HTMLImageElement | null;
-        if (productImageEl) {
-          productImageEl.srcset = ""; // Limpiar srcset del placeholder de Astro
-          productImageEl.src    = buildProductImageUrl(product.mainImage?.url);
-          productImageEl.alt    = product.name;
-        }
+        // Image
+        const img = clone.querySelector(".cart-item-image") as HTMLImageElement | null;
+        if (img) { img.srcset = ""; img.src = buildImageUrl(item.image); img.alt = item.name; }
 
-        // Enlace al producto
-        const productLinkEl = cartItemClone.querySelector<HTMLAnchorElement>(".cart-item-link");
-        if (productLinkEl) {
-          productLinkEl.href        = `/producto/${product.slug}`;
-          productLinkEl.textContent = product.name;
-        }
+        // Link / name
+        const link = clone.querySelector<HTMLAnchorElement>(".cart-item-link");
+        if (link) { link.textContent = item.name; }
 
-        // Variante / peso
-        const productVariantEl = cartItemClone.querySelector(".cart-item-variant");
-        if (productVariantEl) {
-          productVariantEl.textContent = `${product.weightValue}${product.weightUnit}`;
-        }
+        // Price
+        const priceEl = clone.querySelector(".cart-item-price");
+        if (priceEl) priceEl.textContent = fmt(item.unitPrice);
 
-        // Precio unitario
-        const productPriceEl = cartItemClone.querySelector(".cart-item-price");
-        if (productPriceEl) {
-          productPriceEl.textContent = formatCurrencyEUR(product.price);
-        }
+        // Quantity
+        const qtyEl = clone.querySelector(".cart-item-quantity");
+        if (qtyEl) qtyEl.textContent = String(item.quantity);
 
-        // Cantidad actual
-        const productQuantityEl = cartItemClone.querySelector(".cart-item-quantity");
-        if (productQuantityEl) {
-          productQuantityEl.textContent = quantity.toString();
-        }
-
-        // Botón: reducir cantidad
-        cartItemClone.querySelector(".btn-decrease")?.addEventListener("click", () => {
-          if (quantity > 1) updateQuantity(productId, quantity - 1);
+        // Decrease
+        clone.querySelector(".btn-decrease")?.addEventListener("click", async () => {
+          await updateQuantity(item.productId, item.quantity - 1);
         });
 
-        // Botón: aumentar cantidad
-        cartItemClone.querySelector(".btn-increase")?.addEventListener("click", () => {
-          updateQuantity(productId, quantity + 1);
+        // Increase
+        clone.querySelector(".btn-increase")?.addEventListener("click", async () => {
+          await updateQuantity(item.productId, item.quantity + 1);
         });
 
-        // Botón: eliminar del carrito
-        cartItemClone.querySelector(".btn-remove")?.addEventListener("click", () => {
-          removeFromCart(productId);
+        // Remove
+        clone.querySelector(".btn-remove")?.addEventListener("click", async () => {
+          await removeFromCart(item.productId);
         });
 
-        cartItemsContainer.appendChild(cartItemClone);
+        cartItemsContainer.appendChild(clone);
       } catch (err) {
-        console.error("Error al renderizar item del carrito:", err);
+        console.error("Error rendering cart item:", err);
       }
     });
 
-    // Calcular y mostrar totales
-    const orderTotal = cartItems.reduce(
-      (runningTotal, { product, quantity }) => runningTotal + product.price * quantity,
-      0
-    );
-    const formattedTotal = formatCurrencyEUR(orderTotal);
-
-    if (cartSubtotalDisplay) cartSubtotalDisplay.textContent = formattedTotal;
-    if (cartTotalDisplay)    cartTotalDisplay.textContent    = formattedTotal;
+    // Totals
+    const subtotal = items.reduce((s, i) => s + i.unitPrice * i.quantity, 0);
+    if (cartSubtotalDisplay) cartSubtotalDisplay.textContent = fmt(subtotal);
+    if (cartTotalDisplay)    cartTotalDisplay.textContent    = fmt(subtotal);
   }
 
-  // Ir al checkout
+  // Checkout placeholder
   checkoutButton?.addEventListener("click", (e) => {
     e.preventDefault();
     alert("¡Funcionalidad de pago próximamente!");
   });
 
-  // Suscribirse al store y renderizar en cada cambio
-  $cart.subscribe(renderCart);
+  // Subscribe to cartStore
+  cartStore.subscribe(renderCart);
 </script>

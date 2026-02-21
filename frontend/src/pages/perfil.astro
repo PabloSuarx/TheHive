@@ -13,67 +13,62 @@ import OrdersList from "../components/profile/OrdersList.astro";
 </Layout>
 
 <script>
-  import { $user } from "../stores/appStore";
-
   const STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL;
 
-  // --- AUTH GUARD ---
-  const user = $user.get();
-  if (!user?.jwt) {
+  // ── 1. Auth guard ────────────────────────────────────────────────────────────
+  const jwt = localStorage.getItem("jwt");
+  if (!jwt) {
     window.location.replace("/login");
   }
 
-  // --- DOM ELEMENTS ---
-  const profileUsername = document.getElementById("profile-username");
-  const profileEmail = document.getElementById("profile-email");
-  const avatarDisplay = document.getElementById("avatar-display");
+  // ── 2. Load user data from /api/users/me and populate DOM ───────────────────
+  const profileUsername     = document.getElementById("profile-username");
+  const profileEmail        = document.getElementById("profile-email");
+  const avatarDisplay       = document.getElementById("avatar-display");
   const avatarUploadTrigger = document.getElementById("avatar-upload-trigger");
-  const avatarFileInput = document.getElementById("avatar-file-input") as HTMLInputElement | null;
+  const avatarFileInput     = document.getElementById("avatar-file-input") as HTMLInputElement | null;
 
-  const ordersLoading = document.getElementById("orders-loading");
-  const ordersError = document.getElementById("orders-error");
-  const ordersErrorMessage = document.getElementById("orders-error-message");
-  const ordersEmpty = document.getElementById("orders-empty");
-  const ordersContainer = document.getElementById("orders-container");
+  async function loadUserProfile() {
+    if (!jwt) return;
+    try {
+      const res = await fetch(`${STRAPI_URL}/api/users/me?populate=avatar`, {
+        headers: { Authorization: `Bearer ${jwt}` },
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-  // --- POPULATE PROFILE HERO ---
-  function populateProfile() {
-    const currentUser = $user.get();
-    if (!currentUser) return;
+      const user = await res.json();
 
-    if (profileUsername) {
-      profileUsername.textContent = currentUser.username || "Usuario";
-    }
+      if (profileUsername) {
+        profileUsername.textContent = user.username || user.firstName || "Usuario";
+      }
+      if (profileEmail) {
+        profileEmail.textContent = user.email || "";
+      }
 
-    if (profileEmail) {
-      profileEmail.textContent = currentUser.email || "";
-    }
-
-    // Update avatar if available
-    if (currentUser.avatar?.url && avatarDisplay) {
-      const imgUrl = currentUser.avatar.url.startsWith("http")
-        ? currentUser.avatar.url
-        : `${STRAPI_URL}${currentUser.avatar.url}`;
-
-      avatarDisplay.innerHTML = `<img
-        src="${imgUrl}"
-        alt="Avatar de ${currentUser.username}"
-        class="w-full h-full object-cover rounded-full"
-      />`;
+      const avatarUrl = user.avatar?.url;
+      if (avatarUrl && avatarDisplay) {
+        const fullUrl = avatarUrl.startsWith("http")
+          ? avatarUrl
+          : `${STRAPI_URL}${avatarUrl}`;
+        avatarDisplay.innerHTML = `<img
+          src="${fullUrl}"
+          alt="Avatar de ${user.username}"
+          class="w-full h-full object-cover rounded-full"
+        />`;
+      }
+    } catch (err) {
+      console.error("[perfil] loadUserProfile error:", err);
     }
   }
 
-  // --- AVATAR UPLOAD ---
+  // ── 3. Avatar upload ─────────────────────────────────────────────────────────
   avatarUploadTrigger?.addEventListener("click", () => {
     avatarFileInput?.click();
   });
 
   avatarFileInput?.addEventListener("change", async () => {
-    const file = avatarFileInput.files?.[0];
-    if (!file) return;
-
-    const currentUser = $user.get();
-    if (!currentUser?.jwt) return;
+    const file = avatarFileInput?.files?.[0];
+    if (!file || !jwt) return;
 
     // Preview immediately
     const reader = new FileReader();
@@ -90,186 +85,39 @@ import OrdersList from "../components/profile/OrdersList.astro";
 
     // Upload to Strapi
     try {
+      const userId = localStorage.getItem("userId");
       const formData = new FormData();
       formData.append("files", file);
       formData.append("ref", "plugin::users-permissions.user");
-      formData.append("refId", currentUser.id.toString());
+      if (userId) formData.append("refId", userId);
       formData.append("field", "avatar");
 
       const uploadRes = await fetch(`${STRAPI_URL}/api/upload`, {
         method: "POST",
-        headers: {
-          Authorization: `Bearer ${currentUser.jwt}`,
-        },
+        headers: { Authorization: `Bearer ${jwt}` },
         body: formData,
       });
 
       if (!uploadRes.ok) throw new Error("Upload failed");
 
       const uploadData = await uploadRes.json();
-      if (uploadData?.[0]?.url) {
-        $user.set({
-          ...currentUser,
-          avatar: { url: uploadData[0].url },
-        });
+      if (uploadData?.[0]?.url && avatarDisplay) {
+        const newUrl = uploadData[0].url.startsWith("http")
+          ? uploadData[0].url
+          : `${STRAPI_URL}${uploadData[0].url}`;
+        avatarDisplay.innerHTML = `<img
+          src="${newUrl}"
+          alt="Avatar actualizado"
+          class="w-full h-full object-cover rounded-full"
+        />`;
       }
     } catch (error) {
-      console.error("Error uploading avatar:", error);
+      console.error("[perfil] Error uploading avatar:", error);
     }
   });
 
-  // --- STATUS CONFIG for rendering order cards ---
-  const statusConfig: Record<string, { label: string; colorVar: string }> = {
-    pending: { label: "Pendiente", colorVar: "var(--warning)" },
-    pendiente: { label: "Pendiente", colorVar: "var(--warning)" },
-    processing: { label: "En proceso", colorVar: "var(--warning)" },
-    en_proceso: { label: "En proceso", colorVar: "var(--warning)" },
-    shipped: { label: "Enviado", colorVar: "var(--info)" },
-    enviado: { label: "Enviado", colorVar: "var(--info)" },
-    delivered: { label: "Entregado", colorVar: "var(--success)" },
-    entregado: { label: "Entregado", colorVar: "var(--success)" },
-    cancelled: { label: "Cancelado", colorVar: "var(--error)" },
-    cancelado: { label: "Cancelado", colorVar: "var(--error)" },
-  };
-
-  function renderOrderCard(order: any): string {
-    const normalizedStatus = (order.status || order.estado || "pending").toLowerCase().trim();
-    const config = statusConfig[normalizedStatus] || { label: normalizedStatus, colorVar: "var(--text-tertiary)" };
-
-    const formattedDate = new Date(order.date || order.fecha || order.createdAt).toLocaleDateString("es-ES", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    });
-
-    const total = order.total || 0;
-    const formattedTotal = total.toLocaleString("es-ES", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
-
-    const orderNumber = order.orderNumber || order.numero || order.id;
-
-    return `
-      <article class="order-card" style="--status-color: ${config.colorVar};">
-        <div class="order-card__header">
-          <span class="order-card__number">Pedido #${orderNumber}</span>
-          <span class="order-card__badge">${config.label}</span>
-        </div>
-        <div class="order-card__body">
-          <span class="order-card__date">${formattedDate}</span>
-          <span class="order-card__total">${formattedTotal}€</span>
-        </div>
-      </article>
-    `;
-  }
-
-  // --- FETCH ORDERS ---
-  async function loadOrders() {
-    const currentUser = $user.get();
-    if (!currentUser?.jwt || !currentUser?.id) return;
-
-    // Show loading
-    ordersLoading?.classList.remove("hidden");
-    ordersError?.classList.add("hidden");
-    ordersEmpty?.classList.add("hidden");
-    ordersContainer?.classList.add("hidden");
-
-    try {
-      const res = await fetch(
-        `${STRAPI_URL}/api/orders?filters[user][id][$eq]=${currentUser.id}&populate=*`,
-        {
-          headers: {
-            Authorization: `Bearer ${currentUser.jwt}`,
-          },
-        }
-      );
-
-      if (!res.ok) throw new Error(`Error ${res.status}`);
-
-      const data = await res.json();
-      const orders = data?.data || [];
-
-      // Hide loading
-      ordersLoading?.classList.add("hidden");
-
-      if (orders.length === 0) {
-        ordersEmpty?.classList.remove("hidden");
-      } else {
-        if (ordersContainer) {
-          ordersContainer.innerHTML = orders.map(renderOrderCard).join("");
-          ordersContainer.classList.remove("hidden");
-        }
-      }
-    } catch (error: any) {
-      console.error("Error fetching orders:", error);
-      ordersLoading?.classList.add("hidden");
-      if (ordersErrorMessage) {
-        ordersErrorMessage.textContent = "Error al cargar los pedidos. Inténtalo de nuevo.";
-      }
-      ordersError?.classList.remove("hidden");
-    }
-  }
-
-  // --- INIT ---
-  if (user?.jwt) {
-    populateProfile();
-    loadOrders();
+  // ── Init ─────────────────────────────────────────────────────────────────────
+  if (jwt) {
+    loadUserProfile();
   }
 </script>
-
-<style is:global>
-  /* Order card styles injected by JS need to be global */
-  .order-card {
-    padding: 1rem 1.25rem;
-    border: 1px solid var(--border-color);
-    border-radius: 0.75rem;
-    background-color: var(--bg-primary);
-    transition: border-color var(--transition-fast);
-  }
-
-  .order-card:hover {
-    border-color: var(--primary);
-  }
-
-  .order-card__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 0.5rem;
-  }
-
-  .order-card__number {
-    font-weight: 600;
-    font-size: 0.9375rem;
-    color: var(--text-primary);
-  }
-
-  .order-card__badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.1875rem 0.625rem;
-    font-size: 0.75rem;
-    font-weight: 600;
-    border-radius: 9999px;
-    color: var(--status-color);
-    background-color: color-mix(in srgb, var(--status-color) 12%, transparent);
-  }
-
-  .order-card__body {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .order-card__date {
-    font-size: 0.8125rem;
-    color: var(--text-secondary);
-  }
-
-  .order-card__total {
-    font-weight: 700;
-    font-size: 1rem;
-    color: var(--text-primary);
-  }
-</style>

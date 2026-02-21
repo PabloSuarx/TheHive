@@ -172,8 +172,8 @@ const {
 </section>
 
 <script>
-    import { addToCart } from "../../../stores/appStore"
-    import type { Product } from "../../../types/product"
+    import { addToCart } from "../../../utils/cartService";
+    import type { Product } from "../../../types/product";
 
     const addToCartBtn = document.getElementById("hero-add-to-cart");
     const quantityInput = document.getElementById(
@@ -181,14 +181,21 @@ const {
     ) as HTMLInputElement;
 
     if (addToCartBtn) {
-        addToCartBtn.addEventListener("click", () => {
+        addToCartBtn.addEventListener("click", async () => {
             try {
                 const productData = addToCartBtn.dataset.product;
                 const quantity = parseInt(quantityInput?.value || "1");
 
                 if (productData) {
                     const product: Product = JSON.parse(productData);
-                    addToCart(product, quantity);
+
+                    await addToCart({
+                        productId: product.documentId,
+                        name: product.name,
+                        unitPrice: product.price,
+                        image: product.mainImage?.url ?? "",
+                        quantity,
+                    });
 
                     // Feedback
                     const originalText = addToCartBtn.innerHTML;

@@ -76,10 +76,10 @@ averageRating = Math.round(averageRating * 2) / 2;
 </div>
 
 <script>
-  import { addToCart } from "../../../stores/appStore"
-  import type { Product } from "../../../types/product"
+  import { addToCart } from "../../../utils/cartService";
+  import type { Product } from "../../../types/product";
 
-  document.addEventListener("click", (e) => {
+  document.addEventListener("click", async (e) => {
     const target = e.target as HTMLElement;
     const btn = target.closest(".add-to-cart-btn") as HTMLButtonElement;
 
@@ -91,9 +91,16 @@ averageRating = Math.round(averageRating * 2) / 2;
         const productData = btn.dataset.product;
         if (productData) {
           const product: Product = JSON.parse(productData);
-          addToCart(product);
 
-          // Visual feedback (optional)
+          await addToCart({
+            productId: product.documentId,
+            name: product.name,
+            unitPrice: product.price,
+            image: product.mainImage?.url ?? "",
+            quantity: 1,
+          });
+
+          // Visual feedback
           const originalContent = btn.innerHTML;
           btn.innerHTML = `<span class="text-xs">✔</span>`;
           setTimeout(() => {

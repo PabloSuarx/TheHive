@@ -69,18 +69,8 @@ const sortedLinks = navLinks.sort((a, b) => a.order - b.order);
           class="relative p-2 text-primary hover:text-primary transition-colors rounded-lg hover:bg-bg-primary-pale"
           aria-label="Carrito de compra"
         >
-          <svg
-            class="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-            ></path>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-cart3" viewBox="0 0 16 16">
+            <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l.84 4.479 9.144-.459L13.89 4zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4M5 13a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
           </svg>
           <span
             class="cart-count absolute -top-1 -right-1 bg-primary text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center hidden"
@@ -150,7 +140,8 @@ const sortedLinks = navLinks.sort((a, b) => a.order - b.order);
 </header>
 
 <script>
-  import { $user, $cart, $isAuthLoading } from "../../stores/appStore";
+  import { $user, $isAuthLoading } from "../../stores/appStore";
+  import { cartStore, initCartService } from "../../utils/cartService";
 
   // DOM Elements
   const loginButton = document.getElementById("login-button");
@@ -208,10 +199,13 @@ const sortedLinks = navLinks.sort((a, b) => a.order - b.order);
 
   // --- CART LOGIC ---
 
+  // Init cart service (loads from Strapi if authenticated, from localStorage if guest)
+  initCartService();
+
   // Subscribe to cart changes
-  $cart.subscribe((cart) => {
+  cartStore.subscribe((state) => {
+    const count = parseInt(state.count, 10) || 0;
     if (cartBadge) {
-      const count = Object.values(cart).reduce((acc: number, item: any) => acc + item.quantity, 0);
       cartBadge.textContent = count.toString();
       cartBadge.classList.toggle("hidden", count === 0);
     }

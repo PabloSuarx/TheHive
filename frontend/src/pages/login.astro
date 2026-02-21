@@ -15,7 +15,7 @@ const siteConfig = {
 >
   <div class="flex items-center justify-center min-h-[60vh] px-4 py-12">
     <div
-      class="w-full max-w-md bg-white p-8 rounded-2xl shadow-lg border border-[var(--border-color)]"
+      class="w-full max-w-md bg-white p-8 rounded-2xl border border-[var(--border-color)]"
     >
       <div class="text-center mb-8">
         <h1 class="text-3xl font-bold text-[var(--primary)] mb-2">Bienvenido</h1>
@@ -86,6 +86,7 @@ const siteConfig = {
 
 <script>
   import { $user } from "../stores/appStore";
+  import { syncCartAfterLogin } from "../utils/cartService";
 
   // Configuration
   const STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL;
@@ -167,18 +168,25 @@ const siteConfig = {
       }
 
       // Success!
-      // Construct User object matching our interface
-      const user = {
-        ...data.user,
-        jwt: data.jwt,
-      };
+      const { jwt, user: userData } = data;
 
-      // Save to store (persistent)
-      $user.set(user);
+      // 1. Save JWT, userId and userDocumentId to localStorage
+      localStorage.setItem("jwt", jwt);
+      localStorage.setItem("userId", String(userData.id));
+      localStorage.setItem("userDocumentId", userData.documentId);
 
-      // Redirect
-      // Use replace to prevent back-button returning to login
-      window.location.replace("/");
+      // 2. Sync guest cart → Strapi BEFORE setting user (prevents initCartService from wiping guest items)
+      try {
+        await syncCartAfterLogin(jwt, userData.documentId);
+      } catch (syncErr) {
+        console.error("Cart sync failed (non-fatal):", syncErr);
+      }
+
+      // 3. Save to Nano Store (persistent) — after sync so cart is preserved
+      $user.set({ ...userData, jwt });
+
+      // 4. Redirect to profile
+      window.location.replace("/perfil");
       
     } catch (error: any) {
       console.error("Login Error:", error);
