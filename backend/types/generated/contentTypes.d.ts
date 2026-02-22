@@ -1190,6 +1190,46 @@ export interface ApiNavigationNavigation extends Struct.SingleTypeSchema {
   };
 }
 
+export interface ApiNotFoundPageNotFoundPage extends Struct.SingleTypeSchema {
+  collectionName: 'not_found_pages';
+  info: {
+    displayName: 'Not Found Page';
+    pluralName: 'not-found-pages';
+    singularName: 'not-found-page';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    beeIcon: Schema.Attribute.Text;
+    blogLinkText: Schema.Attribute.String;
+    categoriesLinkText: Schema.Attribute.String;
+    contactLinkText: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    errorCode: Schema.Attribute.String;
+    helpSectionTitle: Schema.Attribute.String;
+    homeButtonIcon: Schema.Attribute.Text;
+    homeButtonText: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::not-found-page.not-found-page'
+    > &
+      Schema.Attribute.Private;
+    productsButtonIcon: Schema.Attribute.Text;
+    productsButtonText: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    seo: Schema.Attribute.Component<'shared.seo', false>;
+    subtitle: Schema.Attribute.Text;
+    title: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiOrderOrder extends Struct.CollectionTypeSchema {
   collectionName: 'orders';
   info: {
@@ -2400,6 +2440,7 @@ declare module '@strapi/strapi' {
       'api::home-page.home-page': ApiHomePageHomePage;
       'api::login-page.login-page': ApiLoginPageLoginPage;
       'api::navigation.navigation': ApiNavigationNavigation;
+      'api::not-found-page.not-found-page': ApiNotFoundPageNotFoundPage;
       'api::order.order': ApiOrderOrder;
       'api::origin.origin': ApiOriginOrigin;
       'api::perfil-page.perfil-page': ApiPerfilPagePerfilPage;

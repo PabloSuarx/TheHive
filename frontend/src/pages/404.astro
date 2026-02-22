@@ -1,73 +1,120 @@
 ---
+/*
+ * STRAPI SINGLE TYPE: "NotFoundPage" → endpoint: "not-found-page"
+ * Campos:
+ * - seo (component shared.seo)
+ * - errorCode (string): Código de error "404"
+ * - title (string): Título principal
+ * - subtitle (text): Subtítulo descriptivo
+ * - beeIcon (text): SVG inline de la abeja animada
+ * - homeButtonText (string): Texto del botón de inicio
+ * - homeButtonIcon (text): SVG inline del icono de casa
+ * - productsButtonText (string): Texto del botón de productos
+ * - productsButtonIcon (text): SVG inline del icono de bolsa
+ * - helpSectionTitle (string): Título de la sección de ayuda
+ * - blogLinkText (string): Texto del enlace al blog
+ * - categoriesLinkText (string): Texto del enlace a categorías
+ * - contactLinkText (string): Texto del enlace a contacto
+ */
 import Layout from "../layouts/Layout.astro";
-import Button from "../components/ui/Button.astro"
+import Button from "../components/ui/Button.astro";
+import { get } from "../lib/strapi";
+
+const notFoundPageData = await get("not-found-page", { populate: "*" });
+
+const fallbackData = {
+  errorCode: "404",
+  title: "¡Ups! Esta colmena está vacía",
+  subtitle: "Parece que las abejas no han construido nada aquí todavía",
+  beeIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-8 8c0-2.21 1.79-4 4-4h8c2.21 0 4 1.79 4 4v2h-2v-2c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v2H4v-2zm0 4h16v8H4v-8zm2 2v4h12v-4H6z"/></svg>`,
+  homeButtonText: "Volver al inicio",
+  homeButtonIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house-door mr-2" viewBox="0 0 16 16"><path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4z"/></svg>`,
+  productsButtonText: "Ver productos",
+  productsButtonIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag mr-2" viewBox="0 0 16 16"><path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1m3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z"/></svg>`,
+  helpSectionTitle: "¿Necesitas ayuda?",
+  blogLinkText: "Blog",
+  categoriesLinkText: "Categorías",
+  contactLinkText: "Contacto",
+};
+
+const pageData = { ...fallbackData, ...notFoundPageData };
+
+const {
+  errorCode,
+  title,
+  subtitle,
+  beeIcon,
+  homeButtonText,
+  homeButtonIcon,
+  productsButtonText,
+  productsButtonIcon,
+  helpSectionTitle,
+  blogLinkText,
+  categoriesLinkText,
+  contactLinkText,
+} = pageData;
+
+const seoTitle = notFoundPageData?.seo?.metaTitle || "404 - Página no encontrada";
+const seoDescription = notFoundPageData?.seo?.metaDescription || "La página que buscas no existe. Vuelve al inicio para explorar nuestros productos de miel artesanal.";
 ---
 
-<Layout
-  titulo="404 - Página no encontrada"
-  descripcion="La página que buscas no existe. Vuelve al inicio para explorar nuestros productos de miel artesanal."
->
+<Layout titulo={seoTitle} descripcion={seoDescription}>
   <main
     class="min-h-screen flex items-center justify-center bg-linear-to-br from-warning/5 via-bg-primary to-warning/10"
   >
     <div class="container mx-auto px-4 py-16">
       <div class="max-w-2xl mx-auto text-center">
         <!-- Icono animado -->
-        <div class="mb-8 animate-swing">
-          <img src="/bee-svgrepo-com.svg" alt="Abeja" class="w-32 h-32 mx-auto" />
+        <div class="mb-8 animate-swing text-warning" set:html={beeIcon}>
         </div>
 
         <!-- Código de error -->
         <h1
           class="text-8xl lg:text-9xl font-bold text-transparent bg-clip-text bg-linear-to-r from-warning to-warning/60 mb-6"
         >
-          404
+          {errorCode}
         </h1>
 
         <!-- Título -->
         <h2 class="text-3xl lg:text-4xl font-bold text-text-primary mb-4">
-          ¡Ups! Esta colmena está vacía
+          {title}
         </h2>
 
         <!-- Descripción -->
         <p class="text-lg text-text-secondary mb-8 max-w-md mx-auto leading-relaxed">
-          Parece que las abejas no han construido nada aquí todavía
+          {subtitle}
         </p>
 
         <!-- Botones de acción -->
         <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
           <Button link="/" variant="primary">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house-door mr-2" viewBox="0 0 16 16">
-              <path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4z"/>
-            </svg>
-            Volver al inicio
+            <span set:html={homeButtonIcon}></span>
+            {homeButtonText}
           </Button>
 
           <Button link="/productos" variant="outline">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag mr-2" viewBox="0 0 16 16">
-              <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1m3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z"/>
-            </svg>
-            Ver productos
+            <span set:html={productsButtonIcon}></span>
+            {productsButtonText}
           </Button>
         </div>
 
         <!-- Enlaces adicionales -->
         <div class="mt-12 pt-8 border-t border-divider">
-          <p class="text-sm text-text-tertiary mb-4">¿Necesitas ayuda?</p>
+          <p class="text-sm text-text-tertiary mb-4">{helpSectionTitle}</p>
           <div class="flex flex-wrap gap-4 justify-center text-sm">
             <a href="/blog" class="text-text-secondary hover:text-primary font-medium transition-colors">
-              Blog
+              {blogLinkText}
             </a>
             <span class="text-divider">•</span>
             <a
               href="/categorias"
               class="text-text-secondary hover:text-primary font-medium transition-colors"
             >
-              Categorías
+              {categoriesLinkText}
             </a>
             <span class="text-divider">•</span>
             <a href="/contacto" class="text-text-secondary hover:text-primary font-medium transition-colors">
-              Contacto
+              {contactLinkText}
             </a>
           </div>
         </div>
