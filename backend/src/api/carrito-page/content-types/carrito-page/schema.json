@@ -1,0 +1,80 @@
+{
+  "kind": "singleType",
+  "collectionName": "carrito_pages",
+  "info": {
+    "singularName": "carrito-page",
+    "pluralName": "carrito-pages",
+    "displayName": "Carrito Page"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "seo": {
+      "type": "component",
+      "component": "shared.seo",
+      "repeatable": false
+    },
+    "pageTitle": {
+      "type": "string"
+    },
+    "emptyCartIcon": {
+      "type": "text"
+    },
+    "emptyCartText": {
+      "type": "string"
+    },
+    "continueShoppingButtonText": {
+      "type": "string"
+    },
+    "continueShoppingIcon": {
+      "type": "text"
+    },
+    "summaryTitle": {
+      "type": "string"
+    },
+    "summaryIcon": {
+      "type": "text"
+    },
+    "subtotalLabel": {
+      "type": "string"
+    },
+    "shippingLabel": {
+      "type": "string"
+    },
+    "freeShippingText": {
+      "type": "string"
+    },
+    "totalLabel": {
+      "type": "string"
+    },
+    "checkoutButtonText": {
+      "type": "string"
+    },
+    "checkoutButtonIcon": {
+      "type": "text"
+    },
+    "securePaymentText": {
+      "type": "string"
+    },
+    "decreaseIcon": {
+      "type": "text"
+    },
+    "increaseIcon": {
+      "type": "text"
+    },
+    "removeIcon": {
+      "type": "text"
+    },
+    "removeText": {
+      "type": "string"
+    },
+    "decreaseAriaLabel": {
+      "type": "string"
+    },
+    "increaseAriaLabel": {
+      "type": "string"
+    }
+  }
+}

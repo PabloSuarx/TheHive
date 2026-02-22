@@ -617,6 +617,54 @@ export interface ApiBlogBlog extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiCarritoPageCarritoPage extends Struct.SingleTypeSchema {
+  collectionName: 'carrito_pages';
+  info: {
+    displayName: 'Carrito Page';
+    pluralName: 'carrito-pages';
+    singularName: 'carrito-page';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    checkoutButtonIcon: Schema.Attribute.Text;
+    checkoutButtonText: Schema.Attribute.String;
+    continueShoppingButtonText: Schema.Attribute.String;
+    continueShoppingIcon: Schema.Attribute.Text;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    decreaseAriaLabel: Schema.Attribute.String;
+    decreaseIcon: Schema.Attribute.Text;
+    emptyCartIcon: Schema.Attribute.Text;
+    emptyCartText: Schema.Attribute.String;
+    freeShippingText: Schema.Attribute.String;
+    increaseAriaLabel: Schema.Attribute.String;
+    increaseIcon: Schema.Attribute.Text;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::carrito-page.carrito-page'
+    > &
+      Schema.Attribute.Private;
+    pageTitle: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    removeIcon: Schema.Attribute.Text;
+    removeText: Schema.Attribute.String;
+    securePaymentText: Schema.Attribute.String;
+    seo: Schema.Attribute.Component<'shared.seo', false>;
+    shippingLabel: Schema.Attribute.String;
+    subtotalLabel: Schema.Attribute.String;
+    summaryIcon: Schema.Attribute.Text;
+    summaryTitle: Schema.Attribute.String;
+    totalLabel: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiCartItemCartItem extends Struct.CollectionTypeSchema {
   collectionName: 'cart_items';
   info: {
@@ -2338,6 +2386,7 @@ declare module '@strapi/strapi' {
       'api::blog-page.blog-page': ApiBlogPageBlogPage;
       'api::blog-slug-page.blog-slug-page': ApiBlogSlugPageBlogSlugPage;
       'api::blog.blog': ApiBlogBlog;
+      'api::carrito-page.carrito-page': ApiCarritoPageCarritoPage;
       'api::cart-item.cart-item': ApiCartItemCartItem;
       'api::categoria-page.categoria-page': ApiCategoriaPageCategoriaPage;
       'api::categorias-page.categorias-page': ApiCategoriasPageCategoriasPage;

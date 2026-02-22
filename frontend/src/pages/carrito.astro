@@ -1,33 +1,123 @@
 ---
+/*
+ * STRAPI SINGLE TYPE: "CarritoPage" → endpoint: "carrito-page"
+ * Campos:
+ * - pageTitle: Título de la página
+ * - emptyCartIcon: SVG del icono de carrito vacío
+ * - emptyCartText: Texto cuando el carrito está vacío
+ * - continueShoppingButtonText: Texto del botón para seguir comprando
+ * - continueShoppingIcon: SVG del icono flecha izquierda
+ * - summaryTitle: Título del resumen del pedido
+ * - summaryIcon: SVG del icono de recibo
+ * - subtotalLabel: Label del subtotal
+ * - shippingLabel: Label del envío
+ * - freeShippingText: Texto de envío gratis
+ * - totalLabel: Label del total
+ * - checkoutButtonText: Texto del botón de tramitar pedido
+ * - checkoutButtonIcon: SVG del icono del botón de tramitar
+ * - securePaymentText: Texto de pagos seguros
+ * - decreaseIcon: SVG del icono menos
+ * - increaseIcon: SVG del icono más
+ * - removeIcon: SVG del icono de papelera
+ * - removeText: Texto del botón eliminar
+ * - decreaseAriaLabel: Aria-label para disminuir cantidad
+ * - increaseAriaLabel: Aria-label para aumentar cantidad
+ */
+
 import Layout from "../layouts/Layout.astro";
 import Button from "../components/ui/Button.astro";
 import CartItem from "../components/features/cart/CartItem.astro";
+import { get } from "../lib/strapi";
+
+const carritoPageData = await get("carrito-page", { populate: "*" });
+
+const fallbackData = {
+  pageTitle: "Tu Carrito",
+  emptyCartIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-cart-x text-text-tertiary" viewBox="0 0 16 16">
+            <path d="M7.354 5.646a.5.5 0 1 0-.708.708L7.793 7.5 6.646 8.646a.5.5 0 1 0 .708.708L8.5 8.207l1.146 1.147a.5.5 0 0 0 .708-.708L9.207 7.5l1.147-1.146a.5.5 0 0 0-.708-.708L8.5 6.793z"/>
+            <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zm3.915 10L3.102 4h10.796l-1.313 7zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+          </svg>`,
+  emptyCartText: "Tu carrito está vacío",
+  continueShoppingButtonText: "Ver Productos",
+  continueShoppingIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left mr-2" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+          </svg>`,
+  summaryTitle: "Resumen",
+  summaryIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-receipt text-primary" viewBox="0 0 16 16">
+                  <path d="M1.92.506a.5.5 0 0 1 .434.14L3 1.293l.646-.647a.5.5 0 0 1 .708 0L5 1.293l.646-.647a.5.5 0 0 1 .708 0L7 1.293l.646-.647a.5.5 0 0 1 .708 0L9 1.293l.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .801.13l.5 1A.5.5 0 0 1 15 2v12a.5.5 0 0 1-.053.224l-.5 1a.5.5 0 0 1-.8.13L13 14.707l-.646.647a.5.5 0 0 1-.708 0L11 14.707l-.646.647a.5.5 0 0 1-.708 0L9 14.707l-.646.647a.5.5 0 0 1-.708 0L7 14.707l-.646.647a.5.5 0 0 1-.708 0L5 14.707l-.646.647a.5.5 0 0 1-.708 0L3 14.707l-.646.647a.5.5 0 0 1-.801-.13l-.5-1A.5.5 0 0 1 1 14V2a.5.5 0 0 1 .053-.224l.5-1a.5.5 0 0 1 .367-.27m.217 1.338L2 2.118v11.764l.137.274.51-.51a.5.5 0 0 1 .707 0l.646.647.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.509.509.137-.274V2.118l-.137-.274-.51.51a.5.5 0 0 1-.707 0L12 1.707l-.646.647a.5.5 0 0 1-.708 0L10 1.707l-.646.647a.5.5 0 0 1-.708 0L8 1.707l-.646.647a.5.5 0 0 1-.708 0L6 1.707l-.646.647a.5.5 0 0 1-.708 0L4 1.707l-.646.647a.5.5 0 0 1-.708 0z"/>
+                  <path d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m8-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5"/>
+                </svg>`,
+  subtotalLabel: "Subtotal",
+  shippingLabel: "Envío",
+  freeShippingText: "Gratis",
+  totalLabel: "Total",
+  checkoutButtonText: "Tramitar Pedido",
+  checkoutButtonIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag-check mr-2" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M10.854 8.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
+                  <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1m3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z"/>
+                </svg>`,
+  securePaymentText: "Pagos seguros con tarjeta y PayPal",
+  decreaseIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dash" viewBox="0 0 16 16">
+          <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8"/>
+        </svg>`,
+  increaseIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+          <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+        </svg>`,
+  removeIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+        <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+      </svg>`,
+  removeText: "Eliminar",
+  decreaseAriaLabel: "Disminuir cantidad",
+  increaseAriaLabel: "Aumentar cantidad",
+};
+
+const pageData = { ...fallbackData, ...carritoPageData };
+
+const {
+  pageTitle,
+  emptyCartIcon,
+  emptyCartText,
+  continueShoppingButtonText,
+  continueShoppingIcon,
+  summaryTitle,
+  summaryIcon,
+  subtotalLabel,
+  shippingLabel,
+  freeShippingText,
+  totalLabel,
+  checkoutButtonText,
+  checkoutButtonIcon,
+  securePaymentText,
+  decreaseIcon,
+  increaseIcon,
+  removeIcon,
+  removeText,
+  decreaseAriaLabel,
+  increaseAriaLabel,
+} = pageData;
+
+const { metaTitle, metaDescription, keywords} = pageData.seo;
 ---
 
 <Layout
-  titulo="Carrito de Compra"
-  descripcion="Revisa los productos en tu carrito de compra."
+  titulo={metaTitle}
+  descripcion={metaDescription}
+  keywords={keywords}
 >
   <section class="py-12 bg-bg-secondary min-h-[60vh]">
     <div class="container mx-auto px-4 lg:px-8">
       <h1 class="text-4xl font-bold text-text-primary mb-8 text-center">
-        Tu Carrito
+        {pageTitle}
       </h1>
 
       <!-- Estado vacío -->
       <div id="cart-empty" class="text-center py-16 hidden">
-        <div class="mb-4 flex justify-center">
-          <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-cart-x text-text-tertiary" viewBox="0 0 16 16">
-            <path d="M7.354 5.646a.5.5 0 1 0-.708.708L7.793 7.5 6.646 8.646a.5.5 0 1 0 .708.708L8.5 8.207l1.146 1.147a.5.5 0 0 0 .708-.708L9.207 7.5l1.147-1.146a.5.5 0 0 0-.708-.708L8.5 6.793z"/>
-            <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zm3.915 10L3.102 4h10.796l-1.313 7zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
-          </svg>
-        </div>
-        <p class="text-xl text-text-secondary mb-8">Tu carrito está vacío</p>
+        <div class="mb-4 flex justify-center" set:html={emptyCartIcon} />
+        <p class="text-xl text-text-secondary mb-8">{emptyCartText}</p>
         <Button link="/productos" variant="primary">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left mr-2" viewBox="0 0 16 16">
-            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
-          </svg>
-          Ver Productos
+          <Fragment set:html={continueShoppingIcon} />
+          {continueShoppingButtonText}
         </Button>
       </div>
 
@@ -42,23 +132,20 @@ import CartItem from "../components/features/cart/CartItem.astro";
           <div class="lg:col-span-1">
             <div class="bg-bg-primary p-6 rounded-2xl border border-divider sticky top-24">
               <div class="flex items-center gap-2 mb-6">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-receipt text-primary" viewBox="0 0 16 16">
-                  <path d="M1.92.506a.5.5 0 0 1 .434.14L3 1.293l.646-.647a.5.5 0 0 1 .708 0L5 1.293l.646-.647a.5.5 0 0 1 .708 0L7 1.293l.646-.647a.5.5 0 0 1 .708 0L9 1.293l.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .801.13l.5 1A.5.5 0 0 1 15 2v12a.5.5 0 0 1-.053.224l-.5 1a.5.5 0 0 1-.8.13L13 14.707l-.646.647a.5.5 0 0 1-.708 0L11 14.707l-.646.647a.5.5 0 0 1-.708 0L9 14.707l-.646.647a.5.5 0 0 1-.708 0L7 14.707l-.646.647a.5.5 0 0 1-.708 0L5 14.707l-.646.647a.5.5 0 0 1-.708 0L3 14.707l-.646.647a.5.5 0 0 1-.801-.13l-.5-1A.5.5 0 0 1 1 14V2a.5.5 0 0 1 .053-.224l.5-1a.5.5 0 0 1 .367-.27m.217 1.338L2 2.118v11.764l.137.274.51-.51a.5.5 0 0 1 .707 0l.646.647.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.509.509.137-.274V2.118l-.137-.274-.51.51a.5.5 0 0 1-.707 0L12 1.707l-.646.647a.5.5 0 0 1-.708 0L10 1.707l-.646.647a.5.5 0 0 1-.708 0L8 1.707l-.646.647a.5.5 0 0 1-.708 0L6 1.707l-.646.647a.5.5 0 0 1-.708 0L4 1.707l-.646.647a.5.5 0 0 1-.708 0z"/>
-                  <path d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m8-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5"/>
-                </svg>
-                <h2 class="text-2xl font-bold text-text-primary">Resumen</h2>
+                <Fragment set:html={summaryIcon} />
+                <h2 class="text-2xl font-bold text-text-primary">{summaryTitle}</h2>
               </div>
               <div class="space-y-3 mb-6">
                 <div class="flex justify-between text-text-secondary">
-                  <span>Subtotal</span>
+                  <span>{subtotalLabel}</span>
                   <span id="cart-subtotal">0,00€</span>
                 </div>
                 <div class="flex justify-between text-text-secondary">
-                  <span>Envío</span>
-                  <span class="text-success font-medium">Gratis</span>
+                  <span>{shippingLabel}</span>
+                  <span class="text-success font-medium">{freeShippingText}</span>
                 </div>
                 <div class="border-t border-divider pt-3 flex justify-between font-bold text-xl">
-                  <span>Total</span>
+                  <span>{totalLabel}</span>
                   <span id="cart-total" class="text-primary">0,00€</span>
                 </div>
               </div>
@@ -68,14 +155,11 @@ import CartItem from "../components/features/cart/CartItem.astro";
                 className="w-full justify-center mb-3"
                 id="checkout-btn"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag-check mr-2" viewBox="0 0 16 16">
-                  <path fill-rule="evenodd" d="M10.854 8.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
-                  <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1m3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z"/>
-                </svg>
-                Tramitar Pedido
+                <Fragment set:html={checkoutButtonIcon} />
+                {checkoutButtonText}
               </Button>
               <p class="text-xs text-center text-text-tertiary">
-                Pagos seguros con tarjeta y PayPal
+                {securePaymentText}
               </p>
             </div>
           </div>
@@ -87,7 +171,14 @@ import CartItem from "../components/features/cart/CartItem.astro";
 
   <!-- Template para items del carrito (renderizado en servidor) -->
   <template id="cart-item-template">
-    <CartItem />
+    <CartItem
+      decreaseIcon={decreaseIcon}
+      increaseIcon={increaseIcon}
+      removeIcon={removeIcon}
+      removeText={removeText}
+      decreaseAriaLabel={decreaseAriaLabel}
+      increaseAriaLabel={increaseAriaLabel}
+    />
   </template>
 </Layout>
 
