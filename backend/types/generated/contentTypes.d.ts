@@ -666,6 +666,50 @@ export interface ApiHeroSectionHeroSection extends Struct.SingleTypeSchema {
   };
 }
 
+export interface ApiHomePageHomePage extends Struct.SingleTypeSchema {
+  collectionName: 'home_pages';
+  info: {
+    displayName: 'Index';
+    pluralName: 'home-pages';
+    singularName: 'home-page';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    blogSectionEmptyIcon: Schema.Attribute.Text;
+    blogSectionEmptyMessage: Schema.Attribute.Text;
+    blogSectionLinkIcon: Schema.Attribute.Text;
+    blogSectionLinkText: Schema.Attribute.Text;
+    blogSectionSubtitle: Schema.Attribute.Text;
+    blogSectionTitle: Schema.Attribute.Text;
+    button: Schema.Attribute.Component<'ui.button', true>;
+    categoriesEmptyIcon: Schema.Attribute.Text;
+    categoriesEmptyMessage: Schema.Attribute.Text;
+    categoriesSectionSubtitle: Schema.Attribute.Text;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    featuredProductsButtonText: Schema.Attribute.Text;
+    featuredProductsEcoLabel: Schema.Attribute.Text;
+    featuredProductsEmptyMessage: Schema.Attribute.Text;
+    featuredProductsFeaturedLabel: Schema.Attribute.Text;
+    featuredProductsSubtitle: Schema.Attribute.Text;
+    featuredProductsTitle: Schema.Attribute.Text;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::home-page.home-page'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    seo: Schema.Attribute.Component<'shared.seo', false>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiNavigationNavigation extends Struct.SingleTypeSchema {
   collectionName: 'navigations';
   info: {
@@ -988,6 +1032,40 @@ export interface ApiSiteConfigSiteConfig extends Struct.SingleTypeSchema {
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     url: Schema.Attribute.String;
+  };
+}
+
+export interface ApiSobreNosotrosSobreNosotros extends Struct.SingleTypeSchema {
+  collectionName: 'sobre_nosotross';
+  info: {
+    displayName: 'About';
+    pluralName: 'sobre-nosotross';
+    singularName: 'sobre-nosotros';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    CardComponent: Schema.Attribute.Component<'about-us.info-card', true>;
+    content: Schema.Attribute.Text;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    heroImage: Schema.Attribute.Media<'images'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::sobre-nosotros.sobre-nosotros'
+    > &
+      Schema.Attribute.Private;
+    metaDescription: Schema.Attribute.Text;
+    publishedAt: Schema.Attribute.DateTime;
+    seo: Schema.Attribute.Component<'shared.seo', false>;
+    subtitle: Schema.Attribute.Text;
+    title: Schema.Attribute.Text;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
   };
 }
 
@@ -1605,6 +1683,7 @@ declare module '@strapi/strapi' {
       'api::category.category': ApiCategoryCategory;
       'api::footer.footer': ApiFooterFooter;
       'api::hero-section.hero-section': ApiHeroSectionHeroSection;
+      'api::home-page.home-page': ApiHomePageHomePage;
       'api::navigation.navigation': ApiNavigationNavigation;
       'api::order.order': ApiOrderOrder;
       'api::origin.origin': ApiOriginOrigin;
@@ -1613,6 +1692,7 @@ declare module '@strapi/strapi' {
       'api::review.review': ApiReviewReview;
       'api::single-category.single-category': ApiSingleCategorySingleCategory;
       'api::site-config.site-config': ApiSiteConfigSiteConfig;
+      'api::sobre-nosotros.sobre-nosotros': ApiSobreNosotrosSobreNosotros;
       'api::tag.tag': ApiTagTag;
       'api::ui-component.ui-component': ApiUiComponentUiComponent;
       'api::why-choose-us.why-choose-us': ApiWhyChooseUsWhyChooseUs;

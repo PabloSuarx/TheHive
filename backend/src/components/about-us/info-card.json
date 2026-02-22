@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_about_us_info_cards",
+  "info": {
+    "displayName": "Info Card"
+  },
+  "options": {},
+  "attributes": {
+    "icon": {
+      "type": "text"
+    },
+    "title": {
+      "type": "text"
+    },
+    "description": {
+      "type": "text"
+    }
+  },
+  "config": {}
+}

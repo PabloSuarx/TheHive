@@ -1,5 +1,17 @@
 import type { Schema, Struct } from '@strapi/strapi';
 
+export interface AboutUsInfoCard extends Struct.ComponentSchema {
+  collectionName: 'components_about_us_info_cards';
+  info: {
+    displayName: 'Info Card';
+  };
+  attributes: {
+    description: Schema.Attribute.Text;
+    icon: Schema.Attribute.Text;
+    title: Schema.Attribute.Text;
+  };
+}
+
 export interface FooterFooterLink extends Struct.ComponentSchema {
   collectionName: 'components_footer_footer_links';
   info: {
@@ -173,6 +185,7 @@ export interface UserAddresses extends Struct.ComponentSchema {
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
+      'about-us.info-card': AboutUsInfoCard;
       'footer.footer-link': FooterFooterLink;
       'footer.social-media': FooterSocialMedia;
       'main-image.main-image': MainImageMainImage;

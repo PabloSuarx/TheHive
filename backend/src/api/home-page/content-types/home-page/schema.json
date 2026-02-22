@@ -1,0 +1,70 @@
+{
+  "kind": "singleType",
+  "collectionName": "home_pages",
+  "info": {
+    "singularName": "home-page",
+    "pluralName": "home-pages",
+    "displayName": "Index"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "seo": {
+      "type": "component",
+      "component": "shared.seo",
+      "repeatable": false
+    },
+    "categoriesSectionSubtitle": {
+      "type": "text"
+    },
+    "categoriesEmptyIcon": {
+      "type": "text"
+    },
+    "categoriesEmptyMessage": {
+      "type": "text"
+    },
+    "featuredProductsTitle": {
+      "type": "text"
+    },
+    "featuredProductsSubtitle": {
+      "type": "text"
+    },
+    "featuredProductsEcoLabel": {
+      "type": "text"
+    },
+    "featuredProductsFeaturedLabel": {
+      "type": "text"
+    },
+    "featuredProductsButtonText": {
+      "type": "text"
+    },
+    "featuredProductsEmptyMessage": {
+      "type": "text"
+    },
+    "blogSectionTitle": {
+      "type": "text"
+    },
+    "blogSectionSubtitle": {
+      "type": "text"
+    },
+    "blogSectionLinkText": {
+      "type": "text"
+    },
+    "blogSectionLinkIcon": {
+      "type": "text"
+    },
+    "blogSectionEmptyIcon": {
+      "type": "text"
+    },
+    "blogSectionEmptyMessage": {
+      "type": "text"
+    },
+    "button": {
+      "type": "component",
+      "component": "ui.button",
+      "repeatable": true
+    }
+  }
+}

@@ -8,9 +8,23 @@ import StarRating from "../../ui/StarRating.astro"
 
 interface Props {
   buttonsByName: Record<string, any>;
+  title: string;
+  subtitle: string;
+  ecoLabel: string;
+  featuredLabel: string;
+  buttonText: string;
+  emptyMessage: string;
 }
 
-const { buttonsByName } = Astro.props;
+const {
+  buttonsByName,
+  title,
+  subtitle,
+  ecoLabel,
+  featuredLabel,
+  buttonText,
+  emptyMessage,
+} = Astro.props;
 const PUBLIC_STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL;
 
 const products = (await get("products", {
@@ -33,9 +47,9 @@ const displayProducts = products.length > 0 ? products : [];
 
   <div class="container mx-auto px-4 lg:px-8">
     <div class="text-center max-w-3xl mx-auto mb-16">
-      <h2>Productos Destacados</h2>
+      <h2>{title}</h2>
       <p class="text-lead text-text-secondary mt-4">
-        Las mieles favoritas de nuestros clientes
+        {subtitle}
       </p>
     </div>
 
@@ -47,8 +61,8 @@ const displayProducts = products.length > 0 ? products : [];
               ? product.mainImage.url
               : product.mainImage?.url
                 ? `${PUBLIC_STRAPI_URL}${product.mainImage.url}`
-                : "/placeholder.svg"; 
-            
+                : "/placeholder.svg";
+
             // Calculate rating
             let averageRating = product.rating || 0;
             if (!averageRating && product.reviews && product.reviews.length > 0) {
@@ -71,14 +85,14 @@ const displayProducts = products.length > 0 ? products : [];
                     <span
                       class="absolute top-4 right-4 px-3 py-1 bg-success text-white text-xs font-bold rounded-full"
                     >
-                      Eco
+                      {ecoLabel}
                     </span>
                   )}
                    {!product.organic && (
                      <span
                       class="absolute top-4 right-4 px-3 py-1 bg-warning text-white text-xs font-bold rounded-full"
                     >
-                      Destacado
+                      {featuredLabel}
                     </span>
                    )}
                 </div>
@@ -101,7 +115,7 @@ const displayProducts = products.length > 0 ? products : [];
                     variant="primary"
                     className="w-full mt-4 rounded-xl"
                   >
-                    Ver Producto
+                    {buttonText}
                   </Button>
                 </div>
               </article>
@@ -111,7 +125,7 @@ const displayProducts = products.length > 0 ? products : [];
       </div>
     ) : (
        <div class="text-center py-12">
-        <p class="text-text-tertiary">No hay productos destacados disponibles en este momento.</p>
+        <p class="text-text-tertiary">{emptyMessage}</p>
       </div>
     )}
 
