@@ -537,6 +537,46 @@ export interface ApiBlogPageBlogPage extends Struct.SingleTypeSchema {
   };
 }
 
+export interface ApiBlogSlugPageBlogSlugPage extends Struct.SingleTypeSchema {
+  collectionName: 'blog_slug_pages';
+  info: {
+    displayName: 'Blog Slug Page';
+    pluralName: 'blog-slug-pages';
+    singularName: 'blog-slug-page';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    arrowLeftIcon: Schema.Attribute.Text;
+    authorLabel: Schema.Attribute.String;
+    authorTeamLabel: Schema.Attribute.String;
+    backToLabel: Schema.Attribute.String;
+    breadcrumbBlog: Schema.Attribute.String;
+    breadcrumbHome: Schema.Attribute.String;
+    calendarIcon: Schema.Attribute.Text;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::blog-slug-page.blog-slug-page'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    readingTimeIcon: Schema.Attribute.Text;
+    readingTimeSuffix: Schema.Attribute.String;
+    relatedArticlesTitle: Schema.Attribute.String;
+    seo: Schema.Attribute.Component<'shared.seo', false>;
+    tagsIcon: Schema.Attribute.Text;
+    tagsLabel: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiBlogBlog extends Struct.CollectionTypeSchema {
   collectionName: 'blogs';
   info: {
@@ -2139,6 +2179,7 @@ declare module '@strapi/strapi' {
       'api::beekeeper.beekeeper': ApiBeekeeperBeekeeper;
       'api::blog-category.blog-category': ApiBlogCategoryBlogCategory;
       'api::blog-page.blog-page': ApiBlogPageBlogPage;
+      'api::blog-slug-page.blog-slug-page': ApiBlogSlugPageBlogSlugPage;
       'api::blog.blog': ApiBlogBlog;
       'api::cart-item.cart-item': ApiCartItemCartItem;
       'api::categoria-page.categoria-page': ApiCategoriaPageCategoriaPage;

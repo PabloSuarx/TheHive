@@ -1,0 +1,56 @@
+{
+  "kind": "singleType",
+  "collectionName": "blog_slug_pages",
+  "info": {
+    "singularName": "blog-slug-page",
+    "pluralName": "blog-slug-pages",
+    "displayName": "Blog Slug Page"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "seo": {
+      "type": "component",
+      "component": "shared.seo",
+      "repeatable": false
+    },
+    "breadcrumbHome": {
+      "type": "string"
+    },
+    "breadcrumbBlog": {
+      "type": "string"
+    },
+    "tagsLabel": {
+      "type": "string"
+    },
+    "tagsIcon": {
+      "type": "text"
+    },
+    "authorLabel": {
+      "type": "string"
+    },
+    "authorTeamLabel": {
+      "type": "string"
+    },
+    "readingTimeIcon": {
+      "type": "text"
+    },
+    "readingTimeSuffix": {
+      "type": "string"
+    },
+    "calendarIcon": {
+      "type": "text"
+    },
+    "relatedArticlesTitle": {
+      "type": "string"
+    },
+    "backToLabel": {
+      "type": "string"
+    },
+    "arrowLeftIcon": {
+      "type": "text"
+    }
+  }
+}
