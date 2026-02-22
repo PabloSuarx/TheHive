@@ -1,0 +1,88 @@
+{
+  "kind": "singleType",
+  "collectionName": "productos_pages",
+  "info": {
+    "singularName": "productos-page",
+    "pluralName": "productos-pages",
+    "displayName": "Productos Page"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "seo": {
+      "type": "component",
+      "component": "shared.seo",
+      "repeatable": false
+    },
+    "breadcrumbsSeparator": {
+      "type": "string"
+    },
+    "breadcrumbsHomeLabel": {
+      "type": "string"
+    },
+    "heroTitle": {
+      "type": "string"
+    },
+    "heroDescription": {
+      "type": "text"
+    },
+    "searchIcon": {
+      "type": "text"
+    },
+    "searchPlaceholder": {
+      "type": "string"
+    },
+    "clearSearchIcon": {
+      "type": "text"
+    },
+    "clearSearchAriaLabel": {
+      "type": "string"
+    },
+    "filterAllLabel": {
+      "type": "string"
+    },
+    "sortLabel": {
+      "type": "string"
+    },
+    "sortOptions": {
+      "type": "component",
+      "component": "blog.sort-option",
+      "repeatable": true
+    },
+    "emptyStateIcon": {
+      "type": "text"
+    },
+    "emptyStateTitle": {
+      "type": "string"
+    },
+    "emptyStateDescription": {
+      "type": "text"
+    },
+    "resultsCountEmpty": {
+      "type": "string"
+    },
+    "resultsCountTemplate": {
+      "type": "string"
+    },
+    "paginationPrevAriaLabel": {
+      "type": "string"
+    },
+    "paginationNextAriaLabel": {
+      "type": "string"
+    },
+    "paginationNavAriaLabel": {
+      "type": "string"
+    },
+    "paginationShowLabel": {
+      "type": "string"
+    },
+    "paginationChevronLeftIcon": {
+      "type": "text"
+    },
+    "paginationChevronRightIcon": {
+      "type": "text"
+    }
+  }
+}

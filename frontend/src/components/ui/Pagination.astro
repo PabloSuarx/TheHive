@@ -3,12 +3,24 @@ interface Props {
   defaultPageSize?: number;
   pageSizeOptions?: number[];
   class?: string;
+  paginationPrevAriaLabel?: string;
+  paginationNextAriaLabel?: string;
+  paginationNavAriaLabel?: string;
+  paginationShowLabel?: string;
+  paginationChevronLeftIcon?: string;
+  paginationChevronRightIcon?: string;
 }
 
 const {
   defaultPageSize = 8,
   pageSizeOptions = [8, 16, 24, 48],
   class: className = "",
+  paginationPrevAriaLabel = "Página anterior",
+  paginationNextAriaLabel = "Página siguiente",
+  paginationNavAriaLabel = "Navegación de páginas",
+  paginationShowLabel = "Mostrar:",
+  paginationChevronLeftIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"/></svg>`,
+  paginationChevronRightIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/></svg>`,
 } = Astro.props;
 ---
 
@@ -20,16 +32,14 @@ const {
   data-default-page-size={defaultPageSize}
 >
   <!-- Pagination Controls -->
-  <nav class="flex items-center gap-1 sm:gap-2" aria-label="Navegación de páginas">
+  <nav class="flex items-center gap-1 sm:gap-2" aria-label={paginationNavAriaLabel}>
     <button
       id="prev-page"
       class="p-2 rounded-lg border border-border-default bg-bg-primary text-text-secondary hover:bg-primary-pale hover:text-primary hover:border-primary disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-bg-primary disabled:hover:text-text-secondary disabled:hover:border-border-default transition-all duration-200"
-      aria-label="Página anterior"
+      aria-label={paginationPrevAriaLabel}
       disabled
     >
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
-        <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"/>
-      </svg>
+      <span set:html={paginationChevronLeftIcon} />
     </button>
 
     <div id="page-numbers" class="flex items-center gap-1 sm:gap-2">
@@ -39,18 +49,16 @@ const {
     <button
       id="next-page"
       class="p-2 rounded-lg border border-border-default bg-bg-primary text-text-secondary hover:bg-primary-pale hover:text-primary hover:border-primary disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-bg-primary disabled:hover:text-text-secondary disabled:hover:border-border-default transition-all duration-200"
-      aria-label="Página siguiente"
+      aria-label={paginationNextAriaLabel}
       disabled
     >
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
-        <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/>
-      </svg>
+      <span set:html={paginationChevronRightIcon} />
     </button>
   </nav>
 
   <!-- Items Per Page -->
   <div class="flex items-center gap-2 text-text-secondary text-sm mt-4">
-    <label for="items-per-page" class="whitespace-nowrap">Mostrar:</label>
+    <label for="items-per-page" class="whitespace-nowrap">{paginationShowLabel}</label>
     <select
       id="items-per-page"
       class="bg-bg-primary border border-border-default text-text-primary text-sm rounded-lg focus:ring-primary focus:border-primary block p-2 outline-none cursor-pointer transition-colors hover:border-primary"

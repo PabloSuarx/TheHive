@@ -1144,6 +1144,56 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiProductosPageProductosPage extends Struct.SingleTypeSchema {
+  collectionName: 'productos_pages';
+  info: {
+    displayName: 'Productos Page';
+    pluralName: 'productos-pages';
+    singularName: 'productos-page';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    breadcrumbsHomeLabel: Schema.Attribute.String;
+    breadcrumbsSeparator: Schema.Attribute.String;
+    clearSearchAriaLabel: Schema.Attribute.String;
+    clearSearchIcon: Schema.Attribute.Text;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    emptyStateDescription: Schema.Attribute.Text;
+    emptyStateIcon: Schema.Attribute.Text;
+    emptyStateTitle: Schema.Attribute.String;
+    filterAllLabel: Schema.Attribute.String;
+    heroDescription: Schema.Attribute.Text;
+    heroTitle: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::productos-page.productos-page'
+    > &
+      Schema.Attribute.Private;
+    paginationChevronLeftIcon: Schema.Attribute.Text;
+    paginationChevronRightIcon: Schema.Attribute.Text;
+    paginationNavAriaLabel: Schema.Attribute.String;
+    paginationNextAriaLabel: Schema.Attribute.String;
+    paginationPrevAriaLabel: Schema.Attribute.String;
+    paginationShowLabel: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    resultsCountEmpty: Schema.Attribute.String;
+    resultsCountTemplate: Schema.Attribute.String;
+    searchIcon: Schema.Attribute.Text;
+    searchPlaceholder: Schema.Attribute.String;
+    seo: Schema.Attribute.Component<'shared.seo', false>;
+    sortLabel: Schema.Attribute.String;
+    sortOptions: Schema.Attribute.Component<'blog.sort-option', true>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiReviewReview extends Struct.CollectionTypeSchema {
   collectionName: 'reviews';
   info: {
@@ -1957,6 +2007,7 @@ declare module '@strapi/strapi' {
       'api::origin.origin': ApiOriginOrigin;
       'api::product-card.product-card': ApiProductCardProductCard;
       'api::product.product': ApiProductProduct;
+      'api::productos-page.productos-page': ApiProductosPageProductosPage;
       'api::review.review': ApiReviewReview;
       'api::single-category.single-category': ApiSingleCategorySingleCategory;
       'api::site-config.site-config': ApiSiteConfigSiteConfig;

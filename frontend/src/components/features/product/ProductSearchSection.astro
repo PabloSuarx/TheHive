@@ -1,7 +1,20 @@
 ---
 import FilterTabs from "../../ui/FilterTabs.astro";
 
-const { categories } = Astro.props;
+const {
+  categories,
+  searchIcon,
+  searchPlaceholder,
+  clearSearchIcon,
+  clearSearchAriaLabel,
+  filterAllLabel,
+  sortLabel,
+  sortOptions,
+  resultsCountEmpty,
+  paginationPrevAriaLabel,
+  paginationNextAriaLabel,
+  paginationNavAriaLabel,
+} = Astro.props;
 
 const filters = categories.map((cat: any) => ({
   label: cat.name,
@@ -11,52 +24,42 @@ const filters = categories.map((cat: any) => ({
     <div class="container mx-auto px-4 lg:px-8">
       <!-- Buscador -->
       <div class="max-w-xl mx-auto mb-5 relative">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-          class="bi bi-search absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-tertiary"
-          viewBox="0 0 16 16">
-          <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-        </svg>
+        <!-- <span set:html={searchIcon} /> -->
         <input
           type="text"
           id="product-search"
-          placeholder="Buscar productos... (ej: azahar, romero, ecológico)"
+          placeholder={searchPlaceholder}
           class="w-full pl-12 pr-10 py-3 bg-bg-primary border-2 border-divider rounded-xl focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors text-text-primary placeholder:text-text-tertiary"
           autocomplete="off"
         />
         <button
           id="clear-search"
           class="absolute right-4 top-1/2 -translate-y-1/2 text-text-tertiary hover:text-text-secondary transition-colors hidden"
-          aria-label="Limpiar búsqueda"
+          aria-label={clearSearchAriaLabel}
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-            class="bi bi-x-lg w-4 h-4"
-            viewBox="0 0 16 16">
-            <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
-          </svg>
+          <span set:html={clearSearchIcon} />
         </button>
       </div>
 
       <div class="flex flex-wrap justify-between items-center gap-4">
         <!-- Filtros categoría -->
         <div id="category-filters">
-          <FilterTabs filters={filters} defaultActive="all" allLabel="Todas" />
+          <FilterTabs filters={filters} defaultActive="all" allLabel={filterAllLabel} />
         </div>
 
         <!-- Ordenación -->
         <div class="flex items-center gap-2">
           <label
             for="sort-select"
-            class="text-sm text-text-tertiary whitespace-nowrap">Ordenar:</label
+            class="text-sm text-text-tertiary whitespace-nowrap">{sortLabel}</label
           >
           <select
             id="sort-select"
             class="px-3 py-2 bg-bg-primary border border-divider rounded-lg text-sm text-text-primary focus:border-primary focus:outline-none transition-colors"
           >
-            <option value="featured">Destacados</option>
-            <option value="name-asc">Nombre A-Z</option>
-            <option value="name-desc">Nombre Z-A</option>
-            <option value="price-asc">Precio ↑</option>
-            <option value="price-desc">Precio ↓</option>
+            {sortOptions.map((opt: any) => (
+              <option value={opt.value}>{opt.label}</option>
+            ))}
           </select>
         </div>
       </div>
