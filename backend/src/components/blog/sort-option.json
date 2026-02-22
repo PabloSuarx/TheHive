@@ -1,0 +1,18 @@
+{
+  "collectionName": "components_blog_sort_options",
+  "info": {
+    "displayName": "Sort Option"
+  },
+  "options": {},
+  "attributes": {
+    "label": {
+      "type": "string",
+      "required": true
+    },
+    "value": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "config": {}
+}

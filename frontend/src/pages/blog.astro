@@ -1,9 +1,21 @@
 ---
+/*
+ * STRAPI SINGLE TYPE: "BlogPage" → endpoint: "blog-page"
+ * Campos:
+ * - seo (component shared.seo)
+ * - heroTitle, heroDescription
+ * - breadcrumbsSeparator, breadcrumbsHomeLabel
+ * - searchPlaceholder, searchIcon, clearSearchIcon, clearSearchAriaLabel
+ * - filterAllLabel, sortLabel
+ * - sortOptions (component blog.sort-option, repeatable)
+ * - emptyStateIcon, emptyStateTitle, emptyStateDescription
+ * - paginationAriaLabel, resultsCountEmpty, resultsCountTemplate
+ */
 import Layout from "../layouts/Layout.astro";
 import BlogCard from "../components/features/blog/BlogCard.astro"
 import BlogHeroSection from "../components/features/blog/BlogHeroSection.astro"
 import BlogSearchSection from "../components/features/blog/BlogSearchSection.astro"
-import BlogGridSection from "../components/features/blog/BlogGridSection.astro" 
+import BlogGridSection from "../components/features/blog/BlogGridSection.astro"
 import BlogLoadingSkeleton from "../components/features/blog/BlogLoadingSkeleton.astro"
 import { get } from "../lib/strapi";
 
@@ -19,6 +31,57 @@ const blogs =
     sort: { blogPublishedAt: "desc" },
   })) || [];
 const blogCategories = (await get("blog-categories")) || [];
+
+// Fetch Blog Page content from Strapi
+const blogPageData = await get("blog-page", { populate: "*" });
+
+// Fallback data con contenido actual hardcodeado
+const fallbackData = {
+  heroTitle: "Nuestro Blog",
+  heroDescription: "Lee nuestros artículos sobre miel artesanal, recetas, beneficios para la salud, sostenibilidad y el mundo de la apicultura.",
+  breadcrumbsSeparator: "/",
+  breadcrumbsHomeLabel: "Inicio",
+  searchPlaceholder: "Buscar artículos... (ej: recetas, beneficios, apicultura)",
+  searchIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/></svg>`,
+  clearSearchIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/></svg>`,
+  clearSearchAriaLabel: "Limpiar búsqueda",
+  filterAllLabel: "Todos",
+  sortLabel: "Ordenar:",
+  sortOptions: [
+    { label: "Más recientes", value: "date-desc" },
+    { label: "Más antiguos", value: "date-asc" },
+    { label: "Título A-Z", value: "title-asc" },
+    { label: "Título Z-A", value: "title-desc" }
+  ],
+  emptyStateIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-inbox" viewBox="0 0 16 16"><path d="M4.98 4a.5.5 0 0 0-.39.188L1.54 8H6a.5.5 0 0 1 .5.5 1.5 1.5 0 1 0 3 0A.5.5 0 0 1 10 8h4.46l-3.05-3.812A.5.5 0 0 0 11.02 4zm9.954 5H10.45a2.5 2.5 0 0 1-4.9 0H1.066l.32 2.562a.5.5 0 0 0 .497.438h12.234a.5.5 0 0 0 .496-.438zM3.809 3.563A1.5 1.5 0 0 1 4.981 3h6.038a1.5 1.5 0 0 1 1.172.563l3.7 4.625a.5.5 0 0 1 .105.374l-.39 3.124A1.5 1.5 0 0 1 14.117 13H1.883a1.5 1.5 0 0 1-1.489-1.314l-.39-3.124a.5.5 0 0 1 .106-.374z"/></svg>`,
+  emptyStateTitle: "No se encontraron artículos",
+  emptyStateDescription: "Prueba con otro término de búsqueda o cambia los filtros",
+  paginationAriaLabel: "Paginación del blog",
+  resultsCountEmpty: "Sin resultados",
+  resultsCountTemplate: "Mostrando {start}–{end} de {total} artículos"
+};
+
+const pageData = { ...fallbackData, ...blogPageData };
+
+const {
+  heroTitle,
+  heroDescription,
+  breadcrumbsSeparator,
+  breadcrumbsHomeLabel,
+  searchPlaceholder,
+  searchIcon,
+  clearSearchIcon,
+  clearSearchAriaLabel,
+  filterAllLabel,
+  sortLabel,
+  sortOptions,
+  emptyStateIcon,
+  emptyStateTitle,
+  emptyStateDescription,
+  paginationAriaLabel,
+  resultsCountEmpty,
+  resultsCountTemplate
+} = pageData;
 ---
 
 <Layout
@@ -28,23 +91,43 @@ const blogCategories = (await get("blog-categories")) || [];
 >
 
   <section class="py-12 bg-linear-to-b from-bg-primary to-primary-pale">
-    <BlogHeroSection />
+    <BlogHeroSection
+      {heroTitle}
+      {heroDescription}
+      {breadcrumbsSeparator}
+      {breadcrumbsHomeLabel}
+    />
   </section>
 
   <section class="py-12 bg-linear-to-b from-primary-pale to-bg-primary">
-    <BlogSearchSection {blogCategories} />
+    <BlogSearchSection
+      {blogCategories}
+      {searchPlaceholder}
+      {searchIcon}
+      {clearSearchIcon}
+      {clearSearchAriaLabel}
+      {filterAllLabel}
+      {sortLabel}
+      {sortOptions}
+    />
   </section>
 
   <section id="blog-loading" class="py-12 bg-linear-to-b from-bg-primary to-primary-pale">
-    <BlogLoadingSkeleton /> 
+    <BlogLoadingSkeleton />
   </section>
 
   <section id="blog-section" class="py-12 bg-linear-to-b from-bg-primary to-primary-pale">
-    <BlogGridSection {blogs} /> 
+    <BlogGridSection
+      {blogs}
+      {emptyStateIcon}
+      {emptyStateTitle}
+      {emptyStateDescription}
+      {paginationAriaLabel}
+    />
   </section>
 </Layout>
 
-<script>
+<script define:vars={{ resultsCountEmpty, resultsCountTemplate }}>
   document.addEventListener("DOMContentLoaded", () => {
     const PER_PAGE = 6;
     let page = 1,
@@ -54,32 +137,32 @@ const blogCategories = (await get("blog-categories")) || [];
 
     const searchInput = document.getElementById(
       "blog-search"
-    ) as HTMLInputElement;
-    const clearBtn = document.getElementById("clear-search") as HTMLElement;
+    );
+    const clearBtn = document.getElementById("clear-search");
     const filterBtns = document.querySelectorAll(".filter-btn");
-    const sortSelect = document.getElementById("blog-sort"    ) as HTMLSelectElement;
+    const sortSelect = document.getElementById("blog-sort");
     const allItems = Array.from(
       document.querySelectorAll(".blog-item")
-    ) as HTMLElement[];
-    const grid = document.getElementById("blog-grid") as HTMLElement;
+    );
+    const grid = document.getElementById("blog-grid");
     const paginationEl = document.getElementById(
       "blog-pagination"
-    ) as HTMLElement;
-    const noResults = document.getElementById("blog-no-results") as HTMLElement;
+    );
+    const noResults = document.getElementById("blog-no-results");
     const countEl = document.getElementById(
       "blog-results-count"
-    ) as HTMLElement;
-    const loading = document.getElementById("blog-loading") as HTMLElement;
-    const section = document.getElementById("blog-section") as HTMLElement;
+    );
+    const loading = document.getElementById("blog-loading");
+    const section = document.getElementById("blog-section");
 
-    function normalize(t: string): string {
+    function normalize(t) {
       return t
         .toLowerCase()
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "");
     }
 
-    function matches(item: HTMLElement, q: string): boolean {
+    function matches(item, q) {
       if (!q) return true;
       const safe = normalize(q).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
       try {
@@ -98,7 +181,7 @@ const blogCategories = (await get("blog-categories")) || [];
       }
     }
 
-    function getVisible(): HTMLElement[] {
+    function getVisible() {
       return allItems.filter(
         (i) =>
           (category === "all" || i.dataset.category === category) &&
@@ -106,7 +189,7 @@ const blogCategories = (await get("blog-categories")) || [];
       );
     }
 
-    function sortItems(items: HTMLElement[]): HTMLElement[] {
+    function sortItems(items) {
       return [...items].sort((a, b) => {
         switch (sort) {
           case "date-asc":
@@ -127,12 +210,12 @@ const blogCategories = (await get("blog-categories")) || [];
       });
     }
 
-    function renderPagination(total: number) {
+    function renderPagination(total) {
       const pages = Math.ceil(total / PER_PAGE);
       paginationEl.innerHTML = "";
       if (pages <= 1) return;
 
-      const btn = (html: string, p: number, dis: boolean, act: boolean) => {
+      const btn = (html, p, dis, act) => {
         const b = document.createElement("button");
         b.innerHTML = html;
         b.disabled = dis;
@@ -181,15 +264,15 @@ const blogCategories = (await get("blog-categories")) || [];
       noResults.classList.toggle("hidden", visible.length > 0);
       countEl.textContent =
         visible.length === 0
-          ? "Sin resultados"
-          : `Mostrando ${start + 1}–${Math.min(
-              start + PER_PAGE,
-              visible.length
-            )} de ${visible.length} artículos`;
+          ? resultsCountEmpty
+          : resultsCountTemplate
+              .replace("{start}", String(start + 1))
+              .replace("{end}", String(Math.min(start + PER_PAGE, visible.length)))
+              .replace("{total}", String(visible.length));
       renderPagination(visible.length);
     }
 
-    let debounce: ReturnType<typeof setTimeout>;
+    let debounce;
     searchInput.addEventListener("input", () => {
       clearBtn.classList.toggle("hidden", !searchInput.value);
       clearTimeout(debounce);

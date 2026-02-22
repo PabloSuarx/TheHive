@@ -1,0 +1,73 @@
+{
+  "kind": "singleType",
+  "collectionName": "blog_pages",
+  "info": {
+    "singularName": "blog-page",
+    "pluralName": "blog-pages",
+    "displayName": "Blog Page"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "seo": {
+      "type": "component",
+      "component": "shared.seo",
+      "repeatable": false
+    },
+    "heroTitle": {
+      "type": "string"
+    },
+    "heroDescription": {
+      "type": "text"
+    },
+    "breadcrumbsSeparator": {
+      "type": "string"
+    },
+    "breadcrumbsHomeLabel": {
+      "type": "string"
+    },
+    "searchPlaceholder": {
+      "type": "string"
+    },
+    "searchIcon": {
+      "type": "text"
+    },
+    "clearSearchIcon": {
+      "type": "text"
+    },
+    "clearSearchAriaLabel": {
+      "type": "string"
+    },
+    "filterAllLabel": {
+      "type": "string"
+    },
+    "sortLabel": {
+      "type": "string"
+    },
+    "sortOptions": {
+      "type": "component",
+      "component": "blog.sort-option",
+      "repeatable": true
+    },
+    "emptyStateIcon": {
+      "type": "text"
+    },
+    "emptyStateTitle": {
+      "type": "string"
+    },
+    "emptyStateDescription": {
+      "type": "text"
+    },
+    "paginationAriaLabel": {
+      "type": "string"
+    },
+    "resultsCountEmpty": {
+      "type": "string"
+    },
+    "resultsCountTemplate": {
+      "type": "string"
+    }
+  }
+}

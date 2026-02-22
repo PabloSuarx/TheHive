@@ -1,7 +1,16 @@
 ---
 import FilterTabs from "../../ui/FilterTabs.astro";
 
-const { blogCategories } = Astro.props;
+const {
+  blogCategories,
+  searchPlaceholder,
+  searchIcon,
+  clearSearchIcon,
+  clearSearchAriaLabel,
+  filterAllLabel,
+  sortLabel,
+  sortOptions
+} = Astro.props;
 
 const filters = blogCategories.map((cat: any) => ({
   label: cat.name,
@@ -13,60 +22,41 @@ const filters = blogCategories.map((cat: any) => ({
 
       <!-- Buscador -->
       <div class="max-w-xl mx-auto mb-5 relative">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          fill="currentColor"
-          class="bi bi-search absolute left-4 top-1/2 -translate-y-1/2 text-text-tertiary"
-          viewBox="0 0 16 16"
-        >
-          <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-        </svg>
+        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-text-tertiary" set:html={searchIcon} />
         <input
           type="text"
           id="blog-search"
-          placeholder="Buscar artículos... (ej: recetas, beneficios, apicultura)"
+          placeholder={searchPlaceholder}
           class="w-full pl-12 pr-10 py-3 bg-bg-primary border-2 border-divider rounded-xl focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors"
           autocomplete="off"
         />
         <button
           id="clear-search"
           class="absolute right-4 top-1/2 -translate-y-1/2 text-text-tertiary hover:text-text-secondary hidden transition-colors"
-          aria-label="Limpiar búsqueda"
+          aria-label={clearSearchAriaLabel}
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            fill="currentColor"
-            class="bi bi-x"
-            viewBox="0 0 16 16"
-          >
-            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
-          </svg>
+          <span set:html={clearSearchIcon} />
         </button>
       </div>
 
       <div class="flex flex-wrap justify-between items-center gap-4">
         <!-- Filtros categoría -->
         <div id="blog-filters">
-          <FilterTabs filters={filters} defaultActive="all" allLabel="Todos" />
+          <FilterTabs filters={filters} defaultActive="all" allLabel={filterAllLabel} />
         </div>
 
         <!-- Ordenación -->
         <div class="flex items-center gap-2">
           <label for="blog-sort" class="text-sm text-text-tertiary whitespace-nowrap"
-            >Ordenar:</label
+            >{sortLabel}</label
           >
           <select
             id="blog-sort"
             class="px-3 py-2 bg-bg-primary border border-divider rounded-lg text-sm text-text-primary focus:border-primary focus:outline-none"
           >
-            <option value="date-desc">Más recientes</option>
-            <option value="date-asc">Más antiguos</option>
-            <option value="title-asc">Título A-Z</option>
-            <option value="title-desc">Título Z-A</option>
+            {sortOptions.map((option: any) => (
+              <option value={option.value}>{option.label}</option>
+            ))}
           </select>
         </div>
       </div>

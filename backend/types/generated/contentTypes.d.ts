@@ -492,6 +492,51 @@ export interface ApiBlogCategoryBlogCategory
   };
 }
 
+export interface ApiBlogPageBlogPage extends Struct.SingleTypeSchema {
+  collectionName: 'blog_pages';
+  info: {
+    displayName: 'Blog Page';
+    pluralName: 'blog-pages';
+    singularName: 'blog-page';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    breadcrumbsHomeLabel: Schema.Attribute.String;
+    breadcrumbsSeparator: Schema.Attribute.String;
+    clearSearchAriaLabel: Schema.Attribute.String;
+    clearSearchIcon: Schema.Attribute.Text;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    emptyStateDescription: Schema.Attribute.Text;
+    emptyStateIcon: Schema.Attribute.Text;
+    emptyStateTitle: Schema.Attribute.String;
+    filterAllLabel: Schema.Attribute.String;
+    heroDescription: Schema.Attribute.Text;
+    heroTitle: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::blog-page.blog-page'
+    > &
+      Schema.Attribute.Private;
+    paginationAriaLabel: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    resultsCountEmpty: Schema.Attribute.String;
+    resultsCountTemplate: Schema.Attribute.String;
+    searchIcon: Schema.Attribute.Text;
+    searchPlaceholder: Schema.Attribute.String;
+    seo: Schema.Attribute.Component<'shared.seo', false>;
+    sortLabel: Schema.Attribute.String;
+    sortOptions: Schema.Attribute.Component<'blog.sort-option', true>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiBlogBlog extends Struct.CollectionTypeSchema {
   collectionName: 'blogs';
   info: {
@@ -1896,6 +1941,7 @@ declare module '@strapi/strapi' {
       'admin::user': AdminUser;
       'api::beekeeper.beekeeper': ApiBeekeeperBeekeeper;
       'api::blog-category.blog-category': ApiBlogCategoryBlogCategory;
+      'api::blog-page.blog-page': ApiBlogPageBlogPage;
       'api::blog.blog': ApiBlogBlog;
       'api::cart-item.cart-item': ApiCartItemCartItem;
       'api::category.category': ApiCategoryCategory;
