@@ -600,6 +600,119 @@ export interface ApiCategoryCategory extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiContactPageContactPage extends Struct.SingleTypeSchema {
+  collectionName: 'contact_pages';
+  info: {
+    displayName: 'Contact';
+    pluralName: 'contact-pages';
+    singularName: 'contact-page';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    addressIcon: Schema.Attribute.Text;
+    addressLine1: Schema.Attribute.Text;
+    addressLine2: Schema.Attribute.Text;
+    addressTitle: Schema.Attribute.String;
+    contactInfoDescription: Schema.Attribute.Text;
+    contactInfoTitle: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    emailAddress: Schema.Attribute.String;
+    emailErrorInvalid: Schema.Attribute.String;
+    emailErrorRequired: Schema.Attribute.String;
+    emailHref: Schema.Attribute.String;
+    emailIcon: Schema.Attribute.Text;
+    emailLabel: Schema.Attribute.String;
+    emailPlaceholder: Schema.Attribute.String;
+    emailTitle: Schema.Attribute.String;
+    formTitle: Schema.Attribute.String;
+    heroDescription: Schema.Attribute.Text;
+    heroTitle: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::contact-page.contact-page'
+    > &
+      Schema.Attribute.Private;
+    messageErrorRequired: Schema.Attribute.String;
+    messageLabel: Schema.Attribute.String;
+    messagePlaceholder: Schema.Attribute.String;
+    nameErrorInvalid: Schema.Attribute.String;
+    nameErrorRequired: Schema.Attribute.String;
+    nameLabel: Schema.Attribute.String;
+    namePlaceholder: Schema.Attribute.String;
+    phoneErrorInvalid: Schema.Attribute.String;
+    phoneHref: Schema.Attribute.String;
+    phoneIcon: Schema.Attribute.Text;
+    phoneLabel: Schema.Attribute.String;
+    phoneNumber: Schema.Attribute.String;
+    phonePlaceholder: Schema.Attribute.String;
+    phoneTitle: Schema.Attribute.String;
+    privacyErrorRequired: Schema.Attribute.String;
+    privacyLinkHref: Schema.Attribute.String;
+    privacyLinkText: Schema.Attribute.String;
+    privacyText: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    scheduleIcon: Schema.Attribute.Text;
+    scheduleLine1: Schema.Attribute.Text;
+    scheduleLine2: Schema.Attribute.Text;
+    scheduleTitle: Schema.Attribute.String;
+    seo: Schema.Attribute.Component<'shared.seo', false>;
+    subjectErrorRequired: Schema.Attribute.String;
+    subjectLabel: Schema.Attribute.String;
+    subjectOption1: Schema.Attribute.String;
+    subjectOption2: Schema.Attribute.String;
+    subjectOption3: Schema.Attribute.String;
+    subjectOption4: Schema.Attribute.String;
+    subjectOption5: Schema.Attribute.String;
+    subjectPlaceholder: Schema.Attribute.String;
+    submitButtonLoading: Schema.Attribute.String;
+    submitButtonText: Schema.Attribute.String;
+    successIcon: Schema.Attribute.String;
+    successMessage: Schema.Attribute.String;
+    successTitle: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiContactSubmissionsContactSubmissions
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'contact_submissionss';
+  info: {
+    displayName: 'contact-submissions';
+    pluralName: 'contact-submissionss';
+    singularName: 'contact-submissions';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    email: Schema.Attribute.Email;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::contact-submissions.contact-submissions'
+    > &
+      Schema.Attribute.Private;
+    message: Schema.Attribute.Text;
+    name: Schema.Attribute.String;
+    phone: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    subject: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiFooterFooter extends Struct.SingleTypeSchema {
   collectionName: 'footers';
   info: {
@@ -1681,6 +1794,8 @@ declare module '@strapi/strapi' {
       'api::blog.blog': ApiBlogBlog;
       'api::cart-item.cart-item': ApiCartItemCartItem;
       'api::category.category': ApiCategoryCategory;
+      'api::contact-page.contact-page': ApiContactPageContactPage;
+      'api::contact-submissions.contact-submissions': ApiContactSubmissionsContactSubmissions;
       'api::footer.footer': ApiFooterFooter;
       'api::hero-section.hero-section': ApiHeroSectionHeroSection;
       'api::home-page.home-page': ApiHomePageHomePage;

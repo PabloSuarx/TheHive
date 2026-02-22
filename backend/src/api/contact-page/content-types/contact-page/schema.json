@@ -1,0 +1,176 @@
+{
+  "kind": "singleType",
+  "collectionName": "contact_pages",
+  "info": {
+    "singularName": "contact-page",
+    "pluralName": "contact-pages",
+    "displayName": "Contact"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "seo": {
+      "type": "component",
+      "component": "shared.seo",
+      "repeatable": false
+    },
+    "heroTitle": {
+      "type": "string"
+    },
+    "heroDescription": {
+      "type": "text"
+    },
+    "contactInfoTitle": {
+      "type": "string"
+    },
+    "contactInfoDescription": {
+      "type": "text"
+    },
+    "addressTitle": {
+      "type": "string"
+    },
+    "addressLine1": {
+      "type": "text"
+    },
+    "addressLine2": {
+      "type": "text"
+    },
+    "addressIcon": {
+      "type": "text"
+    },
+    "phoneTitle": {
+      "type": "string"
+    },
+    "phoneNumber": {
+      "type": "string"
+    },
+    "phoneHref": {
+      "type": "string"
+    },
+    "phoneIcon": {
+      "type": "text"
+    },
+    "emailTitle": {
+      "type": "string"
+    },
+    "emailAddress": {
+      "type": "string"
+    },
+    "emailHref": {
+      "type": "string"
+    },
+    "emailIcon": {
+      "type": "text"
+    },
+    "scheduleTitle": {
+      "type": "string"
+    },
+    "scheduleLine1": {
+      "type": "text"
+    },
+    "scheduleLine2": {
+      "type": "text"
+    },
+    "scheduleIcon": {
+      "type": "text"
+    },
+    "formTitle": {
+      "type": "string"
+    },
+    "nameLabel": {
+      "type": "string"
+    },
+    "namePlaceholder": {
+      "type": "string"
+    },
+    "nameErrorRequired": {
+      "type": "string"
+    },
+    "nameErrorInvalid": {
+      "type": "string"
+    },
+    "emailLabel": {
+      "type": "string"
+    },
+    "emailPlaceholder": {
+      "type": "string"
+    },
+    "emailErrorRequired": {
+      "type": "string"
+    },
+    "emailErrorInvalid": {
+      "type": "string"
+    },
+    "phoneLabel": {
+      "type": "string"
+    },
+    "phonePlaceholder": {
+      "type": "string"
+    },
+    "phoneErrorInvalid": {
+      "type": "string"
+    },
+    "subjectLabel": {
+      "type": "string"
+    },
+    "subjectPlaceholder": {
+      "type": "string"
+    },
+    "subjectOption1": {
+      "type": "string"
+    },
+    "subjectOption2": {
+      "type": "string"
+    },
+    "subjectOption3": {
+      "type": "string"
+    },
+    "subjectOption4": {
+      "type": "string"
+    },
+    "subjectOption5": {
+      "type": "string"
+    },
+    "subjectErrorRequired": {
+      "type": "string"
+    },
+    "messageLabel": {
+      "type": "string"
+    },
+    "messagePlaceholder": {
+      "type": "string"
+    },
+    "messageErrorRequired": {
+      "type": "string"
+    },
+    "privacyText": {
+      "type": "string"
+    },
+    "privacyLinkText": {
+      "type": "string"
+    },
+    "privacyLinkHref": {
+      "type": "string"
+    },
+    "privacyErrorRequired": {
+      "type": "string"
+    },
+    "submitButtonText": {
+      "type": "string"
+    },
+    "submitButtonLoading": {
+      "type": "string"
+    },
+    "successTitle": {
+      "type": "string"
+    },
+    "successMessage": {
+      "type": "string"
+    },
+    "successIcon": {
+      "type": "string"
+    }
+  }
+}

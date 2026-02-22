@@ -49,6 +49,5 @@ export async function fetchAPI(endpoint, params = {}) {
 
 export async function get(endpoint, params = {}) {
   const data = await fetchAPI(endpoint, params);
-  // console.log(data);
   return data?.data || null;
 }

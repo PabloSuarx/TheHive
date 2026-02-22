@@ -3,20 +3,180 @@ import Layout from '../layouts/Layout.astro';
 import Breadcrumbs from "../components/ui/Breadcrumbs.astro"
 import ContactInfo from "../components/features/contact/ContactInfo.astro"
 import ContactForm from "../components/features/contact/ContactForm.astro"
+import { get } from "../lib/strapi";
+
+const contactPageData = await get("contact-page", { populate: "*" });
+
+const fallbackData = {
+  // Hero
+  heroTitle: "Contacto",
+  heroDescription: "Ponte en contacto con The Hive. Estamos aquí para ayudarte con cualquier pregunta sobre nuestros productos de miel artesanal, envíos o colaboraciones con apicultores.",
+
+  // ContactInfo
+  contactInfoTitle: "Información de Contacto",
+  contactInfoDescription: "Completa el formulario y te responderemos en menos de 24 horas.",
+
+  addressTitle: "Dirección",
+  addressLine1: "Calle Colmena, 42",
+  addressLine2: "29001 Málaga, España",
+  addressIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+          <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10"/>
+          <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+        </svg>`,
+
+  phoneTitle: "Teléfono",
+  phoneNumber: "+34 952 12 34 56",
+  phoneHref: "tel:+34952123456",
+  phoneIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-telephone" viewBox="0 0 16 16">
+          <path d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.6 17.6 0 0 0 4.168 6.608 17.6 17.6 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.68.68 0 0 0-.58-.122l-2.19.547a1.75 1.75 0 0 1-1.657-.459L5.482 8.062a1.75 1.75 0 0 1-.46-1.657l.548-2.19a.68.68 0 0 0-.122-.58zM1.884.511a1.745 1.745 0 0 1 2.612.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.68.68 0 0 0 .178.643l2.457 2.457a.68.68 0 0 0 .644.178l2.189-.547a1.75 1.75 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.6 18.6 0 0 1-7.01-4.42 18.6 18.6 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877z"/>
+        </svg>`,
+
+  emailTitle: "Email",
+  emailAddress: "hola@thehive.es",
+  emailHref: "mailto:hola@thehive.es",
+  emailIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-envelope" viewBox="0 0 16 16">
+          <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z"/>
+        </svg>`,
+
+  scheduleTitle: "Horario",
+  scheduleLine1: "Lunes a Viernes: 9:00 - 18:00",
+  scheduleLine2: "Sábados: 10:00 - 14:00",
+  scheduleIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-clock" viewBox="0 0 16 16">
+          <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"/>
+          <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0"/>
+        </svg>`,
+
+  // ContactForm
+  formTitle: "Envíanos un Mensaje",
+
+  nameLabel: "Nombre completo",
+  namePlaceholder: "Tu nombre",
+  nameErrorRequired: "Este campo es obligatorio",
+  nameErrorInvalid: "El nombre debe contener solo letras y tener entre 2 y 50 caracteres",
+
+  emailLabel: "Email",
+  emailPlaceholder: "tu@email.com",
+  emailErrorRequired: "Este campo es obligatorio",
+  emailErrorInvalid: "Por favor, introduce un email válido",
+
+  phoneLabel: "Teléfono",
+  phonePlaceholder: "+34 612 345 678",
+  phoneErrorInvalid: "Por favor, introduce un teléfono válido (ej: +34 612 345 678)",
+
+  subjectLabel: "Asunto",
+  subjectPlaceholder: "Selecciona un asunto",
+  subjectOption1: "Consulta sobre productos",
+  subjectOption2: "Estado de mi pedido",
+  subjectOption3: "Colaboración como apicultor",
+  subjectOption4: "Pedidos al por mayor",
+  subjectOption5: "Otro",
+  subjectErrorRequired: "Este campo es obligatorio",
+
+  messageLabel: "Mensaje",
+  messagePlaceholder: "Cuéntanos en qué podemos ayudarte...",
+  messageErrorRequired: "Este campo es obligatorio",
+
+  privacyText: "He leído y acepto la",
+  privacyLinkText: "política de privacidad",
+  privacyLinkHref: "/politica-privacidad",
+  privacyErrorRequired: "Debes aceptar la política de privacidad",
+
+  submitButtonText: "Enviar Mensaje",
+  submitButtonLoading: "Enviando...",
+
+  successTitle: "¡Mensaje enviado con éxito!",
+  successMessage: "Te responderemos en menos de 24 horas.",
+  successIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-check-circle shrink-0" viewBox="0 0 16 16">
+          <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+          <path d="m10.97 4.97-.02.022-3.473 4.425-2.093-2.094a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05"/>
+        </svg>`,
+
+  // Meta tags
+  metaTitle: "Contacto",
+  metaDescription: "Ponte en contacto con The Hive. Estamos aquí para ayudarte con cualquier pregunta sobre nuestros productos de miel artesanal, envíos o colaboraciones con apicultores.",
+  metaKeywords: "contacto, atención al cliente, dudas miel, colaboración apicultores, servicio cliente",
+};
+
+const pageData = { ...fallbackData, ...contactPageData };
+
+const {
+  // Hero
+  heroTitle,
+  heroDescription,
+
+  // ContactInfo
+  contactInfoTitle,
+  contactInfoDescription,
+  addressTitle,
+  addressLine1,
+  addressLine2,
+  addressIcon,
+  phoneTitle,
+  phoneNumber,
+  phoneHref,
+  phoneIcon,
+  emailTitle,
+  emailAddress,
+  emailHref,
+  emailIcon,
+  scheduleTitle,
+  scheduleLine1,
+  scheduleLine2,
+  scheduleIcon,
+
+  // ContactForm
+  formTitle,
+  nameLabel,
+  namePlaceholder,
+  nameErrorRequired,
+  nameErrorInvalid,
+  emailLabel,
+  emailPlaceholder,
+  emailErrorRequired,
+  emailErrorInvalid,
+  phoneLabel,
+  phonePlaceholder,
+  phoneErrorInvalid,
+  subjectLabel,
+  subjectPlaceholder,
+  subjectOption1,
+  subjectOption2,
+  subjectOption3,
+  subjectOption4,
+  subjectOption5,
+  subjectErrorRequired,
+  messageLabel,
+  messagePlaceholder,
+  messageErrorRequired,
+  privacyText,
+  privacyLinkText,
+  privacyLinkHref,
+  privacyErrorRequired,
+  submitButtonText,
+  submitButtonLoading,
+  successTitle,
+  successMessage,
+  successIcon,
+
+  // Meta
+  metaTitle,
+  metaDescription,
+  metaKeywords,
+} = pageData;
 ---
 
-<Layout 
-  titulo="Contacto"
-  descripcion="Ponte en contacto con The Hive. Estamos aquí para ayudarte con cualquier pregunta sobre nuestros productos de miel artesanal, envíos o colaboraciones con apicultores."
-  keywords="contacto, atención al cliente, dudas miel, colaboración apicultores, servicio cliente"
+<Layout
+  titulo={metaTitle}
+  descripcion={metaDescription}
+  keywords={metaKeywords}
 >
 
   <section class="py-12 bg-linear-to-b from-bg-primary to-primary-pale">
     <div class="container mx-auto px-4 lg:px-8">
       <Breadcrumbs separator="/" homeLabel="Inicio" />
-      <h1 class="text-4xl font-bold text-text-primary mb-2">Contacto</h1>
+      <h1 class="text-4xl font-bold text-text-primary mb-2">{heroTitle}</h1>
       <p class="text-lg text-text-secondary max-w-2xl">
-        Ponte en contacto con The Hive. Estamos aquí para ayudarte con cualquier pregunta sobre nuestros productos de miel artesanal, envíos o colaboraciones con apicultores.
+        {heroDescription}
       </p>
     </div>
   </section>
@@ -24,13 +184,65 @@ import ContactForm from "../components/features/contact/ContactForm.astro"
   <section class="py-20 bg-linear-to-b from-primary-pale to-bg-primary">
     <div class="container mx-auto px-4 lg:px-8">
     <div class="grid lg:grid-cols-3 gap-12">
-      
+
       <div class="lg:col-span-1">
-        <ContactInfo />
+        <ContactInfo
+          contactInfoTitle={contactInfoTitle}
+          contactInfoDescription={contactInfoDescription}
+          addressTitle={addressTitle}
+          addressLine1={addressLine1}
+          addressLine2={addressLine2}
+          addressIcon={addressIcon}
+          phoneTitle={phoneTitle}
+          phoneNumber={phoneNumber}
+          phoneHref={phoneHref}
+          phoneIcon={phoneIcon}
+          emailTitle={emailTitle}
+          emailAddress={emailAddress}
+          emailHref={emailHref}
+          emailIcon={emailIcon}
+          scheduleTitle={scheduleTitle}
+          scheduleLine1={scheduleLine1}
+          scheduleLine2={scheduleLine2}
+          scheduleIcon={scheduleIcon}
+        />
       </div>
 
       <div class="lg:col-span-2">
-        <ContactForm />
+        <ContactForm
+          formTitle={formTitle}
+          nameLabel={nameLabel}
+          namePlaceholder={namePlaceholder}
+          nameErrorRequired={nameErrorRequired}
+          nameErrorInvalid={nameErrorInvalid}
+          emailLabel={emailLabel}
+          emailPlaceholder={emailPlaceholder}
+          emailErrorRequired={emailErrorRequired}
+          emailErrorInvalid={emailErrorInvalid}
+          phoneLabel={phoneLabel}
+          phonePlaceholder={phonePlaceholder}
+          phoneErrorInvalid={phoneErrorInvalid}
+          subjectLabel={subjectLabel}
+          subjectPlaceholder={subjectPlaceholder}
+          subjectOption1={subjectOption1}
+          subjectOption2={subjectOption2}
+          subjectOption3={subjectOption3}
+          subjectOption4={subjectOption4}
+          subjectOption5={subjectOption5}
+          subjectErrorRequired={subjectErrorRequired}
+          messageLabel={messageLabel}
+          messagePlaceholder={messagePlaceholder}
+          messageErrorRequired={messageErrorRequired}
+          privacyText={privacyText}
+          privacyLinkText={privacyLinkText}
+          privacyLinkHref={privacyLinkHref}
+          privacyErrorRequired={privacyErrorRequired}
+          submitButtonText={submitButtonText}
+          submitButtonLoading={submitButtonLoading}
+          successTitle={successTitle}
+          successMessage={successMessage}
+          successIcon={successIcon}
+        />
       </div>
 
     </div>

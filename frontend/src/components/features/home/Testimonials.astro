@@ -5,7 +5,9 @@ import type { Testimonial } from "../../../types/home"
 // Fetch data from Strapi
 const single = await get("testimonials-section", {
   populate: {
-    testimonials: true,
+    testimonials: {
+      populate: "*"
+    },
   },
 });
 
