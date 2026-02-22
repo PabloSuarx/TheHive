@@ -1424,6 +1424,68 @@ export interface ApiProductosPageProductosPage extends Struct.SingleTypeSchema {
   };
 }
 
+export interface ApiRegistroPageRegistroPage extends Struct.SingleTypeSchema {
+  collectionName: 'registro_pages';
+  info: {
+    displayName: 'Registro Page';
+    pluralName: 'registro-pages';
+    singularName: 'registro-page';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    alreadyAccountText: Schema.Attribute.String;
+    confirmPasswordIcon: Schema.Attribute.Text;
+    confirmPasswordLabel: Schema.Attribute.String;
+    confirmPasswordPlaceholder: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    emailIcon: Schema.Attribute.Text;
+    emailLabel: Schema.Attribute.String;
+    emailPlaceholder: Schema.Attribute.String;
+    errorConnection: Schema.Attribute.String;
+    errorDefault: Schema.Attribute.String;
+    errorEmailInvalid: Schema.Attribute.String;
+    errorEmailTaken: Schema.Attribute.String;
+    errorIcon: Schema.Attribute.Text;
+    errorPasswordLength: Schema.Attribute.String;
+    errorPasswordMismatch: Schema.Attribute.String;
+    firstNameIcon: Schema.Attribute.Text;
+    firstNameLabel: Schema.Attribute.String;
+    firstNamePlaceholder: Schema.Attribute.String;
+    heroSubtitle: Schema.Attribute.String;
+    heroTitle: Schema.Attribute.String;
+    lastNameIcon: Schema.Attribute.Text;
+    lastNameLabel: Schema.Attribute.String;
+    lastNamePlaceholder: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::registro-page.registro-page'
+    > &
+      Schema.Attribute.Private;
+    loginLinkHref: Schema.Attribute.String;
+    loginLinkText: Schema.Attribute.String;
+    passwordIcon: Schema.Attribute.Text;
+    passwordLabel: Schema.Attribute.String;
+    passwordPlaceholder: Schema.Attribute.String;
+    phoneIcon: Schema.Attribute.Text;
+    phoneLabel: Schema.Attribute.String;
+    phonePlaceholder: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    seo: Schema.Attribute.Component<'shared.seo', false>;
+    submitButtonText: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    usernameIcon: Schema.Attribute.Text;
+    usernameLabel: Schema.Attribute.String;
+    usernamePlaceholder: Schema.Attribute.String;
+  };
+}
+
 export interface ApiReviewReview extends Struct.CollectionTypeSchema {
   collectionName: 'reviews';
   info: {
@@ -2243,6 +2305,7 @@ declare module '@strapi/strapi' {
       'api::product.product': ApiProductProduct;
       'api::producto-page.producto-page': ApiProductoPageProductoPage;
       'api::productos-page.productos-page': ApiProductosPageProductosPage;
+      'api::registro-page.registro-page': ApiRegistroPageRegistroPage;
       'api::review.review': ApiReviewReview;
       'api::single-category.single-category': ApiSingleCategorySingleCategory;
       'api::site-config.site-config': ApiSiteConfigSiteConfig;

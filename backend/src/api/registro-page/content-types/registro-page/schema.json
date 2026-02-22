@@ -1,0 +1,122 @@
+{
+  "kind": "singleType",
+  "collectionName": "registro_pages",
+  "info": {
+    "singularName": "registro-page",
+    "pluralName": "registro-pages",
+    "displayName": "Registro Page"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "seo": {
+      "type": "component",
+      "component": "shared.seo",
+      "repeatable": false
+    },
+    "heroTitle": {
+      "type": "string"
+    },
+    "heroSubtitle": {
+      "type": "string"
+    },
+    "errorIcon": {
+      "type": "text"
+    },
+    "firstNameLabel": {
+      "type": "string"
+    },
+    "firstNameIcon": {
+      "type": "text"
+    },
+    "firstNamePlaceholder": {
+      "type": "string"
+    },
+    "lastNameLabel": {
+      "type": "string"
+    },
+    "lastNameIcon": {
+      "type": "text"
+    },
+    "lastNamePlaceholder": {
+      "type": "string"
+    },
+    "usernameLabel": {
+      "type": "string"
+    },
+    "usernameIcon": {
+      "type": "text"
+    },
+    "usernamePlaceholder": {
+      "type": "string"
+    },
+    "emailLabel": {
+      "type": "string"
+    },
+    "emailIcon": {
+      "type": "text"
+    },
+    "emailPlaceholder": {
+      "type": "string"
+    },
+    "phoneLabel": {
+      "type": "string"
+    },
+    "phoneIcon": {
+      "type": "text"
+    },
+    "phonePlaceholder": {
+      "type": "string"
+    },
+    "passwordLabel": {
+      "type": "string"
+    },
+    "passwordIcon": {
+      "type": "text"
+    },
+    "passwordPlaceholder": {
+      "type": "string"
+    },
+    "confirmPasswordLabel": {
+      "type": "string"
+    },
+    "confirmPasswordIcon": {
+      "type": "text"
+    },
+    "confirmPasswordPlaceholder": {
+      "type": "string"
+    },
+    "submitButtonText": {
+      "type": "string"
+    },
+    "alreadyAccountText": {
+      "type": "string"
+    },
+    "loginLinkText": {
+      "type": "string"
+    },
+    "loginLinkHref": {
+      "type": "string"
+    },
+    "errorPasswordMismatch": {
+      "type": "string"
+    },
+    "errorPasswordLength": {
+      "type": "string"
+    },
+    "errorEmailInvalid": {
+      "type": "string"
+    },
+    "errorDefault": {
+      "type": "string"
+    },
+    "errorEmailTaken": {
+      "type": "string"
+    },
+    "errorConnection": {
+      "type": "string"
+    }
+  }
+}
