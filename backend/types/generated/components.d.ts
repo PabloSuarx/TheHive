@@ -23,6 +23,18 @@ export interface BlogSortOption extends Struct.ComponentSchema {
   };
 }
 
+export interface CategoriaSortOption extends Struct.ComponentSchema {
+  collectionName: 'components_categoria_sort_options';
+  info: {
+    description: 'Opci\u00F3n de ordenaci\u00F3n para productos';
+    displayName: 'Sort Option';
+  };
+  attributes: {
+    label: Schema.Attribute.String & Schema.Attribute.Required;
+    value: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
 export interface FaqFaqItem extends Struct.ComponentSchema {
   collectionName: 'components_faq_faq_items';
   info: {
@@ -257,6 +269,7 @@ declare module '@strapi/strapi' {
     export interface ComponentSchemas {
       'about-us.info-card': AboutUsInfoCard;
       'blog.sort-option': BlogSortOption;
+      'categoria.sort-option': CategoriaSortOption;
       'faq.faq-item': FaqFaqItem;
       'footer.footer-link': FooterFooterLink;
       'footer.social-media': FooterSocialMedia;

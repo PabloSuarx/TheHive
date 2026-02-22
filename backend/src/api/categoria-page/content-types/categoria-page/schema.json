@@ -1,0 +1,70 @@
+{
+  "kind": "singleType",
+  "collectionName": "categoria_pages",
+  "info": {
+    "singularName": "categoria-page",
+    "pluralName": "categoria-pages",
+    "displayName": "Categoria Page",
+    "description": "Contenido estático para la página individual de categoría"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "seo": {
+      "type": "component",
+      "component": "shared.seo",
+      "repeatable": false
+    },
+    "breadcrumbHomeLabel": {
+      "type": "string",
+      "required": true,
+      "default": "Inicio"
+    },
+    "breadcrumbCategoryLabel": {
+      "type": "string",
+      "required": true,
+      "default": "Categoría"
+    },
+    "breadcrumbChevronIcon": {
+      "type": "text",
+      "required": true
+    },
+    "resultsTextPrefix": {
+      "type": "string",
+      "required": true,
+      "default": "Mostrando"
+    },
+    "resultsTextMiddle": {
+      "type": "string",
+      "required": true,
+      "default": "resultados para"
+    },
+    "sortLabel": {
+      "type": "string",
+      "required": true,
+      "default": "Ordenar por:"
+    },
+    "sortOptions": {
+      "type": "component",
+      "component": "categoria.sort-option",
+      "repeatable": true,
+      "required": true
+    },
+    "sidebarCategoriesHeading": {
+      "type": "string",
+      "required": true,
+      "default": "Categorías"
+    },
+    "sidebarOriginHeading": {
+      "type": "string",
+      "required": true,
+      "default": "Origen"
+    },
+    "sidebarCategoryIcon": {
+      "type": "text",
+      "required": true
+    }
+  }
+}

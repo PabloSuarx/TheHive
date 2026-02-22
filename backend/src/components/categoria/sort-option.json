@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_categoria_sort_options",
+  "info": {
+    "displayName": "Sort Option",
+    "description": "Opción de ordenación para productos"
+  },
+  "options": {},
+  "attributes": {
+    "label": {
+      "type": "string",
+      "required": true
+    },
+    "value": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "config": {}
+}

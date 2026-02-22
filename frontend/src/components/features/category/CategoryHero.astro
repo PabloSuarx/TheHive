@@ -7,6 +7,7 @@ interface Props {
     breadcrumName?: string;
     breadcrumCategory?: string;
     imageUrl?: string;
+    chevronIcon?: string;
 }
 
 const {
@@ -14,6 +15,7 @@ const {
     breadcrumName = "Inicio",
     breadcrumCategory = "Categoría",
     imageUrl,
+    chevronIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right mx-2 text-text-tertiary" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708" /></svg>`,
 } = Astro.props;
 ---
 
@@ -41,30 +43,12 @@ const {
         <div class="max-w-2xl">
             <nav class="flex items-center mb-4 text-sm font-medium text-primary">
                 <a class="hover:text-primary-light transition-colors" href="/">{breadcrumName}</a>
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    fill="currentColor"
-                    class="bi bi-chevron-right mx-2 text-text-tertiary"
-                    viewBox="0 0 16 16"
-                >
-                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708" />
-                </svg>
+                <span set:html={chevronIcon} />
 
                 <a class="hover:text-primary-light transition-colors" href="/categorias"
                     >{breadcrumCategory}
                 </a>
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    fill="currentColor"
-                    class="bi bi-chevron-right mx-2 text-text-tertiary"
-                    viewBox="0 0 16 16"
-                >
-                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708" />
-                </svg>
+                <span set:html={chevronIcon} />
                 <span class="text-text-inverse">{category.name}</span>
             </nav>
 

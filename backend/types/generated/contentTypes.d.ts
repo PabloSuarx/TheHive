@@ -611,6 +611,60 @@ export interface ApiCartItemCartItem extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiCategoriaPageCategoriaPage extends Struct.SingleTypeSchema {
+  collectionName: 'categoria_pages';
+  info: {
+    description: 'Contenido est\u00E1tico para la p\u00E1gina individual de categor\u00EDa';
+    displayName: 'Categoria Page';
+    pluralName: 'categoria-pages';
+    singularName: 'categoria-page';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    breadcrumbCategoryLabel: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'Categor\u00EDa'>;
+    breadcrumbChevronIcon: Schema.Attribute.Text & Schema.Attribute.Required;
+    breadcrumbHomeLabel: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'Inicio'>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::categoria-page.categoria-page'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    resultsTextMiddle: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'resultados para'>;
+    resultsTextPrefix: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'Mostrando'>;
+    seo: Schema.Attribute.Component<'shared.seo', false>;
+    sidebarCategoriesHeading: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'Categor\u00EDas'>;
+    sidebarCategoryIcon: Schema.Attribute.Text & Schema.Attribute.Required;
+    sidebarOriginHeading: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'Origen'>;
+    sortLabel: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'Ordenar por:'>;
+    sortOptions: Schema.Attribute.Component<'categoria.sort-option', true> &
+      Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiCategoriasPageCategoriasPage
   extends Struct.SingleTypeSchema {
   collectionName: 'categorias_pages';
@@ -2029,6 +2083,7 @@ declare module '@strapi/strapi' {
       'api::blog-page.blog-page': ApiBlogPageBlogPage;
       'api::blog.blog': ApiBlogBlog;
       'api::cart-item.cart-item': ApiCartItemCartItem;
+      'api::categoria-page.categoria-page': ApiCategoriaPageCategoriaPage;
       'api::categorias-page.categorias-page': ApiCategoriasPageCategoriasPage;
       'api::category.category': ApiCategoryCategory;
       'api::contact-page.contact-page': ApiContactPageContactPage;

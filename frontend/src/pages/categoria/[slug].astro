@@ -1,4 +1,19 @@
 ---
+/*
+ * STRAPI SINGLE TYPE: "CategoriaPage" → endpoint: "categoria-page"
+ * Campos:
+ * - seo (component shared.seo)
+ * - breadcrumbHomeLabel (string)
+ * - breadcrumbCategoryLabel (string)
+ * - breadcrumbChevronIcon (text - SVG)
+ * - resultsTextPrefix (string)
+ * - resultsTextMiddle (string)
+ * - sortLabel (string)
+ * - sortOptions (component categoria.sort-option, repeatable)
+ * - sidebarCategoriesHeading (string)
+ * - sidebarOriginHeading (string)
+ * - sidebarCategoryIcon (text - SVG)
+ */
 import ProductCard from "../../components/features/product/ProductCard.astro"
 import CategoryHero from "../../components/features/category/CategoryHero.astro"
 import CategorySidebar from "../../components/features/category/CategorySidebar.astro"
@@ -18,7 +33,7 @@ export async function getStaticPaths() {
 
 const { slug } = Astro.params;
 
-const [category, allCategories] = (await Promise.all([
+const [category, allCategories, categoriaPageData] = (await Promise.all([
   get("categories", {
     filters: { slug: { $eq: slug } },
     populate: {
@@ -35,11 +50,10 @@ const [category, allCategories] = (await Promise.all([
     },
   }).then((res: Category[]) => res?.[0] || null),
   get("categories"),
-])) as [Category, Category[]];
+  get("categoria-page", { populate: "*" }),
+])) as [Category, Category[], any];
 
-const single = await get("single-category");
-
-if (!category || !single) return Astro.redirect("/404");
+if (!category) return Astro.redirect("/404");
 
 const products = category.products || [];
 const otherCategories = allCategories.filter((c) => c.slug !== slug);
@@ -52,6 +66,39 @@ const imageUrl = category.image?.url?.startsWith("http")
   : category.image?.url
     ? `${PUBLIC_STRAPI_URL}${category.image.url}`
     : undefined;
+
+// Fallback data con contenido actual hardcodeado
+const fallbackData = {
+  breadcrumbHomeLabel: "Inicio",
+  breadcrumbCategoryLabel: "Categoría",
+  breadcrumbChevronIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right mx-2 text-text-tertiary" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708" /></svg>`,
+  resultsTextPrefix: "Mostrando",
+  resultsTextMiddle: "resultados para",
+  sortLabel: "Ordenar por:",
+  sortOptions: [
+    { label: "Más Populares", value: "popular" },
+    { label: "Precio: Menor a Mayor", value: "price-asc" },
+    { label: "Precio: Mayor a Menor", value: "price-desc" },
+  ],
+  sidebarCategoriesHeading: "Categorías",
+  sidebarOriginHeading: "Origen",
+  sidebarCategoryIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-folder shrink-0" viewBox="0 0 16 16"><path d="M.54 3.87.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.826a2 2 0 0 1-1.991-1.819l-.637-7a2 2 0 0 1 .342-1.31zM2.19 4a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91h10.348a1 1 0 0 0 .995-.91l.637-7A1 1 0 0 0 13.81 4zm4.69-1.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139q.323-.119.684-.12h5.396z" /></svg>`,
+};
+
+const pageData = { ...fallbackData, ...categoriaPageData };
+
+const {
+  breadcrumbHomeLabel,
+  breadcrumbCategoryLabel,
+  breadcrumbChevronIcon,
+  resultsTextPrefix,
+  resultsTextMiddle,
+  sortLabel,
+  sortOptions,
+  sidebarCategoriesHeading,
+  sidebarOriginHeading,
+  sidebarCategoryIcon,
+} = pageData;
 ---
 
 <Layout
@@ -60,9 +107,10 @@ const imageUrl = category.image?.url?.startsWith("http")
 >
   <CategoryHero
     category={category}
-    breadcrumName={single.breadcrum_name}
-    breadcrumCategory={single.breadcrum_category}
+    breadcrumName={breadcrumbHomeLabel}
+    breadcrumCategory={breadcrumbCategoryLabel}
     imageUrl={imageUrl}
+    chevronIcon={breadcrumbChevronIcon}
   />
 
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -70,8 +118,9 @@ const imageUrl = category.image?.url?.startsWith("http")
       <CategorySidebar
         otherCategories={otherCategories}
         uniqueOrigins={uniqueOrigins}
-        mainHeading={single.main_h3}
-        originHeading={single.origin_h3}
+        mainHeading={sidebarCategoriesHeading}
+        originHeading={sidebarOriginHeading}
+        categoryIcon={sidebarCategoryIcon}
       />
 
       <div class="flex-1">
@@ -79,21 +128,21 @@ const imageUrl = category.image?.url?.startsWith("http")
           class="flex items-center justify-between mb-8 pb-6 border-b border-divider"
         >
           <p class="text-sm text-text-secondary">
-            Mostrando <span class="text-primary font-medium"
+            {resultsTextPrefix} <span class="text-primary font-medium"
               >{products.length}
-            </span> resultados para <span class="text-primary"
+            </span> {resultsTextMiddle} <span class="text-primary"
               >{category.name}
             </span>
           </p>
           <div class="flex items-center gap-4">
-            <span class="text-sm text-text-secondary">Ordenar por:</span>
+            <span class="text-sm text-text-secondary">{sortLabel}</span>
             <select
               id="sort-select"
               class="bg-bg-secondary border border-divider rounded-full text-sm text-text-primary px-4 py-2 focus:outline-none focus:border-primary cursor-pointer hover:bg-bg-tertiary transition-all"
             >
-              <option value="popular">Más Populares</option>
-              <option value="price-asc">Precio: Menor a Mayor</option>
-              <option value="price-desc">Precio: Mayor a Menor</option>
+              {sortOptions.map((option: any) => (
+                <option value={option.value}>{option.label}</option>
+              ))}
             </select>
           </div>
         </div>
