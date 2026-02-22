@@ -1233,6 +1233,64 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiProductoPageProductoPage extends Struct.SingleTypeSchema {
+  collectionName: 'producto_pages';
+  info: {
+    displayName: 'Producto Page';
+    pluralName: 'producto-pages';
+    singularName: 'producto-page';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    addedToCartIcon: Schema.Attribute.Text;
+    addedToCartLabel: Schema.Attribute.String;
+    addToCartIcon: Schema.Attribute.Text;
+    addToCartLabel: Schema.Attribute.String;
+    backArrowIcon: Schema.Attribute.Text;
+    backToProductsLabel: Schema.Attribute.String;
+    benefitsTitle: Schema.Attribute.String;
+    breadcrumbHomeLabel: Schema.Attribute.String;
+    breadcrumbProductsLabel: Schema.Attribute.String;
+    breadcrumbSeparator: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    descriptionTitle: Schema.Attribute.String;
+    featuredBadgeLabel: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::producto-page.producto-page'
+    > &
+      Schema.Attribute.Private;
+    mapLocationLabel: Schema.Attribute.String;
+    organicBadgeLabel: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    quantityDecreaseAriaLabel: Schema.Attribute.String;
+    quantityIncreaseAriaLabel: Schema.Attribute.String;
+    quantityMinusIcon: Schema.Attribute.Text;
+    quantityPlusIcon: Schema.Attribute.Text;
+    quickDetailsBeekeeperLabel: Schema.Attribute.String;
+    quickDetailsFlavorNotesLabel: Schema.Attribute.String;
+    quickDetailsHarvestLabel: Schema.Attribute.String;
+    quickDetailsOriginLabel: Schema.Attribute.String;
+    quickDetailsTextureLabel: Schema.Attribute.String;
+    reviewAnonymousLabel: Schema.Attribute.String;
+    reviewsPlural: Schema.Attribute.String;
+    reviewsSingular: Schema.Attribute.String;
+    reviewsTitle: Schema.Attribute.String;
+    seo: Schema.Attribute.Component<'shared.seo', false>;
+    starIcon: Schema.Attribute.Text;
+    stockAvailableLabel: Schema.Attribute.String;
+    stockOutLabel: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiProductosPageProductosPage extends Struct.SingleTypeSchema {
   collectionName: 'productos_pages';
   info: {
@@ -2098,6 +2156,7 @@ declare module '@strapi/strapi' {
       'api::origin.origin': ApiOriginOrigin;
       'api::product-card.product-card': ApiProductCardProductCard;
       'api::product.product': ApiProductProduct;
+      'api::producto-page.producto-page': ApiProductoPageProductoPage;
       'api::productos-page.productos-page': ApiProductosPageProductosPage;
       'api::review.review': ApiReviewReview;
       'api::single-category.single-category': ApiSingleCategorySingleCategory;

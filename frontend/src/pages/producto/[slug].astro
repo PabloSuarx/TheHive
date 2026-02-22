@@ -1,4 +1,18 @@
 ---
+/*
+ * STRAPI SINGLE TYPE: "ProductoPage" → endpoint: "producto-page"
+ * Campos:
+ * - breadcrumbHomeLabel, breadcrumbProductsLabel, breadcrumbSeparator
+ * - organicBadgeLabel, featuredBadgeLabel
+ * - starIcon, reviewsSingular, reviewsPlural
+ * - quickDetailsOriginLabel, quickDetailsBeekeeperLabel, quickDetailsTextureLabel, quickDetailsHarvestLabel, quickDetailsFlavorNotesLabel
+ * - quantityDecreaseAriaLabel, quantityIncreaseAriaLabel, quantityMinusIcon, quantityPlusIcon
+ * - addToCartLabel, addToCartIcon, addedToCartLabel, addedToCartIcon
+ * - stockAvailableLabel, stockOutLabel
+ * - descriptionTitle, benefitsTitle, mapLocationLabel
+ * - reviewsTitle, reviewAnonymousLabel
+ * - backToProductsLabel, backArrowIcon
+ */
 import Layout from "../../layouts/Layout.astro";
 import ProductHero from "../../components/features/product/ProductHero.astro"
 import Map from "../../components/features/contact/map/LeafletMap.astro"
@@ -8,6 +22,80 @@ import type { Product, Review, Tag } from "../../types/product";
 
 const PUBLIC_STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL;
 const { slug } = Astro.params;
+
+// Fetch static content from Strapi
+const productoPageData = await get("producto-page", { populate: "*" });
+
+// Fallback data with current hardcoded content
+const fallbackData = {
+  breadcrumbHomeLabel: "Inicio",
+  breadcrumbProductsLabel: "Productos",
+  breadcrumbSeparator: "/",
+  organicBadgeLabel: "Ecológico",
+  featuredBadgeLabel: "Destacado",
+  starIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" /></svg>`,
+  reviewsSingular: "reseña",
+  reviewsPlural: "reseñas",
+  quickDetailsOriginLabel: "Origen",
+  quickDetailsBeekeeperLabel: "Apicultor",
+  quickDetailsTextureLabel: "Textura",
+  quickDetailsHarvestLabel: "Cosecha",
+  quickDetailsFlavorNotesLabel: "Notas de sabor",
+  quantityDecreaseAriaLabel: "Disminuir cantidad",
+  quantityIncreaseAriaLabel: "Aumentar cantidad",
+  quantityMinusIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8" /></svg>`,
+  quantityPlusIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" /></svg>`,
+  addToCartLabel: "Añadir al Carrito",
+  addToCartIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M9 5.5a.5.5 0 0 0-1 0V7H6.5a.5.5 0 0 0 0 1H8v1.5a.5.5 0 0 0 1 0V8h1.5a.5.5 0 0 0 0-1H9z" /><path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zm3.915 10L3.102 4h10.796l-1.313 7zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0" /></svg>`,
+  addedToCartLabel: "¡Añadido!",
+  addedToCartIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" /></svg>`,
+  stockAvailableLabel: "En stock ({stock} disponibles)",
+  stockOutLabel: "Agotado",
+  descriptionTitle: "Descripción",
+  benefitsTitle: "Beneficios",
+  mapLocationLabel: "Colmenas:",
+  reviewsTitle: "Reseñas",
+  reviewAnonymousLabel: "Anónimo",
+  backToProductsLabel: "Volver a todos los productos",
+  backArrowIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" /></svg>`,
+};
+
+// Merge with fetched data (Strapi data takes precedence)
+const pageData = { ...fallbackData, ...productoPageData };
+
+// Destructure all fields
+const {
+  breadcrumbHomeLabel,
+  breadcrumbProductsLabel,
+  breadcrumbSeparator,
+  organicBadgeLabel,
+  featuredBadgeLabel,
+  starIcon,
+  reviewsSingular,
+  reviewsPlural,
+  quickDetailsOriginLabel,
+  quickDetailsBeekeeperLabel,
+  quickDetailsTextureLabel,
+  quickDetailsHarvestLabel,
+  quickDetailsFlavorNotesLabel,
+  quantityDecreaseAriaLabel,
+  quantityIncreaseAriaLabel,
+  quantityMinusIcon,
+  quantityPlusIcon,
+  addToCartLabel,
+  addToCartIcon,
+  addedToCartLabel,
+  addedToCartIcon,
+  stockAvailableLabel,
+  stockOutLabel,
+  descriptionTitle,
+  benefitsTitle,
+  mapLocationLabel,
+  reviewsTitle,
+  reviewAnonymousLabel,
+  backToProductsLabel,
+  backArrowIcon,
+} = pageData;
 
 const product = await get("products", {
   filters: { slug: { $eq: slug } },
@@ -77,31 +165,41 @@ export async function getStaticPaths() {
   descripcion={seoDescription}
   keywords={`miel ${product.name}, comprar ${product.name}, miel artesanal`}
 >
-  <ProductHero product={product} imageUrl={imgUrl}>
+  <ProductHero
+    product={product}
+    imageUrl={imgUrl}
+    breadcrumName={breadcrumbHomeLabel}
+    breadcrumProducts={breadcrumbProductsLabel}
+    breadcrumbSeparator={breadcrumbSeparator}
+    organicBadgeLabel={organicBadgeLabel}
+    featuredBadgeLabel={featuredBadgeLabel}
+    quantityDecreaseAriaLabel={quantityDecreaseAriaLabel}
+    quantityIncreaseAriaLabel={quantityIncreaseAriaLabel}
+    quantityMinusIcon={quantityMinusIcon}
+    quantityPlusIcon={quantityPlusIcon}
+    addToCartLabel={addToCartLabel}
+    addToCartIcon={addToCartIcon}
+    addedToCartLabel={addedToCartLabel}
+    addedToCartIcon={addedToCartIcon}
+  >
     {
       avgRating && (
         <div class="flex items-center gap-2">
           <div class="flex items-center gap-1">
             {[...Array(5)].map((_, i) => (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                fill="currentColor"
-                class={`bi ${
+              <span
+                class={`${
                   i < Math.round(Number(avgRating))
                     ? "text-warning"
                     : "text-text-tertiary"
                 }`}
-                viewBox="0 0 16 16"
-              >
-                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
-              </svg>
+                set:html={starIcon}
+              />
             ))}
           </div>
           <span class="text-sm text-text-secondary">
             {avgRating} ({reviews.length}{" "}
-            {reviews.length === 1 ? "reseña" : "reseñas"})
+            {reviews.length === 1 ? reviewsSingular : reviewsPlural})
           </span>
         </div>
       )
@@ -128,12 +226,12 @@ export async function getStaticPaths() {
         outOfStock ? (
           <span class="inline-flex items-center gap-1 text-error font-medium">
             <span class="w-2 h-2 bg-error rounded-full" />
-            Agotado
+            {stockOutLabel}
           </span>
         ) : (
           <span class="inline-flex items-center gap-1 text-success font-medium">
             <span class="w-2 h-2 bg-success rounded-full" />
-            En stock ({product.stock} disponibles)
+            {stockAvailableLabel.replace("{stock}", product.stock.toString())}
           </span>
         )
       }
@@ -156,7 +254,7 @@ export async function getStaticPaths() {
         product.origin && (
           <div>
             <span class="text-xs text-text-tertiary uppercase tracking-wide">
-              Origen
+              {quickDetailsOriginLabel}
             </span>
             <p class="font-medium text-text-primary">{product.origin}</p>
           </div>
@@ -166,7 +264,7 @@ export async function getStaticPaths() {
         product.beekeeper && (
           <div>
             <span class="text-xs text-text-tertiary uppercase tracking-wide">
-              Apicultor
+              {quickDetailsBeekeeperLabel}
             </span>
             <p class="font-medium text-text-primary">{product.beekeeper.nombre}</p>
           </div>
@@ -176,7 +274,7 @@ export async function getStaticPaths() {
         product.crystallization && (
           <div>
             <span class="text-xs text-text-tertiary uppercase tracking-wide">
-              Textura
+              {quickDetailsTextureLabel}
             </span>
             <p class="font-medium text-text-primary">{product.crystallization}</p>
           </div>
@@ -186,7 +284,7 @@ export async function getStaticPaths() {
         product.harvestSeason && (
           <div>
             <span class="text-xs text-text-tertiary uppercase tracking-wide">
-              Cosecha
+              {quickDetailsHarvestLabel}
             </span>
             <p class="font-medium text-text-primary">{product.harvestSeason}</p>
           </div>
@@ -196,7 +294,7 @@ export async function getStaticPaths() {
         product.flavorNotes && (
           <div class="col-span-2">
             <span class="text-xs text-text-tertiary uppercase tracking-wide">
-              Notas de sabor
+              {quickDetailsFlavorNotesLabel}
             </span>
             <p class="font-medium text-text-primary">{product.flavorNotes}</p>
           </div>
@@ -228,7 +326,7 @@ export async function getStaticPaths() {
           {
             product.description && (
               <div class="max-w-none">
-                <h2 class="text-2xl font-bold text-text-primary mb-6">Descripción</h2>
+                <h2 class="text-2xl font-bold text-text-primary mb-6">{descriptionTitle}</h2>
                 <div
                   class="prose prose-gray max-w-none"
                   set:html={product.description}
@@ -240,7 +338,7 @@ export async function getStaticPaths() {
           {
             product.benefits && (
               <div class="mt-12 max-w-none">
-                <h2 class="text-2xl font-bold text-text-primary mb-6">Beneficios</h2>
+                <h2 class="text-2xl font-bold text-text-primary mb-6">{benefitsTitle}</h2>
                 <p class="text-text-secondary leading-relaxed">{product.benefits}</p>
               </div>
             )
@@ -260,7 +358,7 @@ export async function getStaticPaths() {
                     className="w-full h-[350px] z-0"
                  />
                  <div class="bg-bg-secondary p-3 text-center text-sm text-text-tertiary border-t border-divider">
-                    Colmenas: {product.beekeeper.origin.name}
+                    {mapLocationLabel} {product.beekeeper.origin.name}
                  </div>
               </div>
             )
@@ -273,7 +371,7 @@ export async function getStaticPaths() {
         reviews.length > 0 && (
           <div class="mt-16 w-full">
             <h2 class="text-2xl font-bold text-text-primary mb-8">
-              Reseñas ({reviews.length})
+              {reviewsTitle} ({reviews.length})
             </h2>
             <div class="space-y-6">
               {reviews.map((review: Review) => (
@@ -286,25 +384,19 @@ export async function getStaticPaths() {
                           : "?"}
                       </div>
                       <span class="font-semibold text-text-primary">
-                        {review.userName || "Anónimo"}
+                        {review.userName || reviewAnonymousLabel}
                       </span>
                     </div>
                     <div class="flex items-center gap-1">
                       {[...Array(5)].map((_, i) => (
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="currentColor"
-                          class={`bi ${
+                        <span
+                          class={`${
                             i < (review.rating || 0)
                               ? "text-warning"
                               : "text-text-tertiary"
                           }`}
-                          viewBox="0 0 16 16"
-                        >
-                          <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
-                        </svg>
+                          set:html={starIcon.replace('width="20"', 'width="16"').replace('height="20"', 'height="16"')}
+                        />
                       ))}
                     </div>
                   </div>
@@ -327,17 +419,8 @@ export async function getStaticPaths() {
       href="/productos"
       class="inline-flex items-center gap-2 text-warning font-semibold hover:text-primary-dark transition-colors"
     >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
-        fill="currentColor"
-        class="bi bi-arrow-left"
-        viewBox="0 0 16 16"
-      >
-        <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
-      </svg>
-      Volver a todos los productos
+      <span set:html={backArrowIcon} />
+      {backToProductsLabel}
     </a>
   </div>
 </section>

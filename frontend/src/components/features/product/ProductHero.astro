@@ -6,14 +6,36 @@ interface Props {
     product: Product;
     breadcrumName?: string;
     breadcrumProducts?: string;
+    breadcrumbSeparator?: string;
     imageUrl?: string;
+    organicBadgeLabel?: string;
+    featuredBadgeLabel?: string;
+    quantityDecreaseAriaLabel?: string;
+    quantityIncreaseAriaLabel?: string;
+    quantityMinusIcon?: string;
+    quantityPlusIcon?: string;
+    addToCartLabel?: string;
+    addToCartIcon?: string;
+    addedToCartLabel?: string;
+    addedToCartIcon?: string;
 }
 
 const {
     product,
     breadcrumName = "Inicio",
     breadcrumProducts = "Productos",
+    breadcrumbSeparator = "/",
     imageUrl,
+    organicBadgeLabel = "Ecológico",
+    featuredBadgeLabel = "Destacado",
+    quantityDecreaseAriaLabel = "Disminuir cantidad",
+    quantityIncreaseAriaLabel = "Aumentar cantidad",
+    quantityMinusIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8" /></svg>`,
+    quantityPlusIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" /></svg>`,
+    addToCartLabel = "Añadir al Carrito",
+    addToCartIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M9 5.5a.5.5 0 0 0-1 0V7H6.5a.5.5 0 0 0 0 1H8v1.5a.5.5 0 0 0 1 0V8h1.5a.5.5 0 0 0 0-1H9z" /><path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zm3.915 10L3.102 4h10.796l-1.313 7zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0" /></svg>`,
+    addedToCartLabel = "¡Añadido!",
+    addedToCartIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" /></svg>`,
 } = Astro.props;
 ---
 
@@ -26,7 +48,7 @@ const {
                     {breadcrumName}
                 </a>
             </li>
-            <li><span class="mx-1">/</span></li>
+            <li><span class="mx-1">{breadcrumbSeparator}</span></li>
             <li>
                 <a href="/productos" class="hover:text-warning transition-colors">
                     {breadcrumProducts}
@@ -36,7 +58,7 @@ const {
                 product.category && (
                     <>
                         <li>
-                            <span class="mx-1">/</span>
+                            <span class="mx-1">{breadcrumbSeparator}</span>
                         </li>
                         <li>
                             <a
@@ -49,7 +71,7 @@ const {
                     </>
                 )
             }
-            <li><span class="mx-1">/</span></li>
+            <li><span class="mx-1">{breadcrumbSeparator}</span></li>
             <li class="text-text-primary font-medium">{product.name}</li>
         </ol>
     </div>
@@ -77,14 +99,14 @@ const {
                     {
                         product.organic && (
                             <span class="absolute top-4 left-4 px-4 py-2 bg-success text-text-inverse text-sm font-bold rounded-full">
-                                Ecológico
+                                {organicBadgeLabel}
                             </span>
                         )
                     }
                     {
                         product.featured && (
                             <span class="absolute top-4 right-4 px-4 py-2 bg-warning text-text-inverse text-sm font-bold rounded-full">
-                                Destacado
+                                {featuredBadgeLabel}
                             </span>
                         )
                     }
@@ -121,18 +143,9 @@ const {
                         <button
                             class="px-4 py-3 text-text-tertiary hover:text-primary transition-colors focus:outline-none"
                             onclick="this.nextElementSibling.stepDown()"
-                            aria-label="Disminuir cantidad"
+                            aria-label={quantityDecreaseAriaLabel}
                         >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="20"
-                                height="20"
-                                fill="currentColor"
-                                class="bi bi-dash"
-                                viewBox="0 0 16 16"
-                            >
-                                <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8" />
-                            </svg>
+                            <span set:html={quantityMinusIcon} />
                         </button>
                         <input
                             type="number"
@@ -146,18 +159,9 @@ const {
                         <button
                             class="px-4 py-3 text-text-tertiary hover:text-primary transition-colors focus:outline-none"
                             onclick="this.previousElementSibling.stepUp()"
-                            aria-label="Aumentar cantidad"
+                            aria-label={quantityIncreaseAriaLabel}
                         >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="20"
-                                height="20"
-                                fill="currentColor"
-                                class="bi bi-plus"
-                                viewBox="0 0 16 16"
-                            >
-                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
-                            </svg>
+                            <span set:html={quantityPlusIcon} />
                         </button>
                     </div>
 
@@ -165,19 +169,11 @@ const {
                         id="hero-add-to-cart"
                         class="flex-1 bg-primary hover:bg-primary-dark text-text-primary font-bold py-3 px-8 rounded-xl transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
                         data-product={JSON.stringify(product)}
+                        data-added-label={addedToCartLabel}
+                        data-added-icon={addedToCartIcon}
                     >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="20"
-                            height="20"
-                            fill="currentColor"
-                            class="bi bi-cart-plus"
-                            viewBox="0 0 16 16"
-                        >
-                            <path d="M9 5.5a.5.5 0 0 0-1 0V7H6.5a.5.5 0 0 0 0 1H8v1.5a.5.5 0 0 0 1 0V8h1.5a.5.5 0 0 0 0-1H9z" />
-                            <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zm3.915 10L3.102 4h10.796l-1.313 7zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
-                        </svg>
-                        Añadir al Carrito
+                        <span set:html={addToCartIcon} />
+                        {addToCartLabel}
                     </button>
                 </div>
 
@@ -216,12 +212,12 @@ const {
                     // Feedback
                     const originalText = addToCartBtn.innerHTML;
                     const originalClasses = addToCartBtn.className;
+                    const addedLabel = addToCartBtn.dataset.addedLabel || "¡Añadido!";
+                    const addedIcon = addToCartBtn.dataset.addedIcon || '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" /></svg>';
 
                     addToCartBtn.innerHTML = `
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
-                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                        </svg>
-                        ¡Añadido!
+                        ${addedIcon}
+                        ${addedLabel}
                     `;
 
                     // Toggle classes manually to avoid issues

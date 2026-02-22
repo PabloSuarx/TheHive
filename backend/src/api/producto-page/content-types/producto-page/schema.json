@@ -1,0 +1,110 @@
+{
+  "kind": "singleType",
+  "collectionName": "producto_pages",
+  "info": {
+    "singularName": "producto-page",
+    "pluralName": "producto-pages",
+    "displayName": "Producto Page"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "seo": {
+      "type": "component",
+      "component": "shared.seo",
+      "repeatable": false
+    },
+    "breadcrumbHomeLabel": {
+      "type": "string"
+    },
+    "breadcrumbProductsLabel": {
+      "type": "string"
+    },
+    "breadcrumbSeparator": {
+      "type": "string"
+    },
+    "organicBadgeLabel": {
+      "type": "string"
+    },
+    "featuredBadgeLabel": {
+      "type": "string"
+    },
+    "starIcon": {
+      "type": "text"
+    },
+    "reviewsSingular": {
+      "type": "string"
+    },
+    "reviewsPlural": {
+      "type": "string"
+    },
+    "quickDetailsOriginLabel": {
+      "type": "string"
+    },
+    "quickDetailsBeekeeperLabel": {
+      "type": "string"
+    },
+    "quickDetailsTextureLabel": {
+      "type": "string"
+    },
+    "quickDetailsHarvestLabel": {
+      "type": "string"
+    },
+    "quickDetailsFlavorNotesLabel": {
+      "type": "string"
+    },
+    "quantityDecreaseAriaLabel": {
+      "type": "string"
+    },
+    "quantityIncreaseAriaLabel": {
+      "type": "string"
+    },
+    "quantityMinusIcon": {
+      "type": "text"
+    },
+    "quantityPlusIcon": {
+      "type": "text"
+    },
+    "addToCartLabel": {
+      "type": "string"
+    },
+    "addToCartIcon": {
+      "type": "text"
+    },
+    "addedToCartLabel": {
+      "type": "string"
+    },
+    "addedToCartIcon": {
+      "type": "text"
+    },
+    "stockAvailableLabel": {
+      "type": "string"
+    },
+    "stockOutLabel": {
+      "type": "string"
+    },
+    "descriptionTitle": {
+      "type": "string"
+    },
+    "benefitsTitle": {
+      "type": "string"
+    },
+    "mapLocationLabel": {
+      "type": "string"
+    },
+    "reviewsTitle": {
+      "type": "string"
+    },
+    "reviewAnonymousLabel": {
+      "type": "string"
+    },
+    "backToProductsLabel": {
+      "type": "string"
+    },
+    "backArrowIcon": {
+      "type": "text"
+    }
+  }
+}

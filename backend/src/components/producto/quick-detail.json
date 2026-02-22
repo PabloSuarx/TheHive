@@ -1,0 +1,18 @@
+{
+  "collectionName": "components_producto_quick_details",
+  "info": {
+    "displayName": "Quick Detail"
+  },
+  "options": {},
+  "attributes": {
+    "label": {
+      "type": "string",
+      "required": true
+    },
+    "field": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "config": {}
+}

@@ -123,6 +123,17 @@ export interface OrdersOrderItem extends Struct.ComponentSchema {
   };
 }
 
+export interface ProductoQuickDetail extends Struct.ComponentSchema {
+  collectionName: 'components_producto_quick_details';
+  info: {
+    displayName: 'Quick Detail';
+  };
+  attributes: {
+    field: Schema.Attribute.String & Schema.Attribute.Required;
+    label: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
 export interface SharedSeo extends Struct.ComponentSchema {
   collectionName: 'components_shared_seos';
   info: {
@@ -276,6 +287,7 @@ declare module '@strapi/strapi' {
       'main-image.main-image': MainImageMainImage;
       'menu-item.menu-item': MenuItemMenuItem;
       'orders.order-item': OrdersOrderItem;
+      'producto.quick-detail': ProductoQuickDetail;
       'shared.seo': SharedSeo;
       'shipping.content-section': ShippingContentSection;
       'shipping.shipping-zone': ShippingShippingZone;

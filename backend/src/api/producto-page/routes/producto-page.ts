@@ -1,0 +1,7 @@
+/**
+ * producto-page router
+ */
+
+import { factories } from '@strapi/strapi';
+
+export default factories.createCoreRouter('api::producto-page.producto-page');
