@@ -611,6 +611,41 @@ export interface ApiCartItemCartItem extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiCategoriasPageCategoriasPage
+  extends Struct.SingleTypeSchema {
+  collectionName: 'categorias_pages';
+  info: {
+    displayName: 'Categorias Page';
+    pluralName: 'categorias-pages';
+    singularName: 'categorias-page';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    breadcrumbsHomeLabel: Schema.Attribute.String;
+    breadcrumbsSeparator: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    emptyStateIcon: Schema.Attribute.Text;
+    emptyStateMessage: Schema.Attribute.String;
+    heroDescription: Schema.Attribute.Text;
+    heroTitle: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::categorias-page.categorias-page'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    seo: Schema.Attribute.Component<'shared.seo', false>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiCategoryCategory extends Struct.CollectionTypeSchema {
   collectionName: 'categories';
   info: {
@@ -1994,6 +2029,7 @@ declare module '@strapi/strapi' {
       'api::blog-page.blog-page': ApiBlogPageBlogPage;
       'api::blog.blog': ApiBlogBlog;
       'api::cart-item.cart-item': ApiCartItemCartItem;
+      'api::categorias-page.categorias-page': ApiCategoriasPageCategoriasPage;
       'api::category.category': ApiCategoryCategory;
       'api::contact-page.contact-page': ApiContactPageContactPage;
       'api::contact-submissions.contact-submissions': ApiContactSubmissionsContactSubmissions;

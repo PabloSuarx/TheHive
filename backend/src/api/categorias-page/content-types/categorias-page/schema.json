@@ -1,0 +1,38 @@
+{
+  "kind": "singleType",
+  "collectionName": "categorias_pages",
+  "info": {
+    "singularName": "categorias-page",
+    "pluralName": "categorias-pages",
+    "displayName": "Categorias Page"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "seo": {
+      "type": "component",
+      "component": "shared.seo",
+      "repeatable": false
+    },
+    "breadcrumbsSeparator": {
+      "type": "string"
+    },
+    "breadcrumbsHomeLabel": {
+      "type": "string"
+    },
+    "heroTitle": {
+      "type": "string"
+    },
+    "heroDescription": {
+      "type": "text"
+    },
+    "emptyStateIcon": {
+      "type": "text"
+    },
+    "emptyStateMessage": {
+      "type": "string"
+    }
+  }
+}

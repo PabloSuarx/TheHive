@@ -1,15 +1,28 @@
 ---
 import Breadcrumbs from "../../ui/Breadcrumbs.astro"
+
+interface Props {
+  separator?: string;
+  homeLabel?: string;
+  title?: string;
+  description?: string;
+}
+
+const {
+  separator = "/",
+  homeLabel = "Inicio",
+  title = "Nuestras Categorías",
+  description = "Explora nuestra variedad de mieles artesanales, cada una con su carácter y sabor único."
+} = Astro.props;
 ---
 
 <div class="container mx-auto px-4 lg:px-8">
   <Breadcrumbs
-    separator="/"
-    homeLabel="Inicio"
+    separator={separator}
+    homeLabel={homeLabel}
   />
-  <h1 class="text-4xl font-bold text-text-primary mb-2">Nuestras Categorías</h1>
+  <h1 class="text-4xl font-bold text-text-primary mb-2">{title}</h1>
   <p class="text-lg text-text-secondary max-w-2xl">
-    Explora nuestra variedad de mieles artesanales, cada una con su carácter y
-    sabor único.
+    {description}
   </p>
 </div>  

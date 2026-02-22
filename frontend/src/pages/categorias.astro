@@ -1,4 +1,15 @@
 ---
+/*
+ * STRAPI SINGLE TYPE: "CategoriasPage" → endpoint: "categorias-page"
+ * Campos:
+ * - seo (component: shared.seo)
+ * - breadcrumbsSeparator (string)
+ * - breadcrumbsHomeLabel (string)
+ * - heroTitle (string)
+ * - heroDescription (text)
+ * - emptyStateIcon (text)
+ * - emptyStateMessage (string)
+ */
 import Layout from "../layouts/Layout.astro";
 import CategoryCard from "../components/features/category/CategoryCard.astro"
 
@@ -8,21 +19,63 @@ import CategoryHeroSection from "../components/features/category/CategoryHeroSec
 
 const PUBLIC_STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL;
 const categories = (await get("categories", { populate: { image: true } })) || [];
+
+// Fetch Categorias Page content from Strapi
+const categoriasPageData = await get("categorias-page", { populate: "*" });
+
+const fallbackData = {
+  seo: {
+    title: "Categorías",
+    description: "Explora nuestras categorías de miel artesanal, cada una con su carácter y sabor único.",
+    keywords: "categorías miel, tipos de miel, miel monoflora, miel multiflora, miel premium"
+  },
+  breadcrumbsSeparator: "/",
+  breadcrumbsHomeLabel: "Inicio",
+  heroTitle: "Nuestras Categorías",
+  heroDescription: "Explora nuestra variedad de mieles artesanales, cada una con su carácter y sabor único.",
+  emptyStateIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-grid-3x3-gap mx-auto mb-4 text-text-tertiary" viewBox="0 0 16 16">
+  <path d="M4 2v2H2V2zm1 12v-2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1m0-5V7a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1m0-5V2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1m5 10v-2a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1m0-5V7a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1m0-5V2a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1m5 10v-2a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1m0-5V7a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1m0-5V2a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1"/>
+</svg>`,
+  emptyStateMessage: "No hay categorías disponibles todavía."
+};
+
+const pageData = { ...fallbackData, ...categoriasPageData };
+
+const {
+  seo,
+  breadcrumbsSeparator,
+  breadcrumbsHomeLabel,
+  heroTitle,
+  heroDescription,
+  emptyStateIcon,
+  emptyStateMessage
+} = pageData;
+
+const { title: seoTitle, description: seoDescription, keywords: seoKeywords } = seo;
+
 ---
 
 <Layout
-  titulo="Categorías"
-  descripcion="Explora nuestras categorías de miel artesanal: monoflora, multiflora, premium y más."
-  keywords="categorías miel, tipos de miel, miel monoflora, miel multiflora, miel premium"
+  titulo={seoTitle}
+  descripcion={seoDescription}
+  keywords={seoKeywords}
 >
-
 
   <!-- Hero -->
   <section class="py-12 bg-linear-to-b from-bg-primary to-primary-pale">
-    <CategoryHeroSection />
+    <CategoryHeroSection
+      separator={breadcrumbsSeparator}
+      homeLabel={breadcrumbsHomeLabel}
+      title={heroTitle}
+      description={heroDescription}
+    />
   </section>
 
   <section class="py-12 bg-linear-to-b from-primary-pale to-bg-primary">
-    <CategorySection categories={categories} />
+    <CategorySection
+      categories={categories}
+      emptyStateIcon={emptyStateIcon}
+      emptyStateMessage={emptyStateMessage}
+    />
   </section>
 </Layout>
