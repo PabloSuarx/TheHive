@@ -713,6 +713,80 @@ export interface ApiContactSubmissionsContactSubmissions
   };
 }
 
+export interface ApiEnviosPageEnviosPage extends Struct.SingleTypeSchema {
+  collectionName: 'envios_pages';
+  info: {
+    description: 'P\u00E1gina de env\u00EDos y devoluciones';
+    displayName: 'Envios Page';
+    pluralName: 'envios-pages';
+    singularName: 'envios-page';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    content_sections: Schema.Attribute.Component<
+      'shipping.content-section',
+      true
+    >;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    hero_subtitle: Schema.Attribute.Text & Schema.Attribute.Required;
+    hero_title: Schema.Attribute.String & Schema.Attribute.Required;
+    highlight: Schema.Attribute.Component<'stat.feature', false>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::envios-page.envios-page'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    seo: Schema.Attribute.Component<'shared.seo', false>;
+    shipping_intro_text: Schema.Attribute.Text & Schema.Attribute.Required;
+    shipping_intro_title: Schema.Attribute.String & Schema.Attribute.Required;
+    shipping_zones: Schema.Attribute.Component<'shipping.shipping-zone', true>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiFaqPageFaqPage extends Struct.SingleTypeSchema {
+  collectionName: 'faq_pages';
+  info: {
+    displayName: 'FAQ Page';
+    pluralName: 'faq-pages';
+    singularName: 'faq-page';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    breadcrumbsHomeLabel: Schema.Attribute.String;
+    breadcrumbsSeparator: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    ctaButton: Schema.Attribute.Component<'ui.button', false>;
+    ctaText: Schema.Attribute.String;
+    faqItems: Schema.Attribute.Component<'faq.faq-item', true>;
+    heroDescription: Schema.Attribute.Text;
+    heroTitle: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::faq-page.faq-page'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    seo: Schema.Attribute.Component<'shared.seo', false>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiFooterFooter extends Struct.SingleTypeSchema {
   collectionName: 'footers';
   info: {
@@ -1827,6 +1901,8 @@ declare module '@strapi/strapi' {
       'api::category.category': ApiCategoryCategory;
       'api::contact-page.contact-page': ApiContactPageContactPage;
       'api::contact-submissions.contact-submissions': ApiContactSubmissionsContactSubmissions;
+      'api::envios-page.envios-page': ApiEnviosPageEnviosPage;
+      'api::faq-page.faq-page': ApiFaqPageFaqPage;
       'api::footer.footer': ApiFooterFooter;
       'api::hero-section.hero-section': ApiHeroSectionHeroSection;
       'api::home-page.home-page': ApiHomePageHomePage;

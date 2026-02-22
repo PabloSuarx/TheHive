@@ -1,48 +1,91 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Breadcrumbs from "../components/ui/Breadcrumbs.astro"
+import Breadcrumbs from "../components/ui/Breadcrumbs.astro";
 import { get } from "../lib/strapi";
 
-// Fetch data from Strapi 'shipping' single type
-const shippingData = await get("shipping");
+const enviosPageData = await get("envios-page", {
+  populate: "*"
+});
 
-// Fallback data
-const data = shippingData || {
-  title: "Envíos y Devoluciones",
-  subtitle: "Información sobre nuestros métodos de entrega y políticas",
-  content: `
-    <h3>Envíos Nacionales</h3>
-    <p>Realizamos envíos a toda la península y Baleares. Nuestros pedidos son procesados en un plazo de 24-48 horas laborables.</p>
-    <ul>
-      <li><strong>Península:</strong> Entrega en 24-72h. Envío gratuito en pedidos superiores a 50€.</li>
-      <li><strong>Baleares:</strong> Entrega en 3-5 días laborables.</li>
-    </ul>
 
-    <h3>Empaquetado Ecológico</h3>
-    <p>Comprometidos con el medio ambiente, utilizamos materiales 100% reciclables y libres de plásticos siempre que es posible para asegurar que tu miel llegue intacta y el planeta respire.</p>
-
-    <h3>Devoluciones</h3>
-    <p>Si algún producto llega dañado o no es lo que esperabas, contáctanos en las primeras 48 horas tras la recepción para gestionar el cambio o reembolso.</p>
-  `
+const fallbackData = {
+  seo: {
+    metaTitle: "Envíos y Devoluciones - The Hive",
+    metaDescription: "Información sobre envíos, plazos de entrega y políticas de devolución de The Hive.",
+    keywords: "envios miel, transporte, devoluciones, plazos entrega"
+  },
+  hero_title: "Envíos y Devoluciones",
+  hero_subtitle: "Información sobre nuestros métodos de entrega y políticas",
+  highlight: {
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-truck text-primary shrink-0" viewBox="0 0 16 16">
+  <path d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 0H5a2 2 0 1 1-3.998-.085A1.5 1.5 0 0 1 0 10.5zm1.294 7.456A2 2 0 0 1 4.732 11h5.536a2 2 0 0 1 .732-.732V3.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .294.456M12 10a2 2 0 0 1 1.732 1h.768a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12zm-9 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m9 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2"/>
+</svg>`,
+    title: "Resumen de Envíos",
+    description: "Procesamos los pedidos de lunes a viernes. Los pedidos realizados antes de las 13:00 suelen enviarse el mismo día."
+  },
+  shipping_intro_title: "Envíos Nacionales",
+  shipping_intro_text: "Realizamos envíos a toda la península y Baleares. Nuestros pedidos son procesados en un plazo de 24-48 horas laborables.",
+  shipping_zones: [
+    {
+      label: "Península:",
+      description: "Entrega en 24-72h. Envío gratuito en pedidos superiores a 50€."
+    },
+    {
+      label: "Baleares:",
+      description: "Entrega en 3-5 días laborables."
+    }
+  ],
+  content_sections: [
+    {
+      title: "Empaquetado Ecológico",
+      content: "Comprometidos con el medio ambiente, utilizamos materiales 100% reciclables y libres de plásticos siempre que es posible para asegurar que tu miel llegue intacta y el planeta respire."
+    },
+    {
+      title: "Devoluciones",
+      content: "Si algún producto llega dañado o no es lo que esperabas, contáctanos en las primeras 48 horas tras la recepción para gestionar el cambio o reembolso."
+    }
+  ]
 };
 
-const title = data.title || "Envíos y Devoluciones";
-const subtitle = data.subtitle || "Información sobre entregas";
-const content = data.content || "";
+
+const pageData = { ...fallbackData, ...enviosPageData };
+
+const {
+  seo,
+  hero_title,
+  hero_subtitle,
+  highlight,
+  shipping_intro_title,
+  shipping_intro_text,
+  shipping_zones,
+  content_sections
+} = pageData;
+
+const {
+  metaTitle,
+  metaDescription,
+  keywords
+} = seo || {};
+
+const {
+  icon: highlightIcon,
+  title: highlightTitle,
+  description: highlightDescription
+} = highlight || {};
 ---
 
 <Layout
-  titulo={title}
-  descripcion="Información sobre envíos, plazos de entrega y políticas de devolución de The Hive."
-  keywords="envios miel, transporte, devoluciones, plazos entrega"
+  titulo={metaTitle}
+  descripcion={metaDescription}
+  keywords={keywords}
 >
   <!-- Hero Section -->
   <section class="py-12 bg-bg-primary border-b border-border-color">
     <div class="container mx-auto px-4 lg:px-8">
       <Breadcrumbs separator="/" homeLabel="Inicio" />
-      <h1 class="text-4xl font-bold text-text-primary mb-2">{title}</h1>
+      <h1 class="text-4xl font-bold text-text-primary mb-2">{hero_title}</h1>
       <p class="text-lg text-text-secondary max-w-2xl">
-        {subtitle}
+        {hero_subtitle}
       </p>
     </div>
   </section>
@@ -52,20 +95,40 @@ const content = data.content || "";
     <div class="container mx-auto px-4 lg:px-8">
       <div class="max-w-3xl mx-auto">
 
+        <!-- Highlight Box -->
         <div class="bg-primary-pale border border-primary-light rounded-2xl p-8 mb-10 flex flex-col sm:flex-row gap-6 items-start">
-            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-truck text-primary shrink-0" viewBox="0 0 16 16">
-              <path d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 0H5a2 2 0 1 1-3.998-.085A1.5 1.5 0 0 1 0 10.5zm1.294 7.456A2 2 0 0 1 4.732 11h5.536a2 2 0 0 1 .732-.732V3.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .294.456M12 10a2 2 0 0 1 1.732 1h.768a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12zm-9 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m9 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2"/>
-            </svg>
+            <span set:html={highlightIcon} />
             <div>
-                <h3 class="text-xl font-bold text-text-primary mb-2">Resumen de Envíos</h3>
+                <h3 class="text-xl font-bold text-text-primary mb-2">{highlightTitle}</h3>
                 <p class="text-text-secondary">
-                    Procesamos los pedidos de lunes a viernes. Los pedidos realizados antes de las 13:00 suelen enviarse el mismo día.
+                    {highlightDescription}
                 </p>
             </div>
         </div>
 
+        <!-- Shipping Information -->
         <div class="prose prose-lg prose-amber text-text-secondary max-w-none">
-          <Fragment set:html={content} />
+          <h3>{shipping_intro_title}</h3>
+          <p>{shipping_intro_text}</p>
+          <ul>
+            {shipping_zones && shipping_zones.map((zone: any) => {
+              const { label, description } = zone;
+              return (
+                <li><strong>{label}</strong> {description}</li>
+              );
+            })}
+          </ul>
+
+          <!-- Content Sections (Empaquetado, Devoluciones, etc.) -->
+          {content_sections && content_sections.map((section: any) => {
+            const { title, content } = section;
+            return (
+              <>
+                <h3>{title}</h3>
+                <p>{content}</p>
+              </>
+            );
+          })}
         </div>
 
       </div>

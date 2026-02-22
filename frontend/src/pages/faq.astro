@@ -1,31 +1,73 @@
 ---
+/*
+ * STRAPI SINGLE TYPE: "FaqPage" → endpoint: "faq-page"
+ * Campos:
+ *   - seo (component shared.seo)
+ *   - heroTitle (string)
+ *   - heroDescription (text)
+ *   - breadcrumbsSeparator (string)
+ *   - breadcrumbsHomeLabel (string)
+ *   - faqItems (component faq.faq-item, repeatable)
+ *   - ctaText (string)
+ *   - ctaButton (component ui.button)
+ */
 import Layout from "../layouts/Layout.astro";
 import Breadcrumbs from "../components/ui/Breadcrumbs.astro"
 import FaqItem from "../components/features/faq/FaqItem.astro"
 import Button from "../components/ui/Button.astro"
 import { get } from "../lib/strapi";
 
-const faqs = (await get("faqs")) || [];
+const faqPageData = await get("faq-page", { populate: "*" });
 
-const data = faqs.length > 0 ? faqs : [
-  {
-    question: "¿De dónde proviene vuestra miel?",
-    answer: "Nuestra miel proviene de colmenas situadas en entornos naturales protegidos de la Península Ibérica. Trabajamos directamente con apicultores locales que practican una apicultura sostenible y respetuosa con las abejas."
+const fallbackData = {
+  seo: {
+    metaTitle: "Preguntas Frecuentes (FAQ)",
+    metaDescription: "Resuelve tus dudas sobre nuestros productos, envíos y devoluciones en nuestra sección de Preguntas Frecuentes.",
+    keywords: "faq miel, preguntas frecuentes, dudas compra miel, origen miel"
+  },
+  heroTitle: "Preguntas Frecuentes",
+  heroDescription: "Aquí encontrarás respuestas a las dudas más comunes sobre nuestros productos y servicios.",
+  breadcrumbsSeparator: "/",
+  breadcrumbsHomeLabel: "Inicio",
+  faqItems: [
+    {
+      question: "¿De dónde proviene vuestra miel?",
+      answer: "Nuestra miel proviene de colmenas situadas en entornos naturales protegidos de la Península Ibérica. Trabajamos directamente con apicultores locales que practican una apicultura sostenible y respetuosa con las abejas."
+    }
+  ],
+  ctaText: "¿No encuentras lo que buscas?",
+  ctaButton: {
+    content: "Contáctanos",
+    link: "/contacto",
+    variant: "primary"
   }
-];
+};
+
+const pageData = { ...fallbackData, ...faqPageData };
+
+const {
+  seo,
+  heroTitle,
+  heroDescription,
+  breadcrumbsSeparator,
+  breadcrumbsHomeLabel,
+  faqItems,
+  ctaText,
+  ctaButton
+} = pageData;
 ---
 
 <Layout
-  titulo="Preguntas Frecuentes (FAQ)"
-  descripcion="Resuelve tus dudas sobre nuestros productos, envíos y devoluciones en nuestra sección de Preguntas Frecuentes."
-  keywords="faq miel, preguntas frecuentes, dudas compra miel, origen miel"
+  titulo={seo?.metaTitle || fallbackData.seo.metaTitle}
+  descripcion={seo?.metaDescription || fallbackData.seo.metaDescription}
+  keywords={seo?.keywords || fallbackData.seo.keywords}
 >
   <section class="py-12 bg-bg-primary border-b border-divider">
     <div class="container mx-auto px-4 lg:px-8">
-      <Breadcrumbs separator="/" homeLabel="Inicio" />
-      <h1 class="text-4xl font-bold text-text-primary mb-2">Preguntas Frecuentes</h1>
+      <Breadcrumbs separator={breadcrumbsSeparator} homeLabel={breadcrumbsHomeLabel} />
+      <h1 class="text-4xl font-bold text-text-primary mb-2">{heroTitle}</h1>
       <p class="text-lg text-text-secondary max-w-2xl">
-        Aquí encontrarás respuestas a las dudas más comunes sobre nuestros productos y servicios.
+        {heroDescription}
       </p>
     </div>
   </section>
@@ -34,16 +76,16 @@ const data = faqs.length > 0 ? faqs : [
     <div class="container mx-auto px-4 lg:px-8">
       <div class="max-w-3xl mx-auto space-y-4">
 
-        {data.map((faq: any) => (
+        {faqItems.map((faq: any) => (
             <FaqItem question={faq.question} answer={faq.answer} />
         ))}
 
       </div>
 
       <div class="text-center mt-12">
-          <p class="text-text-secondary mb-4">¿No encuentras lo que buscas?</p>
-          <Button link="/contacto" variant="primary">
-              Contáctanos
+          <p class="text-text-secondary mb-4">{ctaText}</p>
+          <Button link={ctaButton.link} variant={ctaButton.variant}>
+              {ctaButton.content}
           </Button>
       </div>
     </div>

@@ -1,0 +1,52 @@
+{
+  "kind": "singleType",
+  "collectionName": "envios_pages",
+  "info": {
+    "singularName": "envios-page",
+    "pluralName": "envios-pages",
+    "displayName": "Envios Page",
+    "description": "Página de envíos y devoluciones"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "seo": {
+      "type": "component",
+      "component": "shared.seo",
+      "repeatable": false
+    },
+    "hero_title": {
+      "type": "string",
+      "required": true
+    },
+    "hero_subtitle": {
+      "type": "text",
+      "required": true
+    },
+    "highlight": {
+      "type": "component",
+      "component": "stat.feature",
+      "repeatable": false
+    },
+    "shipping_intro_title": {
+      "type": "string",
+      "required": true
+    },
+    "shipping_intro_text": {
+      "type": "text",
+      "required": true
+    },
+    "shipping_zones": {
+      "type": "component",
+      "component": "shipping.shipping-zone",
+      "repeatable": true
+    },
+    "content_sections": {
+      "type": "component",
+      "component": "shipping.content-section",
+      "repeatable": true
+    }
+  }
+}

@@ -12,6 +12,17 @@ export interface AboutUsInfoCard extends Struct.ComponentSchema {
   };
 }
 
+export interface FaqFaqItem extends Struct.ComponentSchema {
+  collectionName: 'components_faq_faq_items';
+  info: {
+    displayName: 'FAQ Item';
+  };
+  attributes: {
+    answer: Schema.Attribute.Text & Schema.Attribute.Required;
+    question: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
 export interface FooterFooterLink extends Struct.ComponentSchema {
   collectionName: 'components_footer_footer_links';
   info: {
@@ -114,6 +125,32 @@ export interface SharedSeo extends Struct.ComponentSchema {
   };
 }
 
+export interface ShippingContentSection extends Struct.ComponentSchema {
+  collectionName: 'components_shipping_content_sections';
+  info: {
+    description: 'Secci\u00F3n de contenido con t\u00EDtulo y texto';
+    displayName: 'Content Section';
+    icon: 'file';
+  };
+  attributes: {
+    content: Schema.Attribute.Text & Schema.Attribute.Required;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface ShippingShippingZone extends Struct.ComponentSchema {
+  collectionName: 'components_shipping_shipping_zones';
+  info: {
+    description: 'Zona de env\u00EDo con descripci\u00F3n';
+    displayName: 'Shipping Zone';
+    icon: 'earth';
+  };
+  attributes: {
+    description: Schema.Attribute.Text & Schema.Attribute.Required;
+    label: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
 export interface StatFeature extends Struct.ComponentSchema {
   collectionName: 'components_stat_features';
   info: {
@@ -208,12 +245,15 @@ declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
       'about-us.info-card': AboutUsInfoCard;
+      'faq.faq-item': FaqFaqItem;
       'footer.footer-link': FooterFooterLink;
       'footer.social-media': FooterSocialMedia;
       'main-image.main-image': MainImageMainImage;
       'menu-item.menu-item': MenuItemMenuItem;
       'orders.order-item': OrdersOrderItem;
       'shared.seo': SharedSeo;
+      'shipping.content-section': ShippingContentSection;
+      'shipping.shipping-zone': ShippingShippingZone;
       'stat.feature': StatFeature;
       'stat.stat-item': StatStatItem;
       'testimonials.testimonial': TestimonialsTestimonial;

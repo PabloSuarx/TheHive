@@ -1,0 +1,20 @@
+{
+  "collectionName": "components_shipping_content_sections",
+  "info": {
+    "displayName": "Content Section",
+    "description": "Sección de contenido con título y texto",
+    "icon": "file"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "content": {
+      "type": "text",
+      "required": true
+    }
+  },
+  "config": {}
+}
