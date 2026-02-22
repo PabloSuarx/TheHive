@@ -1,6 +1,7 @@
 ---
 import Logo from "../ui/Logo.astro"
 import AvatarMenu from "../ui/AvatarMenu.astro"
+import ThemeToggle from "../ui/ThemeToggle.astro"
 import { get } from "../../lib/strapi"
 import type { NavLink } from "../../types/header"
 
@@ -78,6 +79,8 @@ const sortedLinks = navLinks.sort((a, b) => a.order - b.order);
             0
           </span>
         </a>
+
+        <ThemeToggle />
 
         <button
           id="mobile-menu-button"
