@@ -238,6 +238,8 @@ const {
 
     if (!form) return;
 
+    const STORAGE_KEY = 'contactFormData';
+
     // Obtener mensajes de error desde data attributes
     const errorMessages = {
       nameRequired: form.dataset.nameErrorRequired || 'Este campo es obligatorio',
@@ -254,6 +256,7 @@ const {
     const regexNombre = /^[a-záéíóúñA-ZÁÉÍÓÚÑ\s]{2,50}$/;
     const regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     const regexTelefono = /^(\+34|0034|34)?[ -]*(6|7|8|9)[ -]*([0-9][ -]*){8}$/;
+    const MIN_MESSAGE_LENGTH = 10;
 
     // Función de validación individual
     function validarCampo(
@@ -301,19 +304,59 @@ const {
     const mensajeTextarea = document.getElementById('mensaje') as HTMLTextAreaElement | null;
     const privacidadCheckbox = document.getElementById('privacidad') as HTMLInputElement | null;
 
+    // Función para guardar en localStorage
+    function saveToLocalStorage() {
+      const formData = {
+        name: nombreInput?.value || '',
+        email: emailInput?.value || '',
+        phone: telefonoInput?.value || '',
+        subject: asuntoSelect?.value || '',
+        message: mensajeTextarea?.value || '',
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
+    }
+
+    // Función para cargar desde localStorage
+    function loadFromLocalStorage() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          const formData = JSON.parse(saved);
+          if (nombreInput && formData.name) nombreInput.value = formData.name;
+          if (emailInput && formData.email) emailInput.value = formData.email;
+          if (telefonoInput && formData.phone) telefonoInput.value = formData.phone;
+          if (asuntoSelect && formData.subject) asuntoSelect.value = formData.subject;
+          if (mensajeTextarea && formData.message) mensajeTextarea.value = formData.message;
+        }
+      } catch (error) {
+        console.error('Error al cargar datos del localStorage:', error);
+      }
+    }
+
+    // Función para limpiar localStorage
+    function clearLocalStorage() {
+      localStorage.removeItem(STORAGE_KEY);
+    }
+
+    // Cargar datos guardados al iniciar
+    loadFromLocalStorage();
+
     if (nombreInput) {
+      nombreInput.addEventListener('input', saveToLocalStorage);
       nombreInput.addEventListener('blur', function() {
         validarCampo(nombreInput, regexNombre, errorMessages.nameInvalid, errorMessages.nameRequired);
       });
     }
 
     if (emailInput) {
+      emailInput.addEventListener('input', saveToLocalStorage);
       emailInput.addEventListener('blur', function() {
         validarCampo(emailInput, regexEmail, errorMessages.emailInvalid, errorMessages.emailRequired);
       });
     }
 
     if (telefonoInput) {
+      telefonoInput.addEventListener('input', saveToLocalStorage);
       telefonoInput.addEventListener('blur', function() {
         if (telefonoInput.value.trim()) {
           validarCampo(telefonoInput, regexTelefono, errorMessages.phoneInvalid, '');
@@ -327,13 +370,26 @@ const {
 
     if (asuntoSelect) {
       asuntoSelect.addEventListener('change', function() {
+        saveToLocalStorage();
         validarCampo(asuntoSelect, null, '', errorMessages.subjectRequired);
       });
     }
 
     if (mensajeTextarea) {
+      mensajeTextarea.addEventListener('input', saveToLocalStorage);
       mensajeTextarea.addEventListener('blur', function() {
-        validarCampo(mensajeTextarea, null, '', errorMessages.messageRequired);
+        const valor = mensajeTextarea.value.trim();
+        if (valor && valor.length < MIN_MESSAGE_LENGTH) {
+          const errorElement = mensajeTextarea.parentElement?.querySelector('.error-message') as HTMLElement | null;
+          mensajeTextarea.classList.add('input-error');
+          mensajeTextarea.classList.remove('input-success');
+          if (errorElement) {
+            errorElement.textContent = `El mensaje debe tener al menos ${MIN_MESSAGE_LENGTH} caracteres`;
+            errorElement.classList.remove('hidden');
+          }
+        } else {
+          validarCampo(mensajeTextarea, null, '', errorMessages.messageRequired);
+        }
       });
     }
 
@@ -361,7 +417,19 @@ const {
       }
 
       if (mensajeTextarea) {
-        formValido = validarCampo(mensajeTextarea, null, '', errorMessages.messageRequired) && formValido;
+        const valor = mensajeTextarea.value.trim();
+        if (valor && valor.length < MIN_MESSAGE_LENGTH) {
+          const errorElement = mensajeTextarea.parentElement?.querySelector('.error-message') as HTMLElement | null;
+          mensajeTextarea.classList.add('input-error');
+          mensajeTextarea.classList.remove('input-success');
+          if (errorElement) {
+            errorElement.textContent = `El mensaje debe tener al menos ${MIN_MESSAGE_LENGTH} caracteres`;
+            errorElement.classList.remove('hidden');
+          }
+          formValido = false;
+        } else {
+          formValido = validarCampo(mensajeTextarea, null, '', errorMessages.messageRequired) && formValido;
+        }
       }
 
       // Validar checkbox de privacidad
@@ -388,7 +456,7 @@ const {
         return;
       }
 
-      // Simular envío (aquí iría la lógica real de envío)
+      // Enviar formulario a la API
       const submitButton = form.querySelector('button[type="submit"]') as HTMLButtonElement | null;
       const buttonText = submitButton?.querySelector('.button-text') as HTMLElement | null;
       const buttonLoading = submitButton?.querySelector('.button-loading') as HTMLElement | null;
@@ -401,34 +469,74 @@ const {
       buttonText.classList.add('hidden');
       buttonLoading.classList.remove('hidden');
 
-      // Simular delay de envío
-      setTimeout(function() {
-        // Ocultar loading
-        buttonText.classList.remove('hidden');
-        buttonLoading.classList.add('hidden');
-        submitButton.disabled = false;
+      // Preparar datos del formulario
+      const formData = {
+        name: nombreInput?.value.trim() || '',
+        email: emailInput?.value.trim() || '',
+        phone: telefonoInput?.value.trim() || '',
+        subject: asuntoSelect?.value || '',
+        message: mensajeTextarea?.value.trim() || '',
+      };
 
-        // Mostrar mensaje de éxito
-        successMessage.classList.remove('hidden');
+      console.log(formData);
 
-        // Reset form
-        form.reset();
+      // Enviar a la API
+      fetch('https://thehive.pablosuarez.dev/api/contact-submissions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ data: formData }),
+      })
+        .then(function(response) {
+          if (!response.ok) {
+            return response.json().then(function(data) {
+              throw new Error(data.error || 'Error al enviar el mensaje');
+            }).catch(function() {
+              throw new Error('Error al enviar el mensaje');
+            });
+          }
+          return response.json();
+        })
+        .then(function() {
+          // Ocultar loading
+          buttonText.classList.remove('hidden');
+          buttonLoading.classList.add('hidden');
+          submitButton.disabled = false;
 
-        // Limpiar clases de validación
-        const inputs = form.querySelectorAll('input, select, textarea');
-        inputs.forEach(function(input) {
-          input.classList.remove('input-error', 'input-success');
+          // Mostrar mensaje de éxito
+          successMessage.classList.remove('hidden');
+
+          // Reset form
+          form.reset();
+
+          // Limpiar localStorage
+          clearLocalStorage();
+
+          // Limpiar clases de validación
+          const inputs = form.querySelectorAll('input, select, textarea');
+          inputs.forEach(function(input) {
+            input.classList.remove('input-error', 'input-success');
+          });
+
+          // Scroll al mensaje de éxito
+          successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+          // Ocultar mensaje después de 5 segundos
+          setTimeout(function() {
+            successMessage.classList.add('hidden');
+          }, 5000);
+        })
+        .catch(function(error) {
+          // Ocultar loading
+          buttonText.classList.remove('hidden');
+          buttonLoading.classList.add('hidden');
+          submitButton.disabled = false;
+
+          // Mostrar mensaje de error
+          alert('Error: ' + error.message);
+          console.error('Error al enviar el formulario:', error);
         });
-
-        // Scroll al mensaje de éxito
-        successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-        // Ocultar mensaje después de 5 segundos
-        setTimeout(function() {
-          successMessage.classList.add('hidden');
-        }, 5000);
-
-      }, 2000);
     });
   });
 </script>

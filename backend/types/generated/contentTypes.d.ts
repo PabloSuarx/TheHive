@@ -902,16 +902,16 @@ export interface ApiContactPageContactPage extends Struct.SingleTypeSchema {
   };
 }
 
-export interface ApiContactSubmissionsContactSubmissions
+export interface ApiContactSubmissionContactSubmission
   extends Struct.CollectionTypeSchema {
-  collectionName: 'contact_submissionss';
+  collectionName: 'contact_submissions';
   info: {
-    displayName: 'contact-submissions';
-    pluralName: 'contact-submissionss';
-    singularName: 'contact-submissions';
+    displayName: 'Contact Submissions';
+    pluralName: 'contact-submissions';
+    singularName: 'contact-submission';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     createdAt: Schema.Attribute.DateTime;
@@ -921,7 +921,7 @@ export interface ApiContactSubmissionsContactSubmissions
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
-      'api::contact-submissions.contact-submissions'
+      'api::contact-submission.contact-submission'
     > &
       Schema.Attribute.Private;
     message: Schema.Attribute.Text;
@@ -2432,7 +2432,7 @@ declare module '@strapi/strapi' {
       'api::categorias-page.categorias-page': ApiCategoriasPageCategoriasPage;
       'api::category.category': ApiCategoryCategory;
       'api::contact-page.contact-page': ApiContactPageContactPage;
-      'api::contact-submissions.contact-submissions': ApiContactSubmissionsContactSubmissions;
+      'api::contact-submission.contact-submission': ApiContactSubmissionContactSubmission;
       'api::envios-page.envios-page': ApiEnviosPageEnviosPage;
       'api::faq-page.faq-page': ApiFaqPageFaqPage;
       'api::footer.footer': ApiFooterFooter;

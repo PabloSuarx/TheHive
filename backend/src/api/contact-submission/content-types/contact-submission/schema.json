@@ -1,13 +1,13 @@
 {
   "kind": "collectionType",
-  "collectionName": "contact_submissionss",
+  "collectionName": "contact_submissions",
   "info": {
-    "singularName": "contact-submissions",
-    "pluralName": "contact-submissionss",
-    "displayName": "contact-submissions"
+    "singularName": "contact-submission",
+    "pluralName": "contact-submissions",
+    "displayName": "Contact Submissions"
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {
