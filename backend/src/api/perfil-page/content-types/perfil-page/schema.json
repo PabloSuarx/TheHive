@@ -1,0 +1,92 @@
+{
+  "kind": "singleType",
+  "collectionName": "perfil_pages",
+  "info": {
+    "singularName": "perfil-page",
+    "pluralName": "perfil-pages",
+    "displayName": "Perfil Page"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "seo": {
+      "type": "component",
+      "component": "shared.seo",
+      "repeatable": false
+    },
+    "avatarUploadAriaLabel": {
+      "type": "string"
+    },
+    "avatarCameraIcon": {
+      "type": "text"
+    },
+    "loadingText": {
+      "type": "string"
+    },
+    "ordersTitle": {
+      "type": "string"
+    },
+    "ordersLoadingText": {
+      "type": "string"
+    },
+    "ordersLoadingIcon": {
+      "type": "text"
+    },
+    "ordersErrorText": {
+      "type": "string"
+    },
+    "ordersErrorIcon": {
+      "type": "text"
+    },
+    "ordersRetryButtonText": {
+      "type": "string"
+    },
+    "ordersEmptyText": {
+      "type": "string"
+    },
+    "ordersEmptyIcon": {
+      "type": "text"
+    },
+    "errorMessageExpiredSession": {
+      "type": "string"
+    },
+    "errorMessageDefault": {
+      "type": "string"
+    },
+    "orderLabelText": {
+      "type": "string"
+    },
+    "orderStatusProcessing": {
+      "type": "string"
+    },
+    "orderStatusConfirmed": {
+      "type": "string"
+    },
+    "orderStatusShipped": {
+      "type": "string"
+    },
+    "orderStatusDelivered": {
+      "type": "string"
+    },
+    "orderStatusCancelled": {
+      "type": "string"
+    },
+    "orderIconClock": {
+      "type": "text"
+    },
+    "orderIconCheck": {
+      "type": "text"
+    },
+    "orderIconTruck": {
+      "type": "text"
+    },
+    "orderIconX": {
+      "type": "text"
+    },
+    "orderIconBox": {
+      "type": "text"
+    }
+  }
+}

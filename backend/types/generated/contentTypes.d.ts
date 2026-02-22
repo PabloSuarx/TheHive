@@ -1215,6 +1215,58 @@ export interface ApiOriginOrigin extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiPerfilPagePerfilPage extends Struct.SingleTypeSchema {
+  collectionName: 'perfil_pages';
+  info: {
+    displayName: 'Perfil Page';
+    pluralName: 'perfil-pages';
+    singularName: 'perfil-page';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    avatarCameraIcon: Schema.Attribute.Text;
+    avatarUploadAriaLabel: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    errorMessageDefault: Schema.Attribute.String;
+    errorMessageExpiredSession: Schema.Attribute.String;
+    loadingText: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::perfil-page.perfil-page'
+    > &
+      Schema.Attribute.Private;
+    orderIconBox: Schema.Attribute.Text;
+    orderIconCheck: Schema.Attribute.Text;
+    orderIconClock: Schema.Attribute.Text;
+    orderIconTruck: Schema.Attribute.Text;
+    orderIconX: Schema.Attribute.Text;
+    orderLabelText: Schema.Attribute.String;
+    ordersEmptyIcon: Schema.Attribute.Text;
+    ordersEmptyText: Schema.Attribute.String;
+    ordersErrorIcon: Schema.Attribute.Text;
+    ordersErrorText: Schema.Attribute.String;
+    ordersLoadingIcon: Schema.Attribute.Text;
+    ordersLoadingText: Schema.Attribute.String;
+    ordersRetryButtonText: Schema.Attribute.String;
+    orderStatusCancelled: Schema.Attribute.String;
+    orderStatusConfirmed: Schema.Attribute.String;
+    orderStatusDelivered: Schema.Attribute.String;
+    orderStatusProcessing: Schema.Attribute.String;
+    orderStatusShipped: Schema.Attribute.String;
+    ordersTitle: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    seo: Schema.Attribute.Component<'shared.seo', false>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiProductCardProductCard extends Struct.SingleTypeSchema {
   collectionName: 'product_cards';
   info: {
@@ -2301,6 +2353,7 @@ declare module '@strapi/strapi' {
       'api::navigation.navigation': ApiNavigationNavigation;
       'api::order.order': ApiOrderOrder;
       'api::origin.origin': ApiOriginOrigin;
+      'api::perfil-page.perfil-page': ApiPerfilPagePerfilPage;
       'api::product-card.product-card': ApiProductCardProductCard;
       'api::product.product': ApiProductProduct;
       'api::producto-page.producto-page': ApiProductoPageProductoPage;

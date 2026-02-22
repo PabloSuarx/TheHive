@@ -3,30 +3,34 @@ import Avatar from "../ui/Avatar.astro"
 
 interface Props {
   className?: string;
+  avatarUploadAriaLabel: string;
+  avatarCameraIcon: string;
+  loadingText: string;
 }
 
-const { className = "" } = Astro.props;
+const {
+  className = "",
+  avatarUploadAriaLabel,
+  avatarCameraIcon,
+  loadingText,
+} = Astro.props;
 const PUBLIC_STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL;
 ---
 
-<section class:list={["profile-hero", className]} id="profile-hero">
-  <div class="profile-hero__container">
+<section class:list={["py-12 px-4 bg-linear-to-b from-bg-primary to-bg-secondary", className]} id="profile-hero">
+  <div class="max-w-3xl mx-auto flex flex-col items-center gap-6 text-center">
     <!-- Avatar con input oculto para cambiar foto -->
-    <div class="profile-hero__avatar-wrapper">
+    <div class="relative">
       <button
         type="button"
         id="avatar-upload-trigger"
-        class="profile-hero__avatar-btn"
-        aria-label="Cambiar foto de perfil"
+        class="relative w-24 h-24 rounded-full overflow-hidden cursor-pointer border-3 border-primary bg-bg-secondary p-0 transition-colors duration-250 hover:border-primary-dark group"
+        aria-label={avatarUploadAriaLabel}
       >
-        <div id="avatar-display" class="profile-hero__avatar">
+        <div id="avatar-display" class="w-full h-full rounded-full overflow-hidden [&_img]:w-full [&_img]:h-full [&_img]:object-cover">
           <Avatar size="lg" className="w-full! h-full!" />
         </div>
-        <div class="profile-hero__avatar-overlay">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-camera" viewBox="0 0 16 16">
-            <path d="M15 12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h1.172a3 3 0 0 0 2.12-.879l.83-.828A1 1 0 0 1 6.827 3h2.344a1 1 0 0 1 .707.293l.828.828A3 3 0 0 0 12.828 5H14a1 1 0 0 1 1 1zM2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4z"/>
-            <path d="M8 11a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5m0 1a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7M3 6.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0"/>
-          </svg>
+        <div class="absolute inset-0 flex items-center justify-center bg-overlay-dark text-text-inverse opacity-0 transition-opacity duration-150 rounded-full group-hover:opacity-100" set:html={avatarCameraIcon}>
         </div>
       </button>
       <input
@@ -39,96 +43,9 @@ const PUBLIC_STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL;
     </div>
 
     <!-- Info del usuario -->
-    <div class="profile-hero__info">
-      <h1 id="profile-username" class="profile-hero__username">Cargando...</h1>
-      <p id="profile-email" class="profile-hero__email"></p>
+    <div class="flex flex-col gap-1">
+      <h1 id="profile-username" class="text-[clamp(1.5rem,3vw,2rem)] font-bold text-text-primary mb-0">{loadingText}</h1>
+      <p id="profile-email" class="text-sm text-text-secondary mb-0"></p>
     </div>
   </div>
 </section>
-
-<style>
-  .profile-hero {
-    padding: 3rem 1rem;
-    background: linear-gradient(to bottom, var(--bg-primary), var(--bg-secondary));
-  }
-
-  .profile-hero__container {
-    max-width: 48rem;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.5rem;
-    text-align: center;
-  }
-
-  .profile-hero__avatar-wrapper {
-    position: relative;
-  }
-
-  .profile-hero__avatar-btn {
-    position: relative;
-    width: 6rem;
-    height: 6rem;
-    border-radius: 9999px;
-    overflow: hidden;
-    cursor: pointer;
-    border: 3px solid var(--primary);
-    background: var(--bg-secondary);
-    padding: 0;
-    transition: border-color var(--transition-base);
-  }
-
-  .profile-hero__avatar-btn:hover {
-    border-color: var(--primary-dark);
-  }
-
-  .profile-hero__avatar {
-    width: 100%;
-    height: 100%;
-    border-radius: 9999px;
-    overflow: hidden;
-  }
-
-  .profile-hero__avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .profile-hero__avatar-overlay {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--overlay-dark);
-    color: var(--text-inverse);
-    opacity: 0;
-    transition: opacity var(--transition-fast);
-    border-radius: 9999px;
-  }
-
-  .profile-hero__avatar-btn:hover .profile-hero__avatar-overlay {
-    opacity: 1;
-  }
-
-  .profile-hero__info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-
-  .profile-hero__username {
-    font-size: clamp(1.5rem, 3vw, 2rem);
-    font-weight: 700;
-    color: var(--text-primary);
-    margin-bottom: 0;
-  }
-
-  .profile-hero__email {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-    margin-bottom: 0;
-  }
-</style>
