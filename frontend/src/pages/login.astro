@@ -1,11 +1,84 @@
 ---
+/*
+ * STRAPI SINGLE TYPE: "LoginPage" → endpoint: "login-page"
+ * Campos:
+ * - seo (component)
+ * - heroTitle (string)
+ * - heroSubtitle (string)
+ * - errorIcon (text - SVG)
+ * - emailLabel (string)
+ * - emailIcon (text - SVG)
+ * - emailPlaceholder (string)
+ * - passwordLabel (string)
+ * - passwordIcon (text - SVG)
+ * - passwordPlaceholder (string)
+ * - submitButtonText (string)
+ * - noAccountText (string)
+ * - registerLinkText (string)
+ * - registerLinkHref (string)
+ * - errorMessageDefault (string)
+ * - errorMessageConnection (string)
+ */
+
 import Layout from "../layouts/Layout.astro";
 import CustomLoader from "../components/ui/CustomLoader.astro";
 import { $user } from "../stores/appStore";
+import { get } from "../lib/strapi";
 
 const siteConfig = {
   siteName: "The Hive"
 };
+
+// Fetch data from Strapi
+const loginPageData = await get("login-page", { populate: "*" });
+
+// Fallback data with current hardcoded content
+const fallbackData = {
+  heroTitle: "Bienvenido",
+  heroSubtitle: "Inicia sesión en tu cuenta",
+  errorIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-exclamation-circle flex-shrink-0" viewBox="0 0 16 16">
+  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+  <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0M7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0z"/>
+</svg>`,
+  emailLabel: "Correo electrónico",
+  emailIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope" viewBox="0 0 16 16">
+  <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z"/>
+</svg>`,
+  emailPlaceholder: "tu@email.com",
+  passwordLabel: "Contraseña",
+  passwordIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lock" viewBox="0 0 16 16">
+  <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2m3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2M5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1"/>
+</svg>`,
+  passwordPlaceholder: "••••••••",
+  submitButtonText: "Iniciar Sesión",
+  noAccountText: "¿No tienes una cuenta?",
+  registerLinkText: "Regístrate",
+  registerLinkHref: "/registro",
+  errorMessageDefault: "Ha ocurrido un error al iniciar sesión.",
+  errorMessageConnection: "Error de conexión. Inténtalo de nuevo."
+};
+
+// Merge with fallback
+const pageData = { ...fallbackData, ...loginPageData };
+
+// 100% Destructuring
+const {
+  heroTitle,
+  heroSubtitle,
+  errorIcon,
+  emailLabel,
+  emailIcon,
+  emailPlaceholder,
+  passwordLabel,
+  passwordIcon,
+  passwordPlaceholder,
+  submitButtonText,
+  noAccountText,
+  registerLinkText,
+  registerLinkHref,
+  errorMessageDefault,
+  errorMessageConnection
+} = pageData;
 ---
 
 <Layout
@@ -16,20 +89,19 @@ const siteConfig = {
   <div class="flex items-center justify-center min-h-[60vh] px-4 py-12">
     <div
       class="w-full max-w-md bg-bg-primary p-8 rounded-2xl border border-border-color"
+      data-error-default={errorMessageDefault}
+      data-error-connection={errorMessageConnection}
     >
       <div class="text-center mb-8">
-        <h1 class="text-3xl font-bold text-primary mb-2">Bienvenido</h1>
-        <p class="text-text-secondary">Inicia sesión en tu cuenta</p>
+        <h1 class="text-3xl font-bold text-primary mb-2">{heroTitle}</h1>
+        <p class="text-text-secondary">{heroSubtitle}</p>
       </div>
 
       <div
         id="error-container"
         class="hidden mb-6 p-4 rounded-lg bg-bg-tertiary border border-error text-error text-sm flex items-center gap-3"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-exclamation-circle flex-shrink-0" viewBox="0 0 16 16">
-          <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
-          <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0M7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0z"/>
-        </svg>
+        <span set:html={errorIcon} />
         <span id="error-message"></span>
       </div>
 
@@ -39,10 +111,8 @@ const siteConfig = {
             for="email"
             class="flex items-center gap-2 text-sm font-medium text-text-primary mb-1"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope" viewBox="0 0 16 16">
-              <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z"/>
-            </svg>
-            Correo electrónico
+            <span set:html={emailIcon} />
+            {emailLabel}
           </label>
           <input
             type="email"
@@ -50,7 +120,7 @@ const siteConfig = {
             name="email"
             required
             class="w-full px-4 py-3 rounded-lg border border-border-color bg-bg-primary text-text-primary focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all disabled:bg-bg-tertiary disabled:cursor-not-allowed"
-            placeholder="tu@email.com"
+            placeholder={emailPlaceholder}
           />
         </div>
 
@@ -59,10 +129,8 @@ const siteConfig = {
             for="password"
             class="flex items-center gap-2 text-sm font-medium text-text-primary mb-1"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lock" viewBox="0 0 16 16">
-              <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2m3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2M5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1"/>
-            </svg>
-            Contraseña
+            <span set:html={passwordIcon} />
+            {passwordLabel}
           </label>
           <input
             type="password"
@@ -70,7 +138,7 @@ const siteConfig = {
             name="password"
             required
             class="w-full px-4 py-3 rounded-lg border border-border-color bg-bg-primary text-text-primary focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all disabled:bg-bg-tertiary disabled:cursor-not-allowed"
-            placeholder="••••••••"
+            placeholder={passwordPlaceholder}
           />
         </div>
 
@@ -79,7 +147,7 @@ const siteConfig = {
           id="submit-button"
           class="w-full flex items-center justify-center py-3.5 px-4 rounded-lg bg-primary text-text-inverse font-semibold hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
         >
-          <span id="button-text">Iniciar Sesión</span>
+          <span id="button-text">{submitButtonText}</span>
           <div id="button-loader" class="hidden ml-2">
            <CustomLoader size={20} color="white" />
           </div>
@@ -87,10 +155,10 @@ const siteConfig = {
       </form>
 
       <div class="mt-6 text-center text-sm text-text-secondary">
-        ¿No tienes una cuenta? <a
-          href="/registro"
+        {noAccountText} <a
+          href={registerLinkHref}
           class="font-medium text-primary hover:text-primary-dark transition-colors"
-          >Regístrate</a
+          >{registerLinkText}</a
         >
       </div>
     </div>
@@ -112,6 +180,11 @@ const siteConfig = {
   const buttonText = document.getElementById("button-text");
   const buttonLoader = document.getElementById("button-loader");
   const errorContainer = document.getElementById("error-container");
+  const containerDiv = form?.closest('[data-error-default]') as HTMLElement;
+
+  // Error messages from Strapi
+  const errorMessageDefault = containerDiv?.dataset.errorDefault || "Ha ocurrido un error al iniciar sesión.";
+  const errorMessageConnection = containerDiv?.dataset.errorConnection || "Error de conexión. Inténtalo de nuevo.";
 
   // Auth Guard: Redirect if already logged in
   if ($user.get()?.jwt) {
@@ -178,7 +251,7 @@ const siteConfig = {
       if (!response.ok) {
         // Handle specific Strapi errors
         const errorMessage =
-          data?.error?.message || "Ha ocurrido un error al iniciar sesión.";
+          data?.error?.message || errorMessageDefault;
         throw new Error(errorMessage);
       }
 
@@ -205,7 +278,7 @@ const siteConfig = {
       
     } catch (error: any) {
       console.error("Login Error:", error);
-      showError(error.message || "Error de conexión. Inténtalo de nuevo.");
+      showError(error.message || errorMessageConnection);
       setLoading(false);
       // Logic for failed login: focus password for easy retry
       passwordInput.value = "";

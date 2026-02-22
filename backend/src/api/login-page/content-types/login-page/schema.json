@@ -1,0 +1,65 @@
+{
+  "kind": "singleType",
+  "collectionName": "login_pages",
+  "info": {
+    "singularName": "login-page",
+    "pluralName": "login-pages",
+    "displayName": "Login Page"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "seo": {
+      "type": "component",
+      "component": "shared.seo",
+      "repeatable": false
+    },
+    "heroTitle": {
+      "type": "string"
+    },
+    "heroSubtitle": {
+      "type": "string"
+    },
+    "errorIcon": {
+      "type": "text"
+    },
+    "emailLabel": {
+      "type": "string"
+    },
+    "emailIcon": {
+      "type": "text"
+    },
+    "emailPlaceholder": {
+      "type": "string"
+    },
+    "passwordLabel": {
+      "type": "string"
+    },
+    "passwordIcon": {
+      "type": "text"
+    },
+    "passwordPlaceholder": {
+      "type": "string"
+    },
+    "submitButtonText": {
+      "type": "string"
+    },
+    "noAccountText": {
+      "type": "string"
+    },
+    "registerLinkText": {
+      "type": "string"
+    },
+    "registerLinkHref": {
+      "type": "string"
+    },
+    "errorMessageDefault": {
+      "type": "string"
+    },
+    "errorMessageConnection": {
+      "type": "string"
+    }
+  }
+}

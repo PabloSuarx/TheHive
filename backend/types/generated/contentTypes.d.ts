@@ -1071,6 +1071,49 @@ export interface ApiHomePageHomePage extends Struct.SingleTypeSchema {
   };
 }
 
+export interface ApiLoginPageLoginPage extends Struct.SingleTypeSchema {
+  collectionName: 'login_pages';
+  info: {
+    displayName: 'Login Page';
+    pluralName: 'login-pages';
+    singularName: 'login-page';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    emailIcon: Schema.Attribute.Text;
+    emailLabel: Schema.Attribute.String;
+    emailPlaceholder: Schema.Attribute.String;
+    errorIcon: Schema.Attribute.Text;
+    errorMessageConnection: Schema.Attribute.String;
+    errorMessageDefault: Schema.Attribute.String;
+    heroSubtitle: Schema.Attribute.String;
+    heroTitle: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::login-page.login-page'
+    > &
+      Schema.Attribute.Private;
+    noAccountText: Schema.Attribute.String;
+    passwordIcon: Schema.Attribute.Text;
+    passwordLabel: Schema.Attribute.String;
+    passwordPlaceholder: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    registerLinkHref: Schema.Attribute.String;
+    registerLinkText: Schema.Attribute.String;
+    seo: Schema.Attribute.Component<'shared.seo', false>;
+    submitButtonText: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiNavigationNavigation extends Struct.SingleTypeSchema {
   collectionName: 'navigations';
   info: {
@@ -2192,6 +2235,7 @@ declare module '@strapi/strapi' {
       'api::footer.footer': ApiFooterFooter;
       'api::hero-section.hero-section': ApiHeroSectionHeroSection;
       'api::home-page.home-page': ApiHomePageHomePage;
+      'api::login-page.login-page': ApiLoginPageLoginPage;
       'api::navigation.navigation': ApiNavigationNavigation;
       'api::order.order': ApiOrderOrder;
       'api::origin.origin': ApiOriginOrigin;
