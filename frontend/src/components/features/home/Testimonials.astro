@@ -2,7 +2,6 @@
 import { get } from "../../../lib/strapi"
 import type { Testimonial } from "../../../types/home"
 
-// Fetch data from Strapi
 const single = await get("testimonials-section", {
   populate: {
     testimonials: {
@@ -11,7 +10,6 @@ const single = await get("testimonials-section", {
   },
 });
 
-// Fallback data
 const fallbackData = {
   title: "Lo Que Dicen Nuestros Clientes",
   subtitle: "Miles de personas ya disfrutan de nuestra miel",

@@ -137,6 +137,28 @@ export interface StatStatItem extends Struct.ComponentSchema {
   };
 }
 
+export interface TestimonialsTestimonial extends Struct.ComponentSchema {
+  collectionName: 'components_testimonials_testimonials';
+  info: {
+    displayName: 'Testimonial';
+    icon: 'quote';
+  };
+  attributes: {
+    author: Schema.Attribute.String & Schema.Attribute.Required;
+    location: Schema.Attribute.String;
+    rating: Schema.Attribute.Integer &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 5;
+          min: 1;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<5>;
+    text: Schema.Attribute.Text & Schema.Attribute.Required;
+  };
+}
+
 export interface UiButton extends Struct.ComponentSchema {
   collectionName: 'components_ui_buttons';
   info: {
@@ -194,6 +216,7 @@ declare module '@strapi/strapi' {
       'shared.seo': SharedSeo;
       'stat.feature': StatFeature;
       'stat.stat-item': StatStatItem;
+      'testimonials.testimonial': TestimonialsTestimonial;
       'ui.button': UiButton;
       'ui.common-text': UiCommonText;
       'user.addresses': UserAddresses;

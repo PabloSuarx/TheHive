@@ -1210,6 +1210,37 @@ export interface ApiTagTag extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiTestimonialsSectionTestimonialsSection
+  extends Struct.SingleTypeSchema {
+  collectionName: 'testimonials_sections';
+  info: {
+    displayName: 'Testimonials Section';
+    pluralName: 'testimonials-sections';
+    singularName: 'testimonials-section';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::testimonials-section.testimonials-section'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    subtitle: Schema.Attribute.String;
+    testimonials: Schema.Attribute.Component<'testimonials.testimonial', true>;
+    title: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiUiComponentUiComponent extends Struct.SingleTypeSchema {
   collectionName: 'ui_components';
   info: {
@@ -1809,6 +1840,7 @@ declare module '@strapi/strapi' {
       'api::site-config.site-config': ApiSiteConfigSiteConfig;
       'api::sobre-nosotros.sobre-nosotros': ApiSobreNosotrosSobreNosotros;
       'api::tag.tag': ApiTagTag;
+      'api::testimonials-section.testimonials-section': ApiTestimonialsSectionTestimonialsSection;
       'api::ui-component.ui-component': ApiUiComponentUiComponent;
       'api::why-choose-us.why-choose-us': ApiWhyChooseUsWhyChooseUs;
       'plugin::content-releases.release': PluginContentReleasesRelease;
