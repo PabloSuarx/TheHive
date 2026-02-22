@@ -32,9 +32,11 @@ if (!product) {
   return Astro.redirect("/404");
 }
 
-const imgUrl = product.mainImage?.url
-  ? `${PUBLIC_STRAPI_URL}${product.mainImage.url}`
-  : "/placeholder.svg";
+const imgUrl = product.mainImage?.url?.startsWith("http")
+  ? product.mainImage.url
+  : product.mainImage?.url
+    ? `${PUBLIC_STRAPI_URL}${product.mainImage.url}`
+    : "/placeholder.svg";
 
 const reviews = product.reviews || [];
 const avgRating =

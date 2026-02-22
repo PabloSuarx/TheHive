@@ -28,9 +28,11 @@ const PUBLIC_STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL;
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="blog-grid">
         {
           blogs.map((blog: any) => {
-            const imgUrl = blog.featuredImage?.url
-              ? `${PUBLIC_STRAPI_URL}${blog.featuredImage.url}`
-              : undefined;
+            const imgUrl = blog.featuredImage?.url?.startsWith("http")
+              ? blog.featuredImage.url
+              : blog.featuredImage?.url
+                ? `${PUBLIC_STRAPI_URL}${blog.featuredImage.url}`
+                : undefined;
 
             return (
               <div

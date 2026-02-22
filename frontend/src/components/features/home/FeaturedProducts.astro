@@ -43,9 +43,11 @@ const displayProducts = products.length > 0 ? products : [];
       <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
         {
           displayProducts.map((product: Product) => {
-            const imageUrl = product.mainImage?.url
-              ? (product.mainImage.url.startsWith('http') ? product.mainImage.url : `${PUBLIC_STRAPI_URL}${product.mainImage.url}`)
-              : "/public/placeholder.svg"; 
+            const imageUrl = product.mainImage?.url?.startsWith('http')
+              ? product.mainImage.url
+              : product.mainImage?.url
+                ? `${PUBLIC_STRAPI_URL}${product.mainImage.url}`
+                : "/placeholder.svg"; 
             
             // Calculate rating
             let averageRating = product.rating || 0;

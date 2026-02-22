@@ -47,9 +47,11 @@ const uniqueOrigins = [
   ...new Set(products.map((product) => product.origin).filter(Boolean)),
 ];
 
-const imageUrl = category.image?.url
-  ? PUBLIC_STRAPI_URL + category.image.url
-  : undefined;
+const imageUrl = category.image?.url?.startsWith("http")
+  ? category.image.url
+  : category.image?.url
+    ? `${PUBLIC_STRAPI_URL}${category.image.url}`
+    : undefined;
 ---
 
 <Layout

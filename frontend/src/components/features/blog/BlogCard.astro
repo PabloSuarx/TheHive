@@ -16,8 +16,13 @@ interface Props {
 
 const { title, slug, excerpt, imageUrl, author, blogPublishedAt, categoryName, readingTime, className = '' } = Astro.props;
 
+const PUBLIC_STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL;
 const placeholder = '/placeholder.svg';
-const imgSrc = imageUrl || placeholder;
+const imgSrc = imageUrl?.startsWith("http")
+  ? imageUrl
+  : imageUrl
+    ? `${PUBLIC_STRAPI_URL}${imageUrl}`
+    : placeholder;
 
 const formatDate = (dateStr?: string) => {
   if (!dateStr) return '';

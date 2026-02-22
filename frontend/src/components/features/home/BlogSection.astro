@@ -33,9 +33,11 @@ const { latestBlogs, publicStrapiUrl } = Astro.props;
       latestBlogs.length > 0 ? (
         <div class="grid md:grid-cols-3 gap-8">
           {latestBlogs.map((blog) => {
-            const imgUrl = blog.featuredImage?.url
-              ? `${publicStrapiUrl}${blog.featuredImage.url}`
-              : undefined;
+            const imgUrl = blog.featuredImage?.url?.startsWith("http")
+              ? blog.featuredImage.url
+              : blog.featuredImage?.url
+                ? `${publicStrapiUrl}${blog.featuredImage.url}`
+                : undefined;
 
             return (
               <BlogCard

@@ -34,9 +34,11 @@ averageRating = Math.round(averageRating * 2) / 2;
 >
   <div class="relative aspect-4/5 overflow-hidden bg-bg-secondary shrink-0">
     <Image
-      src={product.mainImage?.url
-        ? `${PUBLIC_STRAPI_URL}${product.mainImage.url}`
-        : "/placeholder.svg"}
+      src={product.mainImage?.url?.startsWith("http")
+        ? product.mainImage.url
+        : product.mainImage?.url
+          ? `${PUBLIC_STRAPI_URL}${product.mainImage.url}`
+          : "/placeholder.svg"}
       alt={product.name}
       width={product.mainImage?.width || 400}
       height={product.mainImage?.height || 500}

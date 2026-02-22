@@ -10,17 +10,22 @@ interface Props {
   className?: string;
 }
 
-const { 
-  name, 
-  slug, 
-  description, 
-  icon, 
-  imageUrl, 
+const {
+  name,
+  slug,
+  description,
+  icon,
+  imageUrl,
   productCount = 0,
-  className = '' 
+  className = ''
 } = Astro.props;
 
-const imgSrc = imageUrl || "/placeholder.svg";
+const PUBLIC_STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL;
+const imgSrc = imageUrl?.startsWith("http")
+  ? imageUrl
+  : imageUrl
+    ? `${PUBLIC_STRAPI_URL}${imageUrl}`
+    : "/placeholder.svg";
 ---
 
 <a 

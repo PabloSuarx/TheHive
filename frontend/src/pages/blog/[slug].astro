@@ -53,9 +53,11 @@ if (blog.content && (blog.readingTime !== calculatedReadingTime) && STRAPI_TOKEN
     }).catch(err => console.error("Error updating reading time:", err));
 }
 
-const imgUrl = blog.featuredImage?.url
-  ? `${PUBLIC_STRAPI_URL}${blog.featuredImage.url}`
-  : "/placeholder.svg";
+const imgUrl = blog.featuredImage?.url?.startsWith("http")
+  ? blog.featuredImage.url
+  : blog.featuredImage?.url
+    ? `${PUBLIC_STRAPI_URL}${blog.featuredImage.url}`
+    : "/placeholder.svg";
 
 const seoTitle = blog.seo?.metaTitle || blog.title;
 const seoDescription =
