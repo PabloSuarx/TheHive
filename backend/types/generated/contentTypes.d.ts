@@ -1355,6 +1355,35 @@ export interface ApiPerfilPagePerfilPage extends Struct.SingleTypeSchema {
   };
 }
 
+export interface ApiPrivacyPagePrivacyPage extends Struct.SingleTypeSchema {
+  collectionName: 'privacy_pages';
+  info: {
+    displayName: 'Privacy Page';
+    pluralName: 'privacy-pages';
+    singularName: 'privacy-page';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    content: Schema.Attribute.RichText;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::privacy-page.privacy-page'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    title: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiProductCardProductCard extends Struct.SingleTypeSchema {
   collectionName: 'product_cards';
   info: {
@@ -2444,6 +2473,7 @@ declare module '@strapi/strapi' {
       'api::order.order': ApiOrderOrder;
       'api::origin.origin': ApiOriginOrigin;
       'api::perfil-page.perfil-page': ApiPerfilPagePerfilPage;
+      'api::privacy-page.privacy-page': ApiPrivacyPagePrivacyPage;
       'api::product-card.product-card': ApiProductCardProductCard;
       'api::product.product': ApiProductProduct;
       'api::producto-page.producto-page': ApiProductoPageProductoPage;

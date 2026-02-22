@@ -1,0 +1,103 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Breadcrumbs from "../components/ui/Breadcrumbs.astro"
+import { get } from "../lib/strapi";
+import MarkdownRenderer from '../components/ui/MarkdownRenderer.astro';
+
+const privacyPageData = await get("privacy-page", { populate: "*" });
+
+console.log(privacyPageData);
+
+const fallbackData = {
+  title: "Política de Privacidad",
+  content: "<p>Este es un proyecto de portfolio. No se realizarán transacciones reales ni se procesarán datos personales con fines comerciales. Los datos introducidos en este formulario son únicamente para demostración técnica.</p>"
+};
+
+const pageData = { ...fallbackData, ...privacyPageData };
+const { title, content } = pageData;
+---
+
+<Layout
+  titulo={title}
+  descripcion="Política de privacidad de The Hive - Proyecto de portfolio"
+  keywords="política de privacidad, protección de datos, portfolio"
+>
+
+  <section class="py-12 bg-linear-to-b from-bg-primary to-primary-pale">
+    <div class="container mx-auto px-4 lg:px-8">
+      <Breadcrumbs separator="/" homeLabel="Inicio" />
+      <h1 class="text-4xl font-bold text-text-primary mb-2">{title}</h1>
+    </div>
+  </section>
+
+  <section class="py-20 bg-linear-to-b from-primary-pale to-bg-primary">
+    <div class="container mx-auto px-4 lg:px-8 max-w-4xl">
+      <div class="bg-bg-secondary p-8 rounded-lg border border-primary-light">
+        <MarkdownRenderer content={content} />
+
+        <div class="mt-12 pt-8 border-t border-primary-light">
+          <a
+            href="javascript:history.back()"
+            class="inline-flex items-center gap-2 text-text-link hover:text-text-link-hover transition-colors duration-200"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+            </svg>
+            Volver atrás
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</Layout>
+
+<!-- <style>
+  .privacy-content :global(h2) {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+  }
+
+  .privacy-content :global(h3) {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
+  }
+
+  .privacy-content :global(p) {
+    margin-bottom: 1rem;
+    line-height: 1.75;
+    color: var(--text-secondary);
+  }
+
+  .privacy-content :global(ul) {
+    margin-bottom: 1rem;
+    margin-left: 1.5rem;
+    list-style-type: disc;
+  }
+
+  .privacy-content :global(li) {
+    margin-bottom: 0.5rem;
+    color: var(--text-secondary);
+  }
+
+  .privacy-content :global(strong) {
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .privacy-content :global(a) {
+    color: var(--text-link);
+    text-decoration: underline;
+    transition: color 0.2s;
+  }
+
+  .privacy-content :global(a:hover) {
+    color: var(--text-link-hover);
+  }
+</style> -->
