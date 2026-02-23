@@ -200,6 +200,68 @@ const sortedLinks = navLinks.sort((a, b) => a.order - b.order);
   // Run validation
   validateSession();
 
+  // --- AVATAR LOGIC ---
+
+  // Cargar avatar del nav desde localStorage o Strapi
+  async function updateNavAvatar() {
+    const jwt = localStorage.getItem("jwt");
+    if (!jwt) return;
+
+    // Intentar desde localStorage primero (más rápido)
+    const cachedAvatar = localStorage.getItem("userAvatar");
+    const avatarTrigger = document.getElementById("avatar-trigger");
+
+    if (cachedAvatar && avatarTrigger) {
+      avatarTrigger.innerHTML = `<img
+        src="${cachedAvatar}"
+        alt="Avatar"
+        class="w-8 h-8 rounded-full object-cover"
+      />`;
+      return;
+    }
+
+    // Si no hay cache, fetch a Strapi
+    try {
+      const res = await fetch(`${import.meta.env.PUBLIC_STRAPI_URL}/api/users/me?populate=avatar`, {
+        headers: { Authorization: `Bearer ${jwt}` }
+      });
+      if (!res.ok) return;
+      const user = await res.json();
+      if (user.avatar?.url) {
+        const fullUrl = user.avatar.url.startsWith("http")
+          ? user.avatar.url
+          : `${import.meta.env.PUBLIC_STRAPI_URL}${user.avatar.url}`;
+        localStorage.setItem("userAvatar", fullUrl);
+
+        // Actualizar el img del avatar en el nav
+        if (avatarTrigger) {
+          avatarTrigger.innerHTML = `<img
+            src="${fullUrl}"
+            alt="Avatar"
+            class="w-8 h-8 rounded-full object-cover"
+          />`;
+        }
+      }
+    } catch (e) {
+      console.error("[nav] Error loading avatar:", e);
+    }
+  }
+
+  // Escuchar evento de actualización de avatar
+  window.addEventListener("avatar-updated", (e: any) => {
+    const avatarTrigger = document.getElementById("avatar-trigger");
+    if (avatarTrigger && e.detail?.url) {
+      avatarTrigger.innerHTML = `<img
+        src="${e.detail.url}"
+        alt="Avatar"
+        class="w-8 h-8 rounded-full object-cover"
+      />`;
+    }
+  });
+
+  // Llamar al cargar
+  updateNavAvatar();
+
   // --- CART LOGIC ---
 
   // Init cart service (loads from Strapi if authenticated, from localStorage if guest)

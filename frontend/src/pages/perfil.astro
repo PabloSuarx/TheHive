@@ -122,6 +122,7 @@ const {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
       const user = await res.json();
+      console.log("[avatar] user avatar tras reload:", user.avatar);
 
       if (profileUsername) {
         profileUsername.textContent = user.username || user.firstName || "Usuario";
@@ -130,16 +131,18 @@ const {
         profileEmail.textContent = user.email || "";
       }
 
-      const avatarUrl = user.avatar?.url;
-      if (avatarUrl && avatarDisplay) {
-        const fullUrl = avatarUrl.startsWith("http")
-          ? avatarUrl
-          : `${STRAPI_URL}${avatarUrl}`;
-        avatarDisplay.innerHTML = `<img
-          src="${fullUrl}"
-          alt="Avatar de ${user.username}"
-          class="w-full h-full object-cover rounded-full"
-        />`;
+      if (avatarDisplay) {
+        const avatarUrl = user.avatar?.url;
+        if (avatarUrl) {
+          const fullUrl = avatarUrl.startsWith("http")
+            ? avatarUrl
+            : `${STRAPI_URL}${avatarUrl}`;
+          avatarDisplay.innerHTML = `<img
+            src="${fullUrl}"
+            alt="Avatar de ${user.username}"
+            class="w-full h-full object-cover rounded-full"
+          />`;
+        }
       }
     } catch (err) {
       console.error("[perfil] loadUserProfile error:", err);
@@ -168,34 +171,36 @@ const {
     };
     reader.readAsDataURL(file);
 
-    // Upload to Strapi
+    // Upload via API endpoint
     try {
-      const userId = localStorage.getItem("userId");
-      const formData = new FormData();
-      formData.append("files", file);
-      formData.append("ref", "plugin::users-permissions.user");
-      if (userId) formData.append("refId", userId);
-      formData.append("field", "avatar");
+      const fd = new FormData();
+      fd.append("file", file);
+      fd.append("jwt", jwt);
+      fd.append("userId", localStorage.getItem("userId") ?? "");
 
-      const uploadRes = await fetch(`${STRAPI_URL}/api/upload`, {
+      const uploadRes = await fetch("/api/upload-avatar", {
         method: "POST",
-        headers: { Authorization: `Bearer ${jwt}` },
-        body: formData,
+        body: fd,
       });
 
       if (!uploadRes.ok) throw new Error("Upload failed");
 
-      const uploadData = await uploadRes.json();
-      if (uploadData?.[0]?.url && avatarDisplay) {
-        const newUrl = uploadData[0].url.startsWith("http")
-          ? uploadData[0].url
-          : `${STRAPI_URL}${uploadData[0].url}`;
-        avatarDisplay.innerHTML = `<img
-          src="${newUrl}"
-          alt="Avatar actualizado"
-          class="w-full h-full object-cover rounded-full"
-        />`;
+      const { avatarUrl } = await uploadRes.json();
+      console.log("[avatar] upload response:", avatarUrl);
+
+      // Guardar en localStorage para el nav
+      if (avatarUrl) {
+        const fullUrl = avatarUrl.startsWith("http")
+          ? avatarUrl
+          : `${STRAPI_URL}${avatarUrl}`;
+        localStorage.setItem("userAvatar", fullUrl);
+
+        // Disparar evento para actualizar el nav
+        window.dispatchEvent(new CustomEvent("avatar-updated", { detail: { url: fullUrl } }));
       }
+
+      // Recargar perfil desde Strapi para confirmar que se guardó
+      await loadUserProfile();
     } catch (error) {
       console.error("[perfil] Error uploading avatar:", error);
     }
