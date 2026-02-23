@@ -98,17 +98,17 @@ const { metaTitle, metaDescription, keywords} = pageData.seo;
 
       <!-- Contenido del carrito -->
       <div id="cart-content" class="hidden">
-        <div class="grid lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
           <!-- Lista de productos -->
-          <div class="lg:col-span-2 space-y-4" id="cart-items"></div>
+          <div class="lg:col-span-2 space-y-4 order-1" id="cart-items"></div>
 
           <!-- Resumen del pedido -->
-          <div class="lg:col-span-1">
-            <div class="bg-bg-primary p-6 rounded-2xl border border-divider sticky top-24">
+          <div class="lg:col-span-1 order-2 lg:order-2">
+            <div class="bg-bg-primary p-4 sm:p-6 rounded-2xl border border-divider lg:sticky lg:top-24">
               <div class="flex items-center gap-2 mb-6">
                 <Fragment set:html={summaryIcon} />
-                <h2 class="text-2xl font-bold text-text-primary">{summaryTitle}</h2>
+                <h2 class="text-xl sm:text-2xl font-bold text-text-primary">{summaryTitle}</h2>
               </div>
               <div class="space-y-3 mb-6">
                 <div class="flex justify-between text-text-secondary">
@@ -117,15 +117,15 @@ const { metaTitle, metaDescription, keywords} = pageData.seo;
                 </div>
                 <div class="flex justify-between text-text-secondary">
                   <span>{shippingLabel}</span>
-                  <span class="text-success font-medium">{freeShippingText}</span>
+                  <span class="text-primary font-medium">{freeShippingText}</span>
                 </div>
-                <div class="border-t border-divider pt-3 flex justify-between font-bold text-xl">
+                <div class="border-t border-divider pt-3 flex justify-between font-bold text-lg sm:text-xl">
                   <span>{totalLabel}</span>
                   <span id="cart-total" class="text-primary">0,00€</span>
                 </div>
               </div>
               <Button
-                link="#"
+                link="javascript:void(0)"
                 variant="primary"
                 className="w-full justify-center mb-3"
                 id="checkout-btn"
@@ -172,6 +172,8 @@ const { metaTitle, metaDescription, keywords} = pageData.seo;
   const checkoutButton      = document.getElementById("checkout-btn");
   const cartItemTemplate    = document.getElementById("cart-item-template") as HTMLTemplateElement | null;
 
+  console.log('[checkout-btn] encontrado:', checkoutButton);
+
   // ── Helpers ──────────────────────────────────────────────────────────────────
 
   function buildImageUrl(imageUrl?: string): string {
@@ -207,7 +209,10 @@ const { metaTitle, metaDescription, keywords} = pageData.seo;
 
         // Link / name
         const link = clone.querySelector<HTMLAnchorElement>(".cart-item-link");
-        if (link) { link.textContent = item.name; }
+        if (link) {
+          link.href = item.slug ? `/producto/${item.slug}` : '/productos';
+          link.textContent = item.name;
+        }
 
         // Price
         const priceEl = clone.querySelector(".cart-item-price");
@@ -244,10 +249,16 @@ const { metaTitle, metaDescription, keywords} = pageData.seo;
     if (cartTotalDisplay)    cartTotalDisplay.textContent    = fmt(subtotal);
   }
 
-  // Checkout placeholder
+  // Checkout button handler
   checkoutButton?.addEventListener("click", (e) => {
     e.preventDefault();
-    alert("¡Funcionalidad de pago próximamente!");
+    const jwt = localStorage.getItem('jwt');
+    console.log('[checkout] jwt:', jwt);
+    if (!jwt) {
+      window.location.href = '/login?redirect=/checkout';
+    } else {
+      window.location.href = '/checkout';
+    }
   });
 
   // Subscribe to cartStore

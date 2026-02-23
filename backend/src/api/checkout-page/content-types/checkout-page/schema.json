@@ -1,0 +1,123 @@
+{
+  "kind": "singleType",
+  "collectionName": "checkout_page",
+  "info": {
+    "singularName": "checkout-page",
+    "pluralName": "checkout-pages",
+    "displayName": "Checkout Page"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "pageTitle": {
+      "type": "string"
+    },
+    "addressSectionTitle": {
+      "type": "string"
+    },
+    "orderSummaryTitle": {
+      "type": "string"
+    },
+    "shippingCost": {
+      "type": "decimal"
+    },
+    "freeShippingThreshold": {
+      "type": "decimal"
+    },
+    "freeShippingText": {
+      "type": "string"
+    },
+    "confirmButtonText": {
+      "type": "string"
+    },
+    "successMessage": {
+      "type": "text"
+    },
+    "aliasLabel": {
+      "type": "string"
+    },
+    "streetLabel": {
+      "type": "string"
+    },
+    "cityLabel": {
+      "type": "string"
+    },
+    "stateLabel": {
+      "type": "string"
+    },
+    "countryStateLabel": {
+      "type": "string"
+    },
+    "zipCodeLabel": {
+      "type": "string"
+    },
+    "countryLabel": {
+      "type": "string"
+    },
+    "notesLabel": {
+      "type": "string"
+    },
+    "aliasPlaceholder": {
+      "type": "string"
+    },
+    "streetPlaceholder": {
+      "type": "string"
+    },
+    "cityPlaceholder": {
+      "type": "string"
+    },
+    "statePlaceholder": {
+      "type": "string"
+    },
+    "countryStatePlaceholder": {
+      "type": "string"
+    },
+    "zipCodePlaceholder": {
+      "type": "string"
+    },
+    "countryPlaceholder": {
+      "type": "string"
+    },
+    "notesPlaceholder": {
+      "type": "string"
+    },
+    "addressIcon": {
+      "type": "text"
+    },
+    "summaryIcon": {
+      "type": "text"
+    },
+    "confirmIcon": {
+      "type": "text"
+    },
+    "shippingIcon": {
+      "type": "text"
+    },
+    "subtotalLabel": {
+      "type": "string"
+    },
+    "shippingLabel": {
+      "type": "string"
+    },
+    "totalLabel": {
+      "type": "string"
+    },
+    "emptyCartMessage": {
+      "type": "text"
+    },
+    "loadingText": {
+      "type": "string"
+    },
+    "errorMessage": {
+      "type": "text"
+    },
+    "seo": {
+      "type": "component",
+      "component": "shared.seo",
+      "required": true,
+      "repeatable": false
+    }
+  }
+}

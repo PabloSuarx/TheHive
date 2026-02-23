@@ -34,6 +34,7 @@ export interface CartItem {
     image: string;
     unitPrice: number;
     quantity: number;
+    slug?: string;
 }
 
 export interface OrderAddress {
@@ -112,6 +113,7 @@ function mapStrapiEntry(entry: any): CartItem | null {
         image: imageUrl,
         unitPrice: entry.unitPrice ?? 0,
         quantity: entry.quantity ?? 1,
+        slug: product?.slug ?? "",
     };
 }
 

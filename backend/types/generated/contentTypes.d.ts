@@ -822,6 +822,69 @@ export interface ApiCategoryCategory extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiCheckoutPageCheckoutPage extends Struct.SingleTypeSchema {
+  collectionName: 'checkout_page';
+  info: {
+    displayName: 'Checkout Page';
+    pluralName: 'checkout-pages';
+    singularName: 'checkout-page';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    addressIcon: Schema.Attribute.Text;
+    addressSectionTitle: Schema.Attribute.String;
+    aliasLabel: Schema.Attribute.String;
+    aliasPlaceholder: Schema.Attribute.String;
+    cityLabel: Schema.Attribute.String;
+    cityPlaceholder: Schema.Attribute.String;
+    confirmButtonText: Schema.Attribute.String;
+    confirmIcon: Schema.Attribute.Text;
+    countryLabel: Schema.Attribute.String;
+    countryPlaceholder: Schema.Attribute.String;
+    countryStateLabel: Schema.Attribute.String;
+    countryStatePlaceholder: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    emptyCartMessage: Schema.Attribute.Text;
+    errorMessage: Schema.Attribute.Text;
+    freeShippingText: Schema.Attribute.String;
+    freeShippingThreshold: Schema.Attribute.Decimal;
+    loadingText: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::checkout-page.checkout-page'
+    > &
+      Schema.Attribute.Private;
+    notesLabel: Schema.Attribute.String;
+    notesPlaceholder: Schema.Attribute.String;
+    orderSummaryTitle: Schema.Attribute.String;
+    pageTitle: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    seo: Schema.Attribute.Component<'shared.seo', false> &
+      Schema.Attribute.Required;
+    shippingCost: Schema.Attribute.Decimal;
+    shippingIcon: Schema.Attribute.Text;
+    shippingLabel: Schema.Attribute.String;
+    stateLabel: Schema.Attribute.String;
+    statePlaceholder: Schema.Attribute.String;
+    streetLabel: Schema.Attribute.String;
+    streetPlaceholder: Schema.Attribute.String;
+    subtotalLabel: Schema.Attribute.String;
+    successMessage: Schema.Attribute.Text;
+    summaryIcon: Schema.Attribute.Text;
+    totalLabel: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    zipCodeLabel: Schema.Attribute.String;
+    zipCodePlaceholder: Schema.Attribute.String;
+  };
+}
+
 export interface ApiContactPageContactPage extends Struct.SingleTypeSchema {
   collectionName: 'contact_pages';
   info: {
@@ -1238,7 +1301,7 @@ export interface ApiOrderOrder extends Struct.CollectionTypeSchema {
     singularName: 'order';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     Address: Schema.Attribute.Component<'user.addresses', true>;
@@ -2460,6 +2523,7 @@ declare module '@strapi/strapi' {
       'api::categoria-page.categoria-page': ApiCategoriaPageCategoriaPage;
       'api::categorias-page.categorias-page': ApiCategoriasPageCategoriasPage;
       'api::category.category': ApiCategoryCategory;
+      'api::checkout-page.checkout-page': ApiCheckoutPageCheckoutPage;
       'api::contact-page.contact-page': ApiContactPageContactPage;
       'api::contact-submission.contact-submission': ApiContactSubmissionContactSubmission;
       'api::envios-page.envios-page': ApiEnviosPageEnviosPage;

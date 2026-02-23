@@ -29,8 +29,8 @@ const {
 } = Astro.props;
 ---
 
-<div class={`bg-bg-primary p-4 rounded-xl border border-divider flex gap-4 items-center ${className} cart-item-root`}>
-  <div class="w-24 h-24 shrink-0 rounded-lg overflow-hidden bg-bg-secondary relative">
+<div class={`bg-bg-primary p-4 rounded-xl border border-divider flex flex-col sm:flex-row gap-4 sm:items-center ${className} cart-item-root`}>
+  <div class="w-20 h-20 sm:w-24 sm:h-24 shrink-0 rounded-lg overflow-hidden bg-bg-secondary relative">
     <Image
       src="/placeholder.svg"
       alt="Producto"
@@ -43,22 +43,22 @@ const {
   </div>
   <div class="flex-1 min-w-0">
     <h3 class="font-bold text-text-primary truncate">
-      <a href="#" class="hover:text-primary transition-colors cart-item-link">Nombre del Producto</a>
+      <a href="/productos" class="hover:text-primary transition-colors cart-item-link">Nombre del Producto</a>
     </h3>
     <p class="text-sm text-text-tertiary mb-2 cart-item-variant">Peso</p>
     <div class="font-bold text-primary cart-item-price">0,00€</div>
   </div>
-  <div class="flex flex-col items-end gap-2">
+  <div class="flex sm:flex-col items-center sm:items-end gap-2 justify-between sm:justify-start">
     <div class="flex items-center border border-divider rounded-lg">
       <button
-        class="px-2 py-1 text-text-secondary hover:bg-bg-secondary hover:text-primary transition-colors btn-decrease"
+        class="px-3 py-2 sm:px-2 sm:py-1 text-text-secondary hover:bg-bg-secondary hover:text-primary transition-colors btn-decrease"
         aria-label={decreaseAriaLabel}
       >
         <Fragment set:html={decreaseIcon} />
       </button>
-      <span class="px-2 text-sm font-medium w-8 text-center cart-item-quantity">1</span>
+      <span class="px-3 py-1 sm:px-2 text-sm font-medium w-10 sm:w-8 text-center cart-item-quantity">1</span>
       <button
-        class="px-2 py-1 text-text-secondary hover:bg-bg-secondary hover:text-primary transition-colors btn-increase"
+        class="px-3 py-2 sm:px-2 sm:py-1 text-text-secondary hover:bg-bg-secondary hover:text-primary transition-colors btn-increase"
         aria-label={increaseAriaLabel}
       >
         <Fragment set:html={increaseIcon} />
