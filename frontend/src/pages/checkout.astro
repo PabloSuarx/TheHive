@@ -329,6 +329,45 @@ const { metaTitle, metaDescription, keywords } = pageData.seo;
     window.location.href = '/login?redirect=/checkout';
   }
 
+  // Autorellenar formulario con direcciones guardadas
+  async function loadUserAddress() {
+    if (!jwt) return;
+
+    try {
+      const userRes = await fetch(`${strapiBaseUrl}/api/users/me?populate=addresses`, {
+        headers: { Authorization: `Bearer ${jwt}` }
+      });
+
+      if (userRes.ok) {
+        const userData = await userRes.json();
+        const { addresses } = userData;
+
+        if (addresses?.length > 0) {
+          const defaultAddress = addresses.find((a: any) => a.isDefault) ?? addresses[0];
+          const { alias, street, city, state, countryState, zipCode, country } = defaultAddress;
+
+          const aliasInput = document.getElementById('alias') as HTMLInputElement;
+          const streetInput = document.getElementById('street') as HTMLInputElement;
+          const cityInput = document.getElementById('city') as HTMLInputElement;
+          const stateInput = document.getElementById('state') as HTMLInputElement;
+          const countryStateInput = document.getElementById('countryState') as HTMLInputElement;
+          const zipCodeInput = document.getElementById('zipCode') as HTMLInputElement;
+          const countryInput = document.getElementById('country') as HTMLInputElement;
+
+          if (aliasInput && alias) aliasInput.value = alias;
+          if (streetInput && street) streetInput.value = street;
+          if (cityInput && city) cityInput.value = city;
+          if (stateInput && state) stateInput.value = state;
+          if (countryStateInput && countryState) countryStateInput.value = countryState;
+          if (zipCodeInput && zipCode) zipCodeInput.value = zipCode;
+          if (countryInput && country) countryInput.value = country;
+        }
+      }
+    } catch (error) {
+      console.error('[checkout] Error loading user address:', error);
+    }
+  }
+
   // DOM Elements
   const orderItemsContainer = document.getElementById("order-items");
   const summarySubtotal = document.getElementById("summary-subtotal");
@@ -532,4 +571,7 @@ const { metaTitle, metaDescription, keywords } = pageData.seo;
       readAndRender();
     });
   }
+
+  // Cargar dirección guardada del usuario
+  loadUserAddress();
 </script>

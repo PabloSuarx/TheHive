@@ -1,5 +1,7 @@
 import type { APIRoute } from 'astro';
 
+export const prerender = false;
+
 interface CheckoutItem {
   productId: string;
   quantity: number;
@@ -28,8 +30,18 @@ interface CheckoutBody {
 }
 
 export const POST: APIRoute = async ({ request }) => {
+  let body: CheckoutBody;
+
   try {
-    const body = await request.json() as CheckoutBody;
+    body = await request.json() as CheckoutBody;
+  } catch {
+    return new Response(
+      JSON.stringify({ error: 'Invalid request body' }),
+      { status: 400, headers: { 'Content-Type': 'application/json' } }
+    );
+  }
+
+  try {
     const { jwt, items, address, notes, subtotal, shippingCost, total } = body;
 
     // Validate JWT
@@ -161,7 +173,6 @@ export const POST: APIRoute = async ({ request }) => {
       JSON.stringify({ success: true, orderId }),
       { status: 200, headers: { 'Content-Type': 'application/json' } }
     );
-
   } catch (error) {
     console.error('Checkout error:', error);
     return new Response(
