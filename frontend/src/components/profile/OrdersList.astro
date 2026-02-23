@@ -102,7 +102,41 @@ const {
   orderIconX,
   orderIconBox,
 }}>
+  window.__ordersConfig = {
+    errorMessageExpiredSession,
+    errorMessageDefault,
+    orderLabelText,
+    orderStatusProcessing,
+    orderStatusConfirmed,
+    orderStatusShipped,
+    orderStatusDelivered,
+    orderStatusCancelled,
+    orderIconClock,
+    orderIconCheck,
+    orderIconTruck,
+    orderIconX,
+    orderIconBox,
+  };
+</script>
+
+<script>
   const STRAPI_URL = import.meta.env.PUBLIC_STRAPI_URL;
+
+  const {
+    errorMessageExpiredSession,
+    errorMessageDefault,
+    orderLabelText,
+    orderStatusProcessing,
+    orderStatusConfirmed,
+    orderStatusShipped,
+    orderStatusDelivered,
+    orderStatusCancelled,
+    orderIconClock,
+    orderIconCheck,
+    orderIconTruck,
+    orderIconX,
+    orderIconBox,
+  } = (window as any).__ordersConfig;
 
   // ─── DOM refs ───────────────────────────────────────────────────────────────
   const ordersLoading   = document.getElementById("orders-loading");
@@ -153,11 +187,13 @@ const {
     return `
       <ul class="list-none p-0 m-0 mb-2.5 flex flex-col gap-1 border-t border-b border-border-default py-2">
         ${lines.map((line) => {
-          const name = line.product?.name ?? line.product?.title ?? "Producto";
+          const name = line.product?.name ?? line.product?.title ?? `Producto (x${line.quantity})`;
+          const unitPrice = line.unitPrice ?? 0;
+          const qty = line.quantity ?? 1;
           return `
             <li class="flex justify-between items-center gap-2 text-[0.8125rem]">
               <span class="text-text-secondary overflow-hidden text-ellipsis whitespace-nowrap">${name}</span>
-              <span class="text-text-tertiary whitespace-nowrap shrink-0">${line.quantity} × ${fmtMoney(line.unitPrice)} €</span>
+              <span class="text-text-tertiary whitespace-nowrap shrink-0">${qty} × ${fmtMoney(unitPrice)} €</span>
             </li>`;
         }).join("")}
       </ul>`;
@@ -201,30 +237,32 @@ const {
     showOnly(ordersLoading);
 
     try {
-      const params = new URLSearchParams({
-        "populate[orders][populate][Orders][populate][product]": "*",
-        "populate[orders][populate][Address]": "*",
-      });
-
-      const res = await fetch(`${STRAPI_URL}/api/users/me?${params}`, {
-        headers: { Authorization: `Bearer ${jwt}` },
-      });
+      const res = await fetch(
+        `${STRAPI_URL}/api/users/me?populate[orders][populate][Orders][populate][product]=*&populate[orders][populate][Address]=*`,
+        {
+          headers: { Authorization: `Bearer ${jwt}` },
+        }
+      );
 
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
       const data = await res.json();
-      const orders = data.orders ?? [];
+      const { orders } = data;
+      const safeOrders = Array.isArray(orders) ? orders : [];
 
-      if (orders.length === 0) {
+      console.log('[orders] data recibida:', safeOrders?.length, 'pedidos');
+      console.log('[orders] primer pedido:', JSON.stringify(safeOrders?.[0]));
+
+      if (safeOrders.length === 0) {
         showOnly(ordersEmpty);
       } else {
         // Sort client-side by placedAt desc (API/users/me doesn't accept sort param)
-        orders.sort((a, b) =>
+        safeOrders.sort((a, b) =>
           new Date(b.placedAt ?? b.createdAt).getTime() -
           new Date(a.placedAt ?? a.createdAt).getTime()
         );
         if (ordersContainer) {
-          ordersContainer.innerHTML = orders.map(renderOrderCard).join("");
+          ordersContainer.innerHTML = safeOrders.map(renderOrderCard).join("");
         }
         showOnly(ordersContainer);
       }

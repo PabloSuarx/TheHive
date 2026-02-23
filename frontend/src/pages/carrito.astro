@@ -172,8 +172,6 @@ const { metaTitle, metaDescription, keywords} = pageData.seo;
   const checkoutButton      = document.getElementById("checkout-btn");
   const cartItemTemplate    = document.getElementById("cart-item-template") as HTMLTemplateElement | null;
 
-  console.log('[checkout-btn] encontrado:', checkoutButton);
-
   // ── Helpers ──────────────────────────────────────────────────────────────────
 
   function buildImageUrl(imageUrl?: string): string {
@@ -189,6 +187,7 @@ const { metaTitle, metaDescription, keywords} = pageData.seo;
 
   function renderCart(storeValue: { items: string; count: string; total: string }) {
     let items: CartItem[] = [];
+    
     try { items = JSON.parse(storeValue.items ?? "[]"); } catch { items = []; }
 
     const isEmpty = items.length === 0;
@@ -201,6 +200,8 @@ const { metaTitle, metaDescription, keywords} = pageData.seo;
 
     items.forEach((item) => {
       try {
+
+        console.log(item);
         const clone = cartItemTemplate.content.cloneNode(true) as DocumentFragment;
 
         // Image
@@ -209,10 +210,8 @@ const { metaTitle, metaDescription, keywords} = pageData.seo;
 
         // Link / name
         const link = clone.querySelector<HTMLAnchorElement>(".cart-item-link");
-        if (link) {
-          link.href = item.slug ? `/producto/${item.slug}` : '/productos';
-          link.textContent = item.name;
-        }
+        if (link) { link.textContent = item.name; 
+          link.href = `/productos/${item.slug}`; }
 
         // Price
         const priceEl = clone.querySelector(".cart-item-price");
@@ -253,7 +252,6 @@ const { metaTitle, metaDescription, keywords} = pageData.seo;
   checkoutButton?.addEventListener("click", (e) => {
     e.preventDefault();
     const jwt = localStorage.getItem('jwt');
-    console.log('[checkout] jwt:', jwt);
     if (!jwt) {
       window.location.href = '/login?redirect=/checkout';
     } else {
