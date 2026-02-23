@@ -1,24 +1,11 @@
-# robots.txt - DEV ENVIROMENT
-
 User-agent: *
-Disallow: /
+Allow: /
 
-User-agent: Googlebot
-Disallow: /
+Disallow: /api/
+Disallow: /carrito
+Disallow: /checkout
+Disallow: /perfil
+Disallow: /login
+Disallow: /registro
 
-User-agent: Bingbot
-Disallow: /
-
-User-agent: Slurp
-Disallow: /
-
-User-agent: DuckDuckBot
-Disallow: /
-
-User-agent: Baiduspider
-Disallow: /
-
-User-agent: YandexBot
-Disallow: /
-
-# Sitemap: 
+Sitemap: https://thehive.pablosuarez.dev/sitemap.xml 

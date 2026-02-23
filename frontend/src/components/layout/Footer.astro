@@ -88,9 +88,19 @@ const columnOrder = ["General", "Empresa", "Ayuda", "Legal"];
   <div class="border-t border-divider">
     <div class="container mx-auto px-4 lg:px-8 py-6">
       <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-        <p class="text-sm text-text-secondary text-center md:text-left">
-          {copyrightText}
-        </p>
+        <div class="flex flex-col items-center md:items-start gap-2">
+          <p class="text-sm text-text-secondary text-center md:text-left">
+            {copyrightText}
+          </p>
+          <div class="flex gap-4 text-xs">
+            <a href="/politica-privacidad" class="text-sm text-text-secondary hover:text-primary transition-colors">
+              Política de Privacidad
+            </a>
+            <a href="/sitemap.xml" class="text-sm text-text-secondary hover:text-primary transition-colors">
+              Sitemap
+            </a>
+          </div>
+        </div>
 
         <p class="text-xs text-text-tertiary text-center md:text-right max-w-md">
           <strong class="text-primary">Proyecto Educativo:</strong> Este sitio web

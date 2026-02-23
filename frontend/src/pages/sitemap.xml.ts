@@ -1,8 +1,9 @@
+import type { APIRoute } from 'astro';
 import { get } from '../lib/strapi';
 
 const SITE_URL = import.meta.env.SITE || 'https://thehive.pablosuarez.dev';
 
-export async function GET() {
+export const GET: APIRoute = async () => {
   const products = await get('products') || [];
   const categories = await get('categories') || [];
   const blogs = await get('blogs') || [];
@@ -11,11 +12,14 @@ export async function GET() {
 
   const staticPages = [
     { url: '/', priority: '1.0', changefreq: 'weekly' },
-    { url: '/productos', priority: '0.9', changefreq: 'weekly' },
+    { url: '/productos', priority: '0.9', changefreq: 'daily' },
+    { url: '/blog', priority: '0.8', changefreq: 'daily' },
     { url: '/categorias', priority: '0.8', changefreq: 'weekly' },
-    { url: '/blog', priority: '0.8', changefreq: 'weekly' },
-    { url: '/contacto', priority: '0.6', changefreq: 'monthly' },
-    { url: '/sobre-nosotros', priority: '0.5', changefreq: 'monthly' },
+    { url: '/sobre-nosotros', priority: '0.7', changefreq: 'monthly' },
+    { url: '/contacto', priority: '0.7', changefreq: 'monthly' },
+    { url: '/envios', priority: '0.6', changefreq: 'monthly' },
+    { url: '/faq', priority: '0.6', changefreq: 'monthly' },
+    { url: '/politica-privacidad', priority: '0.3', changefreq: 'yearly' },
   ];
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -30,7 +34,7 @@ ${products.map(p => `  <url>
     <loc>${SITE_URL}/producto/${p.slug}</loc>
     <lastmod>${p.updatedAt ? p.updatedAt.split('T')[0] : today}</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>`).join('\n')}
 ${categories.map(c => `  <url>
     <loc>${SITE_URL}/categoria/${c.slug}</loc>
@@ -42,11 +46,11 @@ ${blogs.map(b => `  <url>
     <loc>${SITE_URL}/blog/${b.slug}</loc>
     <lastmod>${b.updatedAt ? b.updatedAt.split('T')[0] : today}</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
   </url>`).join('\n')}
 </urlset>`;
 
   return new Response(xml.trim(), {
-    headers: { 'Content-Type': 'application/xml; charset=utf-8' }
+    headers: { 'Content-Type': 'application/xml' }
   });
-}
+};
