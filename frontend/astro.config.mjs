@@ -9,6 +9,9 @@ export default defineConfig({
   }),
   vite: {
     plugins: [tailwindcss()],
+    server: {
+      allowedHosts: ["thehive.pablosuarez.dev"]
+    }
   },
   image: {
     domains: ['thehive.pablosuarez.dev', '127.0.0.1'],
