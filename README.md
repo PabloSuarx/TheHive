@@ -1,4 +1,5 @@
 # TheHive — Proyecto Integrador DAW 2
+# TheHive — Proyecto Integrador DAW 2
 
 Tienda de comercio electrónico de miel artesanal desarrollada como Proyecto Integrador del ciclo de **Desarrollo de Aplicaciones Web (DAW)**. El proyecto implementa una arquitectura JAMstack desacoplada con un CMS headless en el backend y un frontend generado estáticamente.
 
