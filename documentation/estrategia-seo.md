@@ -92,6 +92,8 @@ Google utiliza estas métricas como señales de posicionamiento:
 |**LCP**|Tiempo de carga del elemento principal|< 2,5 s|
 |**INP**|Respuesta a la interacción|< 200 ms|
 |**CLS**|Estabilidad visual (movimiento de elementos)|< 0,1|
+
+
 Utilizando https://pagespeed.web.dev/ comprobamos el rendimiento de la página:
 ![Análisis de rendimiento en PageSpeed Insights](assets/images/pagespeed.png)
 

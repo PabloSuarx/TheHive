@@ -289,7 +289,7 @@ El proyecto se despliega en un VPS de Hetzner con la siguiente configuración:
 | Gestión de procesos | PM2 | Mantiene activos el frontend y el backend |
 | Base de datos | PostgreSQL | Gestionada por Strapi |
 | Frontend | Astro (`npm run build`) | HTML estático servido por Nginx |
-| Backend | Strapi (`npm run start`) | Proceso Node.js en el puerto 1337 |
+| Backend | Strapi (`npm run build`) | Proceso Node.js en el puerto 1337 |
 
 PM2 garantiza que ambos procesos se reinician automáticamente si el servidor se reinicia o si uno de ellos falla, sin intervención manual.
 
