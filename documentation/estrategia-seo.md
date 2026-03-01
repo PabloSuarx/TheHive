@@ -93,7 +93,7 @@ Google utiliza estas métricas como señales de posicionamiento:
 |**INP**|Respuesta a la interacción|< 200 ms|
 |**CLS**|Estabilidad visual (movimiento de elementos)|< 0,1|
 Utilizando https://pagespeed.web.dev/ comprobamos el rendimiento de la página:
-![[pagespeed.png]]
+![Análisis de rendimiento en PageSpeed Insights](assets/images/pagespeed.png)
 
 Enlace del análisis:
 https://pagespeed.web.dev/analysis/https-thehive-pablosuarez-dev/9zyu7qi8hh?form_factor=mobile
@@ -117,13 +117,13 @@ https://pagespeed.web.dev/analysis/https-thehive-pablosuarez-dev/9zyu7qi8hh?form
 | PageSpeed Insights    | Medición de Core Web Vitals                       |
 
 
-![[googlesearchconsole.png]]
+![Panel de Google Search Console sin datos de rendimiento aún](assets/images/googlesearchconsole.png)
 
 Actualmente no existen datos de rendimiento de Google Search Console.
 
 Se ha enviado con éxito el sitemap.xml para su indexación, aún no ha pasado una semana desde en envío del _sitemap_. Se recomienda entre 1 y dos semanas para comenzar a recibir métricas.
 
-![[sitemap.png]]
+![Confirmación de envío del sitemap.xml en Google Search Console](assets/images/sitemap.png)
 
 ---
 ## 6. Estado de implementación
