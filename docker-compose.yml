@@ -1,0 +1,97 @@
+name: thehive
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: runner
+      args:
+        PUBLIC_STRAPI_URL: ${PUBLIC_STRAPI_URL}
+        PUBLIC_SITE_URL: ${PUBLIC_SITE_URL}
+    image: thehive-frontend:latest
+    container_name: thehive-frontend
+    restart: unless-stopped
+    environment:
+      - HOST=0.0.0.0
+      - PORT=4321
+      # Server-side (SSR): comunicación interna entre contenedores
+      - STRAPI_URL=http://backend:1337
+      - STRAPI_TOKEN=${STRAPI_TOKEN}
+      # Client-side: URL pública que el browser usa (via NPM proxy)
+      - PUBLIC_STRAPI_URL=${PUBLIC_STRAPI_URL}
+      - PUBLIC_SITE_URL=${PUBLIC_SITE_URL}
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - global-network
+    # Sin ports: todo pasa por Nginx Proxy Manager
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: runner
+    image: thehive-backend:latest
+    container_name: thehive-backend
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=${NODE_ENV:-production}
+      # Base de datos
+      - DATABASE_CLIENT=postgres
+      - DATABASE_HOST=db
+      - DATABASE_PORT=5432
+      - DATABASE_NAME=${POSTGRES_DB}
+      - DATABASE_USERNAME=${POSTGRES_USER}
+      - DATABASE_PASSWORD=${POSTGRES_PASSWORD}
+      - DATABASE_SSL=false
+      # Seguridad Strapi
+      - APP_KEYS=${STRAPI_APP_KEYS}
+      - API_TOKEN_SALT=${STRAPI_API_TOKEN_SALT}
+      - ADMIN_JWT_SECRET=${STRAPI_ADMIN_JWT_SECRET}
+      - TRANSFER_TOKEN_SALT=${STRAPI_TRANSFER_TOKEN_SALT}
+      - JWT_SECRET=${STRAPI_JWT_SECRET}
+      # URL pública del backend (para medios/uploads)
+      - PUBLIC_URL=${PUBLIC_STRAPI_URL}
+    volumes:
+      - thehive-strapi-uploads:/app/public/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:1337/_health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    networks:
+      - global-network
+
+  db:
+    image: postgres:17-alpine  
+    container_name: thehive-db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - thehive-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - global-network
+
+volumes:
+  thehive-postgres-data:
+    name: thehive-postgres-data
+  thehive-strapi-uploads:
+    name: thehive-strapi-uploads
+
+networks:
+  global-network:
+    external: true
